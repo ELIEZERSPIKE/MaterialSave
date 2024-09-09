@@ -123,4 +123,6 @@ public class Material {
         this.problem = problem;
         this.charge = charge;
     }
+
+
 }

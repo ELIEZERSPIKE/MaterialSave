@@ -280,7 +280,7 @@
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="comboCategorie" prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" />
+                        <ComboBox  prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" />
                         <Label prefHeight="17.0" prefWidth="60.0" text="Local">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
@@ -311,7 +311,7 @@
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="comboStatut" prefWidth="150.0" />
+                        <ComboBox  prefWidth="150.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -406,13 +406,13 @@
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="comboCategorie" layoutX="681.0" layoutY="111.0" />
+                  <TextField  layoutX="681.0" layoutY="111.0" />
                   <Label layoutX="598.0" layoutY="245.0" text="statut">
                      <font>
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="comboStatut" layoutX="681.0" layoutY="239.0" />
+                  <TextField layoutX="681.0" layoutY="239.0" />
                </children>
             </AnchorPane>
          </children>
