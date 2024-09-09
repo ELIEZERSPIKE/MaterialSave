@@ -88,7 +88,7 @@ public class Material {
     public String getStatut() {
         return statut;
     }
-
+//jniikhuh
     public void setStatut(String statut) {
         this.statut = statut;
     }
