@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" >
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <AnchorPane layoutX="20.0" layoutY="14.0" prefHeight="162.0" prefWidth="760.0" style="-fx-background-color: #2A5058;" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                    <children>
+                        <Label layoutX="38.0" layoutY="14.0" text="Dashboard" textFill="WHITE">
+                            <font>
+                                <Font name="Arial Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Button layoutX="675.0" layoutY="14.0" mnemonicParsing="false" text="Logout" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane layoutX="14.0" layoutY="76.0" prefHeight="308.0" prefWidth="760.0" style="-fx-background-color: #324851;" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="76.0">
+                    <children>
+                        <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="280.0" prefWidth="732.0">
+                            <children>
+                                <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #46A0A3;">
+                                    <children>
+                                        <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="119.0" text="Total Matériels" textFill="WHITE">
+                                            <font>
+                                                <Font name="Tahoma Bold" size="13.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="TotalMateriels" layoutX="97.0" layoutY="13.0" prefHeight="25.0" prefWidth="91.0" text="0" textFill="WHITE">
+                                            <font>
+                                                <Font name="Berlin Sans FB Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane layoutX="270.0" layoutY="14.0" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #3B7D7D;">
+                                    <children>
+                                        <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="137.0" text="Matériels Disponibles" textFill="WHITE">
+                                            <font>
+                                                <Font name="Tahoma Bold" size="13.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="TotalDisponibles" layoutX="97.0" layoutY="13.0" prefHeight="25.0" prefWidth="91.0" text="0" textFill="WHITE">
+                                            <font>
+                                                <Font name="Berlin Sans FB Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane layoutX="528.0" layoutY="14.0" prefHeight="120.0" prefWidth="220.0" style="-fx-background-color: #2C5B59;">
+                                    <children>
+                                        <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="181.0" text="Matériels en Maintenance" textFill="WHITE">
+                                            <font>
+                                                <Font name="Tahoma Bold" size="13.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="TotalMaintenance" layoutX="97.0" layoutY="13.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
+                                            <font>
+                                                <Font name="Berlin Sans FB Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

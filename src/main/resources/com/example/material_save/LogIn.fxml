@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.material_save.Controllers.AuthController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #44D952;" styleClass="fx-effect">
+         <children>
+            <ImageView fitHeight="63.0" fitWidth="174.0" layoutX="10.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../assets/logo1M.png" />
+               </image>
+            </ImageView>
+            <Text layoutX="27.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logiciel de gestion de Matériels" textAlignment="CENTER" wrappingWidth="139.31639289855957">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <VBox alignment="CENTER" prefHeight="500.0" prefWidth="411.0" style="-fx-background-color: white;">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connexion">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefWidth="401.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Renseignez les informations pour vous connecter" textAlignment="CENTER" />
+               </children>
+            </HBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Connectez-vous  au Compte" />
+            <HBox alignment="CENTER" prefHeight="19.0" prefWidth="401.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <VBox alignment="CENTER" spacing="15.0">
+               <children>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Pane prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 25;">
+                           <children>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../assets/mdi--account.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <TextField fx:id="username" alignment="CENTER" prefHeight="25.0" prefWidth="162.0" promptText="Nom d'utilisateur" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-border-color: #44D952;" stylesheets="@css/style.css" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Pane prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 25;">
+                           <children>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../assets/verrouiller.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <PasswordField fx:id="password" alignment="CENTER" prefHeight="25.0" prefWidth="162.0" promptText=" Mot de Passe" style="-fx-border-color: #44D952; -fx-background-radius: 20; -fx-border-radius: 20;" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="62.0" prefWidth="406.0">
+               <children>
+                  <Button fx:id="onSignIn" alignment="CENTER" mnemonicParsing="false" onAction="#onSubmitSignIn" prefHeight="31.0" prefWidth="210.0" style="-fx-background-color: #44D952; -fx-background-radius: 20;" text="Se connecter" textAlignment="CENTER" textFill="#f8f4f4">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dejà membre ?" textAlignment="CENTER" wrappingWidth="87.98308658599854">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Text>
+            <Hyperlink onAction="#onRegister" prefHeight="3.0" prefWidth="107.0" text="Inscrivez-vous" />
+         </children>
+      </VBox>
+   </children>
+</HBox>

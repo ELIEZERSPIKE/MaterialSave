@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.material_save.Controllers.HomeController">
+   <children>
+      <VBox prefHeight="500.0" style="-fx-background-color: #44D952;">
+         <children>
+            <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent;" text="Tableau de Bord" />
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="275.0" mnemonicParsing="false" onMouseClicked="#onBackToHome" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Home">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/carbon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#AccessDasboard" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Liste des matériels">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/computer.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="102.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Liste des catégories">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/categories.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="145.0" mnemonicParsing="false" onMouseClicked="#Maintenances" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Maintenances">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/charts.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="189.0" mnemonicParsing="false" onMouseClicked="#Location" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Emplacement">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/Istock-removebg-preview.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="232.0" mnemonicParsing="false" onMouseClicked="#Parameters" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Parametres">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/set%20-%20Copie.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button alignment="TOP_LEFT" layoutX="15.0" layoutY="275.0" mnemonicParsing="false" onMouseClicked="#LogOut" prefHeight="43.0" prefWidth="185.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Deconnexion">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../assets/simple-line-icons--logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+      <StackPane fx:id="AreatStackPane" layoutX="182.0" prefHeight="10.0" prefWidth="5.0" style="-fx-background-color: white;" />
+   </children>
+</AnchorPane>
