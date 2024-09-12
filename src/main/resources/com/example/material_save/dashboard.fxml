@@ -222,12 +222,12 @@
                   </Label>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Material_Add_Form" layoutX="258.0" layoutY="66.0" prefHeight="533.0" prefWidth="752.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="Material_Add_Form" layoutX="258.0" layoutY="66.0" prefHeight="533.0" prefWidth="752.0" style="-fx-background-color: #FFA500;">
                <children>
                   <AnchorPane layoutY="-9.0" prefHeight="275.0" prefWidth="841.0" style="-fx-background-color: #87CEEB;">
                      <children>
                         <TextField fx:id="searchMaterial" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="201.0" promptText="Rechercher" />
-                        <TableView fx:id="Material_tableView" layoutY="49.0" prefHeight="215.0" prefWidth="841.0">
+                        <TableView fx:id="Material_tableView" layoutY="49.0" onMouseClicked="#materialSelectData" prefHeight="215.0" prefWidth="841.0">
                           <columns>
                             <TableColumn fx:id="col_material" prefWidth="105.99998474121094" text="Numero Materiel" />
                             <TableColumn fx:id="col_name" prefWidth="88.66665649414062" text="Nom" />
@@ -280,7 +280,7 @@
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox  prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" />
+                        <ComboBox fx:id="BoxCategorie" prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" />
                         <Label prefHeight="17.0" prefWidth="60.0" text="Local">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
@@ -311,14 +311,14 @@
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox  prefWidth="150.0" />
+                        <ComboBox fx:id="comboStatut" prefWidth="150.0" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="addMaterial" layoutX="22.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952; -fx-effect: hand;" text="Ajouter" />
-                  <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
+                  <Button fx:id="addMaterial" layoutX="22.0" layoutY="444.0" mnemonicParsing="false" onAction="#AjouterMateriel" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952; -fx-effect: hand;" text="Ajouter" />
+                  <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleUpdateMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
                   <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
                </children>
             </AnchorPane>
@@ -358,7 +358,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Maintenance_Form" layoutX="180.0" layoutY="77.0" prefHeight="450.0" prefWidth="700.0" style="-fx-background-color: #FFA500;">
+            <AnchorPane fx:id="Maintenance_Form" layoutX="180.0" layoutY="77.0" prefHeight="507.0" prefWidth="919.0" style="-fx-background-color: #FFA500;" visible="false">
                <children>
                   <TableView fx:id="Maintenance_tableView" layoutX="14.0" layoutY="25.0" prefHeight="481.0" prefWidth="487.0">
                     <columns>
@@ -369,7 +369,7 @@
                         <TableColumn prefWidth="90.666748046875" text="statut" />
                     </columns>
                   </TableView>
-                  <Label layoutX="554.0" layoutY="16.0" prefHeight="17.0" prefWidth="403.0" text="Remplir le formulaire de maintenance ">
+                  <Label layoutX="554.0" layoutY="16.0" prefHeight="17.0" prefWidth="303.0" text="Remplir le formulaire de maintenance ">
                      <font>
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
@@ -400,19 +400,13 @@
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="681.0" layoutY="200.0" />
+                  <TextField fx:id="probleme_materiel" layoutX="681.0" layoutY="200.0" />
                   <Label layoutX="576.0" layoutY="116.0" text="categorie">
                      <font>
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField  layoutX="681.0" layoutY="111.0" />
-                  <Label layoutX="598.0" layoutY="245.0" text="statut">
-                     <font>
-                        <Font name="Tahoma Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <TextField layoutX="681.0" layoutY="239.0" />
+                  <ComboBox fx:id="comboCategorie" layoutX="667.0" layoutY="118.0" prefWidth="150.0" />
                </children>
             </AnchorPane>
          </children>
