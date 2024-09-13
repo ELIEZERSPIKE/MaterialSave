@@ -139,11 +139,30 @@ public class Material implements MaterielInterface {
 
 
 
-//    public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem,
+//  public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem,
 //                    String charge) {
 //        this.materialNumber = materialNumber;
+//       this.name = name;
+//      this.etat = etat;
+//       this.marque = marque;
+//        this.locale = locale;
+//       this.category = category;
+//       this.date = date;
+//       this.utilisateur = utilisateur;
+//       this.statut = statut;
+//      this.charge = (charge != null) ? charge : "";
+// }
+
+
+//    public Material(int materialNumber, int id, String name,
+//                    String etat, String marque,
+//                    String locale, String category, Date date, String utilisateur,
+//                    String statut, String problem, String charge)
+//    {
+//       this.materialNumber = materialNumber;
+//       this.id = id;
 //        this.name = name;
-//        this.etat = etat;
+//       this.etat = etat;
 //        this.marque = marque;
 //        this.locale = locale;
 //        this.category = category;
@@ -155,10 +174,8 @@ public class Material implements MaterielInterface {
 //    }
 
 
-    public Material(int materialNumber, int id, String name, String etat, String marque,
-                    String locale, String category, Date date, String utilisateur, String statut, String problem, String charge) {
+    public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem, String charge) {
         this.materialNumber = materialNumber;
-        this.id = id;
         this.name = name;
         this.etat = etat;
         this.marque = marque;
@@ -167,8 +184,8 @@ public class Material implements MaterielInterface {
         this.date = date;
         this.utilisateur = utilisateur;
         this.statut = statut;
-        this.problem = problem;
-        this.charge = charge;
+        this.problem = (problem != null) ? problem : "";
+        this.charge = (charge != null) ? charge : "";
     }
 
     public void register(Material material) throws SQLException {
@@ -221,43 +238,76 @@ public class Material implements MaterielInterface {
 
 
 
-    public boolean updateMaterial(Material material) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
+//    public boolean updateMaterial(Material material) throws SQLException {
+//        Connection connection = null;
+//        PreparedStatement preparedStatement = null;
+//
+//        try {
+//            connection = DBConfig.getConnection();
+//            String query = "UPDATE material SET " +
+//                    "nom = ?, marque = ?, etat = ?, local = ?, " +
+//                    "categorie = ?, date = ?, utilisateur = ?, statut = ? " +
+//                    "WHERE numeroMateriel = ?";
+//
+//            preparedStatement = connection.prepareStatement(query);
+//
+//            preparedStatement.setString(1, material.getName());
+//            preparedStatement.setString(2, material.getMarque());
+//            preparedStatement.setString(3, material.getEtat());
+//            preparedStatement.setString(4, material.getLocale());
+//            preparedStatement.setString(5, material.getCategory());
+//            preparedStatement.setDate(6, material.getDate());
+//            preparedStatement.setString(7, material.getUtilisateur());
+//            preparedStatement.setString(8, material.getStatut());
+//            preparedStatement.setInt(9, material.getMaterialNumber());
+//
+//            int rowsAffected = preparedStatement.executeUpdate();
+//
+//            return rowsAffected > 0;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw e;
+//        } finally {
+//            if (preparedStatement != null) {
+//                preparedStatement.close();
+//            }
+//            if (connection != null) {
+//                connection.close();
+//            }
+//        }
+//    }
 
+    public boolean updateMaterial(Material material) throws SQLException {
+
+        connection = null;
+        PreparedStatement preparedStatement  = null;
+
+        String query = "UPDATE material SET numeroMateriel = ?," +
+                " nom = ?, marque = ?, etat = ?, local = ?, categorie = ?," +
+                " date = ?, utilisateur = ?, statut = ? WHERE numeroMateriel = ?";
         try {
             connection = DBConfig.getConnection();
-            String query = "UPDATE material SET " +
-                    "nom = ?, marque = ?, etat = ?, local = ?, " +
-                    "categorie = ?, date = ?, utilisateur = ?, statut = ? " +
-                    "WHERE numeroMateriel = ?";
+            preparedStatement  = connection.prepareStatement(query);
 
-            preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1, material.getName());
-            preparedStatement.setString(2, material.getMarque());
-            preparedStatement.setString(3, material.getEtat());
-            preparedStatement.setString(4, material.getLocale());
-            preparedStatement.setString(5, material.getCategory());
-            preparedStatement.setDate(6, material.getDate());
-            preparedStatement.setString(7, material.getUtilisateur());
-            preparedStatement.setString(8, material.getStatut());
-            preparedStatement.setInt(9, material.getMaterialNumber());
+
+            preparedStatement.setInt(1, material.getMaterialNumber());
+            preparedStatement.setString(2, material.getName());
+            preparedStatement.setString(3, material.getMarque());
+            preparedStatement.setString(4, material.getEtat());
+            preparedStatement.setString(5, material.getLocale());
+            preparedStatement.setString(6, material.getCategory());
+            preparedStatement.setDate(7, material.getDate());
+            preparedStatement.setString(8, material.getUtilisateur());
+            preparedStatement.setString(9, material.getStatut());
+            preparedStatement.setInt(10, material.getMaterialNumber());
 
             int rowsAffected = preparedStatement.executeUpdate();
-
             return rowsAffected > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;
-        } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+            throw  e;
         }
     }
 

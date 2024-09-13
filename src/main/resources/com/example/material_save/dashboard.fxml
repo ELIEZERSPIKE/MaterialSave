@@ -227,17 +227,18 @@
                   <AnchorPane layoutY="-9.0" prefHeight="275.0" prefWidth="841.0" style="-fx-background-color: #87CEEB;">
                      <children>
                         <TextField fx:id="searchMaterial" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="201.0" promptText="Rechercher" />
-                        <TableView fx:id="Material_tableView" layoutY="49.0" onMouseClicked="#materialSelectData" prefHeight="215.0" prefWidth="841.0">
+                        <TableView fx:id="Material_tableView" layoutY="49.0" onMouseClicked="#materialSelectData" prefHeight="215.0" prefWidth="855.0">
                           <columns>
-                            <TableColumn fx:id="col_material" prefWidth="105.99998474121094" text="Numero Materiel" />
-                            <TableColumn fx:id="col_name" prefWidth="88.66665649414062" text="Nom" />
-                              <TableColumn fx:id="col_marque" prefWidth="88.66665649414062" text="Marque" />
-                              <TableColumn fx:id="col_etat" prefWidth="88.66665649414062" text="Etat" />
-                              <TableColumn fx:id="col_local" prefWidth="88.66665649414062" text="Local" />
-                              <TableColumn fx:id="col_category" prefWidth="88.66665649414062" text="Categorie" />
-                              <TableColumn fx:id="col_date" prefWidth="89.99993896484375" text="Date" />
-                              <TableColumn fx:id="col_utilisateur" prefWidth="103.99993896484375" text="Utilisateur" />
-                              <TableColumn fx:id="colstatut" prefWidth="98.0001220703125" text="Statut" />
+                            <TableColumn fx:id="col_material" prefWidth="112.0" text="Numero Materiel" />
+                            <TableColumn fx:id="col_name" prefWidth="82.0" text="Nom" />
+                              <TableColumn fx:id="col_marque" prefWidth="88.00003051757812" text="Marque" />
+                              <TableColumn fx:id="col_etat" prefWidth="72.6666259765625" text="Etat" />
+                              <TableColumn fx:id="col_local" prefWidth="64.0" text="Local" />
+                              <TableColumn fx:id="col_category" prefWidth="101.33331298828125" text="Categorie" />
+                              <TableColumn fx:id="col_date" prefWidth="64.0" text="Date" />
+                              <TableColumn fx:id="col_utilisateur" prefWidth="88.0" text="Utilisateur" />
+                              <TableColumn fx:id="colstatut" prefWidth="96.00006103515625" text="Statut" />
+                              <TableColumn prefWidth="90.66656494140625" text="Id Materiel" />
                           </columns>
                         </TableView>
                      </children>
@@ -318,7 +319,7 @@
                      </padding>
                   </HBox>
                   <Button fx:id="addMaterial" layoutX="22.0" layoutY="444.0" mnemonicParsing="false" onAction="#AjouterMateriel" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952; -fx-effect: hand;" text="Ajouter" />
-                  <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleUpdateMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
+                  <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" onAction="#MettreAjour" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
                   <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
                </children>
             </AnchorPane>

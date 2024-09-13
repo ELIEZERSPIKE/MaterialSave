@@ -203,6 +203,8 @@ public class MaterialController implements Initializable {
 
     @FXML
     private TextField searchMaterial;
+    @FXML
+    private  TextField TexfieldMaterielId;
 
     @FXML
     private TextField textefieldLocate;
@@ -227,6 +229,9 @@ public class MaterialController implements Initializable {
 
     @FXML
     private TextField dateMaintenace;
+
+    @FXML
+    private TextField textFieldMaterialId;
 
     @FXML
     private TextField chargeMaintenace_textfield;
@@ -354,7 +359,7 @@ public class MaterialController implements Initializable {
 
             while (resultSet.next()) {
                 Material sData = new Material(
-                        resultSet.getInt("id"),
+//                        resultSet.getInt("id"),
                         resultSet.getInt("numeroMateriel"),
                         resultSet.getString("nom"),
                         resultSet.getString("marque"),
@@ -379,52 +384,53 @@ public class MaterialController implements Initializable {
         return listData;
     }
 
-    public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
-        connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            // Connexion à la base de données
-            connection = DBConfig.getConnection();
-
-
-            String req = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ? ";
-
-            preparedStatement = connection.prepareStatement(req);
-            preparedStatement.setInt(1, numeroMateriel);
-
-            // Exécution de la requête
-            resultSet = preparedStatement.executeQuery();
-
-            // Si un résultat est trouvé, le matériel existe
-            if (resultSet.next()) {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Material Number " + numeroMateriel + " le materiel exist  dejà!");
-                alert.showAndWait();
-                return true;  // Le matériel existe déjà
-            } else {
-                System.out.println("veuillez remplir le formulaire pour ajouter le materiel.");
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;  // On relance l'exception pour gérer l'erreur à un niveau supérieur
-        } finally {
-
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
-    }
+//    public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
+//        connection = null;
+//        PreparedStatement preparedStatement = null;
+//        ResultSet resultSet = null;
+//
+//        try {
+//            // Connexion à la base de données
+//            connection = DBConfig.getConnection();
+//
+//
+////            String req = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ? ";
+//                String req = "SELECT count(*)FROM material WHERE numeroMateriel = ?  ";
+//
+//            preparedStatement = connection.prepareStatement(req);
+//            preparedStatement.setInt(1, numeroMateriel);
+//
+//            // Exécution de la requête
+//            resultSet = preparedStatement.executeQuery();
+//
+//            // Si un résultat est trouvé, le matériel existe
+//            if (resultSet.next()) {
+//                alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Error Message");
+//                alert.setHeaderText(null);
+//                alert.setContentText("Material Number " + numeroMateriel + " le materiel exist  dejà!");
+//                alert.showAndWait();
+//                return true;  // Le matériel existe déjà
+//            } else {
+//                System.out.println("veuillez remplir le formulaire pour ajouter le materiel.");
+//                return false;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw e;  // On relance l'exception pour gérer l'erreur à un niveau supérieur
+//        } finally {
+//
+//            if (resultSet != null) {
+//                resultSet.close();
+//            }
+//            if (preparedStatement != null) {
+//                preparedStatement.close();
+//            }
+//            if (connection != null) {
+//                connection.close();
+//            }
+//        }
+//    }
 
     public void AjouterMateriel() throws IOException {
 
@@ -446,6 +452,7 @@ public class MaterialController implements Initializable {
             try {
                 // Vérification si le numéro de matériel existe déjà
                 boolean checkMaterialNumber = checkMaterialNumber(Integer.parseInt(materialNumber));
+
                 if (checkMaterialNumber) {
                     // Si le matériel existe déjà, afficher une alerte d'erreur
                     alert = new Alert(Alert.AlertType.ERROR);
@@ -506,6 +513,89 @@ public class MaterialController implements Initializable {
     }
 
 
+    public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
+        boolean exists = false;
+
+
+        String query = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, numeroMateriel);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;  // Vérifie si le matériel existe
+            }
+        }
+
+        return exists;
+    }
+
+
+
+
+
+public void MettreAjour() throws IOException{
+
+    String materialNumber = textfieldMaterialNumber.getText().trim();
+    String name = textfieldMateriamName.getText().trim();
+    String marque = TextfieldMaterialMarque.getText().trim();
+    String etat = textfieldMaterial_state.getText().trim();
+    String locale = textefieldLocate.getText().trim();
+    String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
+    LocalDate date = addDate.getValue();
+    String utilisateur = textfield_Material_User.getText().trim();
+    String statut = comboStatut.getSelectionModel().getSelectedItem();
+
+    if(materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
+    || category == null || utilisateur.isEmpty() || statut == null || date == null ){
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(null);
+        alert.setContentText("Remplir tout les champs");
+        alert.showAndWait();
+        return;
+    }
+    alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+    alert.setTitle("sur de modifier ? ");
+    alert.setHeaderText(null);
+    alert.setContentText("sur de modifier " + materialNumber + "?");
+    Optional<ButtonType> option =  alert.showAndWait();
+    if (option.get().equals(ButtonType.OK)){
+        try{
+            connection = DBConfig.getConnection();
+
+            int materialNumberInt = Integer.parseInt(materialNumber);
+
+            Material material = new Material(  materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut, null, null);
+            boolean success = material.updateMaterial(material);
+
+            if (success){
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("mise a jou");
+                alert.showAndWait();
+                materialShowData();
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setContentText("echec");
+                alert.showAndWait();
+                materialShowData();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+}
+
+
+
+
     public void materialShowData() {
         materialData = materialListData();
 
@@ -546,114 +636,18 @@ public class MaterialController implements Initializable {
         }
     }
 
-    public void handleUpdateMaterial() throws IOException {
-
-        String materialNumber = textfieldMaterialNumber.getText().trim();
-        String name = textfieldMateriamName.getText().trim();
-        String marque = TextfieldMaterialMarque.getText().trim();
-        String etat = textfieldMaterial_state.getText().trim();
-        String locale = textefieldLocate.getText().trim();
-        String category = BoxCategorie.getSelectionModel().getSelectedItem();
-        LocalDate date = addDate.getValue();
-        String utilisateur = textfield_Material_User.getText().trim();
-        String statut = comboStatut.getSelectionModel().getSelectedItem();
-
-        if (!materialNumber.isEmpty() && !name.isEmpty() && !marque.isEmpty() && !etat.isEmpty() &&
-                !locale.isEmpty() && category != null && !utilisateur.isEmpty() && statut != null) {
-
-            try {
-
-                Material material = findByMaterialNumber(Integer.parseInt(materialNumber));
-                if (material != null) {
-
-                    if (material.getMaterialNumber() == Integer.parseInt(materialNumber)) {
-                        if (checkMaterialNumber(Integer.parseInt(materialNumber))) {
-                            showAlert(Alert.AlertType.ERROR, "Erreur", "Le numéro de matériel existe déjà.");
-                            return;
-                        }
-                    }
-
-
-                    material.setMaterialNumber(Integer.parseInt(materialNumber));
-                    material.setName(name);
-                    material.setMarque(marque);
-                    material.setEtat(etat);
-                    material.setLocale(locale);
-                    material.setCategory(category);
-
-                    if (date != null) {
-                        material.setDate(Date.valueOf(date));
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date doit être sélectionnée.");
-                        return;
-                    }
-
-                    material.setUtilisateur(utilisateur);
-                    material.setStatut(statut);
-
-
-                    boolean success = material.updateMaterial(material);
-
-                    if (success) {
-                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Matériel mis à jour avec succès !");
-                        materialShowData();
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "La mise à jour a échoué.");
-                    }
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Matériel introuvable.");
-                }
-            } catch (NumberFormatException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de format", "Le numéro de matériel doit être un nombre valide.");
-                e.printStackTrace();
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Une erreur s'est produite lors de la mise à jour.");
-                e.printStackTrace();
-            }
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Tous les champs sont requis.");
-        }
-    }
 
 
 
 
-    public Material findByMaterialNumber(int materialNumber) throws SQLException {
-
-        String query = "SELECT * FROM material WHERE numeroMateriel = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, materialNumber);
-
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-
-                Material material = new Material();
-
-                material.setMaterialNumber(resultSet.getInt("numeroMateriel"));
-                material.setName(resultSet.getString("name"));
-                material.setMarque(resultSet.getString("marque"));
-                material.setEtat(resultSet.getString("etat"));
-                material.setLocale(resultSet.getString("local"));
-                material.setCategory(resultSet.getString("categorie"));
-                material.setDate(resultSet.getDate("date"));
-                material.setUtilisateur(resultSet.getString("utilisateur"));
-                material.setStatut(resultSet.getString("statut"));
-
-                return material;
-            }
-        }
-        return null;
-    }
 
 
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
+
+
+
+
 
 
     @Override

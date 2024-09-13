@@ -1,0 +1,47 @@
+    public void  findByMaterialNumber(int materialNumber) throws SQLException {
+        Material material = null;
+
+        // Exemple d'une requête SQL si tu utilises une base de données
+        String query = "SELECT * FROM material WHERE numeroMateriel = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, materialNumber);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                material = new Material();
+                material.setId(resultSet.getInt("id"));
+                material.setMaterialNumber(resultSet.getInt("material_number"));
+                material.setName(resultSet.getString("name"));
+                material.setMarque(resultSet.getString("marque"));
+                material.setEtat(resultSet.getString("etat"));
+                material.setLocale(resultSet.getString("locale"));
+                material.setCategory(resultSet.getString("category"));
+                material.setDate(resultSet.getDate("date"));
+                material.setUtilisateur(resultSet.getString("utilisateur"));
+                material.setStatut(resultSet.getString("statut"));
+            } else{
+                System.out.println("Non trouve");
+            }
+
+        }
+
+
+    }
+    public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
+        boolean exists = false;
+
+
+        String query = "SELECT COUNT(*) FROM material WHERE numeroMateriel = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, numeroMateriel);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;  // Vérifie si le matériel existe
+            }
+        }
+
+        return exists;
+    }

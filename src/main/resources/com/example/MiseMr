@@ -1,0 +1,104 @@
+//    public void handleUpdateMaterial() throws IOException {
+//
+//        String materialNumber = textfieldMaterialNumber.getText().trim();
+//        String name = textfieldMateriamName.getText().trim();
+//        String marque = TextfieldMaterialMarque.getText().trim();
+//        String etat = textfieldMaterial_state.getText().trim();
+//        String locale = textefieldLocate.getText().trim();
+//        String category = BoxCategorie.getSelectionModel().getSelectedItem();
+//        LocalDate date = addDate.getValue();
+//        String utilisateur = textfield_Material_User.getText().trim();
+//        String statut = comboStatut.getSelectionModel().getSelectedItem();
+//
+//        if (!materialNumber.isEmpty() && !name.isEmpty() && !marque.isEmpty() && !etat.isEmpty() &&
+//                !locale.isEmpty() && category != null && !utilisateur.isEmpty() && statut != null) {
+//
+//            try {
+//
+//                Material material = findByMaterialNumber(Integer.parseInt(materialNumber));
+//                if (material != null) {
+//
+//                    if (material.getMaterialNumber() == Integer.parseInt(materialNumber)) {
+//                        if (checkMaterialNumber(Integer.parseInt(materialNumber))) {
+//                            showAlert(Alert.AlertType.ERROR, "Erreur", "Le numéro de matériel existe déjà.");
+//                            return;
+//                        }
+//                    }
+//
+//
+//                    material.setMaterialNumber(Integer.parseInt(materialNumber));
+//                    material.setName(name);
+//                    material.setMarque(marque);
+//                    material.setEtat(etat);
+//                    material.setLocale(locale);
+//                    material.setCategory(category);
+//
+//                    if (date != null) {
+//                        material.setDate(Date.valueOf(date));
+//                    } else {
+//                        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date doit être sélectionnée.");
+//                        return;
+//                    }
+//
+//                    material.setUtilisateur(utilisateur);
+//                    material.setStatut(statut);
+//
+//
+//                    boolean success = material.updateMaterial(material);
+//
+//                    if (success) {
+//                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Matériel mis à jour avec succès !");
+//                        materialShowData();
+//                    } else {
+//                        showAlert(Alert.AlertType.ERROR, "Erreur", "La mise à jour a échoué.");
+//                    }
+//                } else {
+//                    showAlert(Alert.AlertType.ERROR, "Erreur", "Matériel introuvable.");
+//                }
+//            } catch (NumberFormatException e) {
+//                showAlert(Alert.AlertType.ERROR, "Erreur de format", "Le numéro de matériel doit être un nombre valide.");
+//                e.printStackTrace();
+//            } catch (SQLException e) {
+//                showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Une erreur s'est produite lors de la mise à jour.");
+//                e.printStackTrace();
+//            }
+//        } else {
+//            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Tous les champs sont requis.");
+//        }
+//    }
+//    public Material findByMaterialNumber(int materialNumber) throws SQLException {
+//
+//        String query = "SELECT * FROM material WHERE numeroMateriel = ?";
+//        try (PreparedStatement statement = connection.prepareStatement(query)) {
+//            statement.setInt(1, materialNumber);
+//
+//            ResultSet resultSet = statement.executeQuery();
+//            if (resultSet.next()) {
+//
+//                Material material = new Material();
+//
+//                material.setMaterialNumber(resultSet.getInt("numeroMateriel"));
+//                material.setName(resultSet.getString("name"));
+//                material.setMarque(resultSet.getString("marque"));
+//                material.setEtat(resultSet.getString("etat"));
+//                material.setLocale(resultSet.getString("local"));
+//                material.setCategory(resultSet.getString("categorie"));
+//                material.setDate(resultSet.getDate("date"));
+//                material.setUtilisateur(resultSet.getString("utilisateur"));
+//                material.setStatut(resultSet.getString("statut"));
+//
+//                return material;
+//            }
+//        }
+//        return null;
+//    }
+
+
+
+private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
