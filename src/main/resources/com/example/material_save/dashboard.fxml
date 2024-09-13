@@ -320,7 +320,7 @@
                   </HBox>
                   <Button fx:id="addMaterial" layoutX="22.0" layoutY="444.0" mnemonicParsing="false" onAction="#AjouterMateriel" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952; -fx-effect: hand;" text="Ajouter" />
                   <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" onAction="#MettreAjour" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
-                  <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
+                  <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleDeleteMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #FFA500;" visible="false">

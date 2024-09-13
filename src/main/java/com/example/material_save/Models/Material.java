@@ -311,6 +311,48 @@ public class Material implements MaterielInterface {
         }
     }
 
+    public boolean DeleteMaterial(Material material) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String query = "DELETE FROM `material` WHERE `numeroMateriel` = ?";
+
+        try {
+
+            connection = DBConfig.getConnection();
+
+            // Préparez la requête
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, material.getMaterialNumber());
+
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            // Retournez true si des lignes ont été supprimées, sinon false
+            return rowsDeleted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // Laissez passer l'exception pour une gestion ultérieure
+        } finally {
+
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 }
 

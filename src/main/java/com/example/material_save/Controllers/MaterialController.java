@@ -595,6 +595,63 @@ public void MettreAjour() throws IOException{
 
 
 
+    public void handleDeleteMaterial(ActionEvent event) {
+        String materialNumberText = textfieldMaterialNumber.getText().trim();
+
+        if (materialNumberText.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de validation");
+            alert.setContentText("Le numéro de matériel est requis.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            int materialNumber = Integer.parseInt(materialNumberText);
+
+
+            Material material = new Material();
+            material.setMaterialNumber(materialNumber);
+
+
+            Material materialService = new Material();
+            boolean success = material.DeleteMaterial(material);
+            materialShowData();
+
+            if (success) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès de la suppression");
+                alert.setHeaderText(null);
+                alert.setContentText("Le matériel avec le numéro " + materialNumber + " a été supprimé avec succès.");
+                alert.showAndWait();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur de suppression");
+                alert.setHeaderText(null);
+                alert.setContentText("Le matériel avec le numéro " + materialNumber + " n'a pas été trouvé.");
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de format");
+            alert.setHeaderText(null);
+            alert.setContentText("Le numéro de matériel doit être un nombre valide.");
+            alert.showAndWait();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur SQL");
+            alert.setHeaderText(null);
+            alert.setContentText("Une erreur s'est produite lors de la suppression.");
+            alert.showAndWait();
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
     public void materialShowData() {
         materialData = materialListData();
@@ -664,6 +721,7 @@ public void MettreAjour() throws IOException{
         addstatutList();
         addcategorieList();
         materialShowData();
+
 
 
     }
