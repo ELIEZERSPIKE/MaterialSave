@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -54,7 +55,7 @@ public class MaterialController implements Initializable {
     private LineChart<?, ?> GraphNonDispo;
 
     @FXML
-    private BarChart<?, ?> GraphiqueMateriel;
+    private BarChart<String, Number> GraphiqueMateriel;
 
     @FXML
     private Button Home_Btn;
@@ -324,9 +325,7 @@ public class MaterialController implements Initializable {
 
     }
 
-
     private final String[] categoriesList = {"Electronique", "Mobilier", "Agricole", "Equipement mobilier", "Equipement agricole", "Equipement mobilier"};
-
     public void addcategorieList() {
         List<String> categoriesL = new ArrayList<>();
         for (String data : categoriesList) {
@@ -383,54 +382,6 @@ public class MaterialController implements Initializable {
 
         return listData;
     }
-
-//    public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
-//        connection = null;
-//        PreparedStatement preparedStatement = null;
-//        ResultSet resultSet = null;
-//
-//        try {
-//            // Connexion à la base de données
-//            connection = DBConfig.getConnection();
-//
-//
-////            String req = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ? ";
-//                String req = "SELECT count(*)FROM material WHERE numeroMateriel = ?  ";
-//
-//            preparedStatement = connection.prepareStatement(req);
-//            preparedStatement.setInt(1, numeroMateriel);
-//
-//            // Exécution de la requête
-//            resultSet = preparedStatement.executeQuery();
-//
-//            // Si un résultat est trouvé, le matériel existe
-//            if (resultSet.next()) {
-//                alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Error Message");
-//                alert.setHeaderText(null);
-//                alert.setContentText("Material Number " + numeroMateriel + " le materiel exist  dejà!");
-//                alert.showAndWait();
-//                return true;  // Le matériel existe déjà
-//            } else {
-//                System.out.println("veuillez remplir le formulaire pour ajouter le materiel.");
-//                return false;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;  // On relance l'exception pour gérer l'erreur à un niveau supérieur
-//        } finally {
-//
-//            if (resultSet != null) {
-//                resultSet.close();
-//            }
-//            if (preparedStatement != null) {
-//                preparedStatement.close();
-//            }
-//            if (connection != null) {
-//                connection.close();
-//            }
-//        }
-//    }
 
     public void AjouterMateriel() throws IOException {
 
@@ -531,11 +482,7 @@ public class MaterialController implements Initializable {
         return exists;
     }
 
-
-
-
-
-public void MettreAjour() throws IOException{
+    public void MettreAjour() throws IOException{
 
     String materialNumber = textfieldMaterialNumber.getText().trim();
     String name = textfieldMateriamName.getText().trim();
@@ -592,9 +539,6 @@ public void MettreAjour() throws IOException{
 
 
 }
-
-
-
     public void handleDeleteMaterial(ActionEvent event) {
         String materialNumberText = textfieldMaterialNumber.getText().trim();
 
@@ -649,10 +593,6 @@ public void MettreAjour() throws IOException{
     }
 
 
-
-
-
-
     public void materialShowData() {
         materialData = materialListData();
 
@@ -693,6 +633,33 @@ public void MettreAjour() throws IOException{
         }
     }
 
+    public void homeDisplayBarChart() {
+        GraphiqueMateriel.getData().clear();
+
+        String sql = "SELECT date, COUNT(id) FROM material WHERE statut = 'disponible' GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 5";
+        connection = DBConfig.getConnection();
+
+        try {
+            XYChart.Series<String, Number> chart = new XYChart.Series<>();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                chart.getData().add(new XYChart.Data<>(resultSet.getString(1), resultSet.getInt(2)));
+            }
+
+            // Ajoutez la série au graphique après avoir inséré toutes les données
+            GraphiqueMateriel.getData().add(chart);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+
+
+
 
 
 
@@ -721,6 +688,7 @@ public void MettreAjour() throws IOException{
         addstatutList();
         addcategorieList();
         materialShowData();
+        homeDisplayBarChart();
 
 
 
