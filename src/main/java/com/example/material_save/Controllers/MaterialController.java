@@ -1,6 +1,7 @@
 package com.example.material_save.Controllers;
 
 import com.example.material_save.IDB.DBConfig;
+import com.example.material_save.Models.Category;
 import com.example.material_save.Models.Material;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -111,7 +109,7 @@ public class MaterialController implements Initializable {
     private Button addMaterial;
 
     @FXML
-    private TableView<?> categorie_tableView;
+    private TableView<Category> categorie_tableView;
 
     @FXML
     private TextField charge_materiel;
@@ -132,15 +130,15 @@ public class MaterialController implements Initializable {
     private TableColumn<Material, Date> col_date_main;
 
     @FXML
-    private TableColumn<?, ?> col_description_categorie;
+    private TableColumn<Category, String> col_description_categorie;
 
     @FXML
     private TableColumn<Material, String> col_etat;
 
     @FXML
-    private TableColumn<?, ?> col_etat_categorie;
+    private TableColumn<Category, String> col_etat_categorie;
     @FXML
-    private TableColumn<?, ?> col_categoryName;
+    private TableColumn<Category, String> col_categoryName;
 
     @FXML
     private TableColumn<Material, String> col_local;
@@ -241,6 +239,9 @@ public class MaterialController implements Initializable {
     private Button updateMaterial;
 
     @FXML
+    private PieChart PieChartMateriel;
+
+    @FXML
     private AnchorPane HomeForm;
 
     private Connection connection;
@@ -253,6 +254,7 @@ public class MaterialController implements Initializable {
     private Alert alert;
 
     private ObservableList<Material> materialData;
+    private ObservableList<Category> categoriesData;
 
 
     public void close() {
@@ -301,9 +303,10 @@ public class MaterialController implements Initializable {
             Form_categories.setVisible(true);
             Form_categories.setManaged(true);
             System.out.println("categorie  trouve");
-
             Maintenance_Form.setVisible(false);
             Maintenance_Form.setManaged(false);
+
+            categoriesData();
 
 
         } else if (event.getSource() == AddMaintenances_Btn) {
@@ -325,27 +328,18 @@ public class MaterialController implements Initializable {
 
     }
 
-    private final String[] categoriesList = {"Electronique", "Mobilier", "Agricole", "Equipement mobilier", "Equipement agricole", "Equipement mobilier"};
-    public void addcategorieList() {
-        List<String> categoriesL = new ArrayList<>();
-        for (String data : categoriesList) {
-            categoriesL.add(data);
-        }
+//    private final String[] categoriesList = {"Electronique", "Mobilier", "Agricole"};
+private final String[] categoriesList = {"", "", ""};
+//    public void addcategorieList() {
+//        List<String> categoriesL = new ArrayList<>();
+//        for (String data : categoriesList) {
+//            categoriesL.add(data);
+//        }
+//
+//        ObservableList Oblist = FXCollections.observableList(categoriesL);
+//        BoxCategorie.setItems(Oblist);
+//    }
 
-        ObservableList Oblist = FXCollections.observableList(categoriesL);
-        BoxCategorie.setItems(Oblist);
-    }
-
-    private final String[] statutList = {"Disponible", "Non-disponible", "Retire", "En maintenance", "En reserve"};
-
-    public void addstatutList() {
-        List<String> statutL = new ArrayList<>();
-        for (String data : statutList) {
-            statutL.add(data);
-        }
-        ObservableList Oblist = FXCollections.observableList(statutL);
-        comboStatut.setItems(Oblist);
-    }
 
     public ObservableList<Material> materialListData() {
         ObservableList<Material> listData = FXCollections.observableArrayList();
@@ -411,6 +405,7 @@ public class MaterialController implements Initializable {
                     alert.setHeaderText(null);
                     alert.setContentText("Le matériel existe déjà");
                     alert.showAndWait();
+                    ViderChamps();
                 } else {
                     // Si le matériel n'existe pas, on peut le créer
 
@@ -430,6 +425,7 @@ public class MaterialController implements Initializable {
                         // Enregistrement du matériel en base de données
                         material.register(material);
                         materialShowData();
+                        ViderChamps();
 
                         // Afficher un message de confirmation après l'ajout réussi
                         alert = new Alert(Alert.AlertType.INFORMATION);
@@ -447,6 +443,9 @@ public class MaterialController implements Initializable {
                         alert.showAndWait();
 
 
+
+
+
                     }
                 }
             } catch (Exception e) {
@@ -460,10 +459,9 @@ public class MaterialController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Veuillez remplir tous les champs !");
             alert.showAndWait();
+
         }
     }
-
-
     public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
         boolean exists = false;
 
@@ -477,11 +475,12 @@ public class MaterialController implements Initializable {
             if (resultSet.next()) {
                 exists = resultSet.getInt(1) > 0;  // Vérifie si le matériel existe
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         return exists;
     }
-
     public void MettreAjour() throws IOException{
 
     String materialNumber = textfieldMaterialNumber.getText().trim();
@@ -522,13 +521,18 @@ public class MaterialController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("mise a jou");
                 alert.showAndWait();
+
                 materialShowData();
+                ViderChamps();
+
+
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText(null);
                 alert.setContentText("echec");
                 alert.showAndWait();
                 materialShowData();
+
             }
 
         }catch (Exception e){
@@ -568,6 +572,7 @@ public class MaterialController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Le matériel avec le numéro " + materialNumber + " a été supprimé avec succès.");
                 alert.showAndWait();
+                ViderChamps();
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -575,6 +580,8 @@ public class MaterialController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Le matériel avec le numéro " + materialNumber + " n'a pas été trouvé.");
                 alert.showAndWait();
+
+                ViderChamps();
             }
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -582,6 +589,7 @@ public class MaterialController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Le numéro de matériel doit être un nombre valide.");
             alert.showAndWait();
+            ViderChamps();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur SQL");
@@ -606,11 +614,8 @@ public class MaterialController implements Initializable {
         col_utilisateur.setCellValueFactory(new PropertyValueFactory<>("utilisateur"));
         colstatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
 
-
         Material_tableView.setItems(materialData);
     }
-
-
     public void materialSelectData() {
         Material sData = Material_tableView.getSelectionModel().getSelectedItem();
         if (sData != null) {
@@ -632,7 +637,6 @@ public class MaterialController implements Initializable {
 
         }
     }
-
     public void homeDisplayBarChart() {
         GraphiqueMateriel.getData().clear();
 
@@ -656,12 +660,232 @@ public class MaterialController implements Initializable {
 
         }
     }
+    private void updatePieChart() {
+        String selectedStatut = comboStatut.getValue();
+        System.out.println("Statut sélectionné : " + selectedStatut);
+
+        PieChartMateriel.getData().clear();
+
+        if (selectedStatut != null) {
+            Connection connection = null;
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+
+            try {
+                connection = DBConfig.getConnection();
+                String sql = "SELECT statut, COUNT(id) AS count FROM material WHERE statut = ? GROUP BY statut";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, selectedStatut);
+                resultSet = preparedStatement.executeQuery();
+
+                int count = 0;
+                if (resultSet.next()) {
+                    count = resultSet.getInt("count");
+                    System.out.println("Matériels : " + count);
+                } else {
+                    System.out.println("Aucune donnée trouvée pour : " + selectedStatut);
+                }
+
+                int total = getTotaCount(connection);
+                PieChartMateriel.getData().addAll(
+                        new PieChart.Data(selectedStatut, count),
+                        new PieChart.Data("Autres", total - count)
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                // Assurer la fermeture des ressources
+                try { if (resultSet != null) resultSet.close(); } catch (Exception e) { e.printStackTrace(); }
+                try { if (preparedStatement != null) preparedStatement.close(); } catch (Exception e) { e.printStackTrace(); }
+                try { if (connection != null) connection.close(); } catch (Exception e) { e.printStackTrace(); }
+            }
+        }
+    }
+    private int getTotaCount(Connection connection){
+
+        String total = "SELECT COUNT(id) AS total FROM material ";
+        try{
+            connection = DBConfig.getConnection();
+            preparedStatement = connection.prepareStatement(total);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return resultSet.getInt("total");
+            }
+        }catch (Exception e){
+           e.printStackTrace();
+        }
+        return 0;
+    }
+    public  void ViderChamps(){
+    textfieldMaterialNumber.setText("");
+    textfieldMateriamName.setText("");
+    TextfieldMaterialMarque.setText("");
+    textfieldMaterial_state.setText("");
+    BoxCategorie.getSelectionModel().clearSelection();
+    textefieldLocate.setText("");
+    addDate.setValue(null);
+    textfield_Material_User.setText("");
+    comboStatut.getSelectionModel().clearSelection();
+}
 
 
+public ObservableList<Category> CategoriesListData(){
+        ObservableList<Category> listData = FXCollections.observableArrayList();
+        String selectData = "SELECT * FROM category";
+        connection = DBConfig.getConnection();
+        try{
+            Category courseC;
+
+            preparedStatement = connection.prepareStatement(selectData);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+
+                courseC = new Category(resultSet.getString("NomCategory"),
+                        resultSet.getString("Description"),
+                resultSet.getString("Etat") );
+                 listData.add(courseC);
+            }
+
+        } catch (Exception e){
+          e.printStackTrace();
+        }
+        return  listData;
+}
+
+public void addCategoryList() {
+        String listCategory = "SELECT * FROM category";
+        connection = DBConfig.getConnection();
+        ObservableList<String> courseC = FXCollections.observableArrayList();
+        try {
+            preparedStatement = connection.prepareStatement(listCategory);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                courseC.add(resultSet.getString("NomCategory"));
+            }
+            BoxCategorie.setItems(courseC);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
 
+public boolean checkCategoryExists(String NomCategory) throws SQLException {
+        boolean exists = false;
 
 
+        String query = "SELECT NomCategory FROM category WHERE NomCategory = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, NomCategory);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                exists = resultSet.getInt(1) > 0;  // Vérifie si le matériel existe
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return exists;
+    }
+
+public void categoriesData(){
+     categoriesData = CategoriesListData();
+    col_categoryName.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+    col_description_categorie.setCellValueFactory(new PropertyValueFactory<>("categoryDescription"));
+    col_etat_categorie.setCellValueFactory(new PropertyValueFactory<>("categoryState"));
+
+    categorie_tableView.setItems(categoriesData);
+
+ }
+ public void ajouterCategory() throws IOException {
+        String categoryName = textfield_categorie_name.getText().trim();
+        String categoryDescription = description_categorie.getText().trim();
+        String categoryState = etat_categorie.getText().trim();
+
+        if (categoryName.isEmpty() || categoryDescription.isEmpty() || categoryState.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avertissement");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez remplir tous les champs requis.");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            if (checkCategoryExists(categoryName)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("La catégorie existe déjà");
+                alert.showAndWait();
+                ViderChampsCategory();
+                return;
+            }
+
+            Category category = new Category(categoryName, categoryDescription, categoryState);
+
+            category.register(category);
+            categoriesData();
+//            Methode pou recuperer le combo box:addCategoryList();
+            addCategoryList();
+
+//            Methode pour charger le tableView
+            CategoriesListData();
+
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Catégorie créée");
+            alert.showAndWait();
+
+            // Vider les champs après l'ajout
+            ViderChampsCategory();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Catégorie non créée");
+            alert.showAndWait();
+        }
+    }
+    public void CategorySelectData(){
+        Category courseC = categorie_tableView.getSelectionModel().getSelectedItem();
+        if(courseC != null){
+            textfield_categorie_name.setText(courseC.getCategoryName());
+            description_categorie.setText(courseC.getCategoryDescription());
+            etat_categorie.setText(courseC.getCategoryState());
+        }
+    }
+    public void  ViderChampsCategory(){
+    textfield_categorie_name.setText("");
+    etat_categorie.setText("");
+    description_categorie.setText("");
+}
+public void availableCategory() {
+        // Obtenir l'élément sélectionné dans la table des catégories
+        Category courseC = categorie_tableView.getSelectionModel().getSelectedItem();
+        int num = categorie_tableView.getSelectionModel().getSelectedIndex();
+
+        if (num < 0) {
+            return;
+        }
+        textfield_categorie_name.setText(courseC.getCategoryName());
+        description_categorie.setText(courseC.getCategoryDescription());
+        etat_categorie.setText(courseC.getCategoryState());
+    }
 
 
 
@@ -684,12 +908,34 @@ public class MaterialController implements Initializable {
 
         Material_Add_Form.setVisible(false);
         Material_Add_Form.setManaged(false);
+        ViderChampsCategory();
 
-        addstatutList();
-        addcategorieList();
+//        addstatutList();
+//        addcategorieList();
         materialShowData();
         homeDisplayBarChart();
 
+        CategorySelectData();
+
+        CategoriesListData();
+
+        availableCategory();
+
+//        La Methode qui recupere les elements du combobox
+        addCategoryList();
+
+//        comboStatut.getItems().addAll(statutList);
+        if (comboStatut.getItems().addAll("Disponible", "Non-disponible", "En reserve", "En maintenance"));
+
+        comboStatut.setOnAction(event -> updatePieChart());
+
+        BoxCategorie.setOnAction(event -> {
+            String selectedCategory = BoxCategorie.getSelectionModel().getSelectedItem();
+            if (selectedCategory != null) {
+                String categoryName = selectedCategory;
+                System.out.println("Nom de la catégorie sélectionnée: " + categoryName);
+            }
+        });
 
 
     }

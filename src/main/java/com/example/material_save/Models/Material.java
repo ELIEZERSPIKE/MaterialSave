@@ -210,14 +210,7 @@ public class Material implements MaterielInterface {
             preparedStatement.setDate(7, this.date);
             preparedStatement.setString(8, this.utilisateur);
             preparedStatement.setString(9,  this.statut);
-
-//            java.util.Date date = new java.util.Date();
-//            java.sql.Date sqlDate = new  java.sql.Date(date.getTime());
-//            preparedStatement.setString(10, String.valueOf(sqlDate));
-
             preparedStatement.executeUpdate();
-
-
         } finally {
             if (preparedStatement != null) {
                 try {
@@ -238,45 +231,7 @@ public class Material implements MaterielInterface {
 
 
 
-//    public boolean updateMaterial(Material material) throws SQLException {
-//        Connection connection = null;
-//        PreparedStatement preparedStatement = null;
-//
-//        try {
-//            connection = DBConfig.getConnection();
-//            String query = "UPDATE material SET " +
-//                    "nom = ?, marque = ?, etat = ?, local = ?, " +
-//                    "categorie = ?, date = ?, utilisateur = ?, statut = ? " +
-//                    "WHERE numeroMateriel = ?";
-//
-//            preparedStatement = connection.prepareStatement(query);
-//
-//            preparedStatement.setString(1, material.getName());
-//            preparedStatement.setString(2, material.getMarque());
-//            preparedStatement.setString(3, material.getEtat());
-//            preparedStatement.setString(4, material.getLocale());
-//            preparedStatement.setString(5, material.getCategory());
-//            preparedStatement.setDate(6, material.getDate());
-//            preparedStatement.setString(7, material.getUtilisateur());
-//            preparedStatement.setString(8, material.getStatut());
-//            preparedStatement.setInt(9, material.getMaterialNumber());
-//
-//            int rowsAffected = preparedStatement.executeUpdate();
-//
-//            return rowsAffected > 0;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            if (preparedStatement != null) {
-//                preparedStatement.close();
-//            }
-//            if (connection != null) {
-//                connection.close();
-//            }
-//        }
-//    }
+
 
     public boolean updateMaterial(Material material) throws SQLException {
 
