@@ -318,8 +318,8 @@
                            </font>
                         </Label>
                         <TextField fx:id="etat_categorie" layoutX="151.0" layoutY="137.0" />
-                        <Button fx:id="updateCategorie_Btn" layoutX="116.0" layoutY="240.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: yellow;" text="Modifier" />
-                        <Button fx:id="deleteCategorie_Btn" layoutX="195.0" layoutY="240.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: red;" text="Supprimer" />
+                        <Button fx:id="updateCategorie_Btn" layoutX="116.0" layoutY="240.0" mnemonicParsing="false" onAction="#MettreAjourCategorie" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: yellow;" text="Modifier" />
+                        <Button fx:id="deleteCategorie_Btn" layoutX="195.0" layoutY="240.0" mnemonicParsing="false" onAction="#SupprimerCategory" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: red;" text="Supprimer" />
                      </children>
                   </AnchorPane>
                </children>

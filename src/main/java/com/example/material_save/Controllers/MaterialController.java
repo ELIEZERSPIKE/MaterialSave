@@ -887,6 +887,145 @@ public void availableCategory() {
         etat_categorie.setText(courseC.getCategoryState());
     }
 
+//    public void MettraAjourCategorie() throws IOException{
+//        String CategoryName = textfield_categorie_name.getText().trim();
+//        String CategoryDescription = description_categorie.getText().trim();
+//        String  CategoryState = etat_categorie.getText().trim();
+//
+//        if(CategoryName.isEmpty() || CategoryDescription.isEmpty() || CategoryState.isEmpty()){
+//            alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText(null);
+//            alert.setContentText("Veuillez remplir tout les champs");
+//            alert.showAndWait();
+//            return;
+//        }
+//        alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setHeaderText(null);
+//        alert.setContentText("êtes vous sûr de vouloir modifier" + CategoryName + "?");
+//        Optional<ButtonType> option = alert.showAndWait();
+//        if(option.get().equals(ButtonType.OK)){
+//            try{
+//                connection = DBConfig.getConnection();
+//                String CategorieName = CategoryName;
+//                Category category = new Category(CategorieName, CategoryDescription, CategoryState);
+//                boolean success = category.updateCategory(category);
+//
+//                if (success){
+//                    alert = new Alert(Alert.AlertType.CONFIRMATION);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("Mise a jour effectue");
+//                    alert.showAndWait();
+//                    ViderChampsCategory();
+//                    categoriesData();
+//
+//
+//                } else{
+//
+//                    alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("Echec");
+//                    alert.showAndWait();
+//                    ViderChampsCategory();
+//                    categoriesData();
+//                }
+//            } catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+    public void MettreAjourCategorie() throws IOException {
+        String categoryName = textfield_categorie_name.getText().trim();
+        String categoryDescription = description_categorie.getText().trim();
+        String categoryState = etat_categorie.getText().trim();
+
+        if (categoryName.isEmpty() || categoryDescription.isEmpty() || categoryState.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez remplir tous les champs");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("Êtes-vous sûr de vouloir modifier " + categoryName + "?");
+        Optional<ButtonType> option = alert.showAndWait();
+        if (option.isPresent() && option.get().equals(ButtonType.OK)) {
+            try {
+                connection = DBConfig.getConnection();
+                Category category = new Category(categoryName, categoryDescription, categoryState);
+                boolean success = category.updateCategory(category);
+
+                if (success) {
+                    alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Mise à jour effectuée");
+                    alert.showAndWait();
+                    ViderChampsCategory();
+                    categoriesData();
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Échec de la mise à jour");
+                    alert.showAndWait();
+                    ViderChampsCategory();
+                    categoriesData();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Une erreur est survenue lors de la mise à jour.");
+                errorAlert.showAndWait();
+            }
+        }
+    }
+
+
+
+    public void SupprimerCategory() throws IOException {
+        String CategoryName = textfield_categorie_name.getText().trim();
+        String CategoryDescription = description_categorie.getText().trim();
+        String CategoryState = etat_categorie.getText().trim();
+        if (CategoryName.isEmpty() && CategoryDescription.isEmpty() && CategoryState.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de validation");
+            alert.setContentText("Le nom de la catégorie est obligatoire");
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            connection = DBConfig.getConnection();
+            Category category = new Category(CategoryName, CategoryDescription, CategoryState);
+            boolean success = category.DeleteCategory(category);
+
+            if (success) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Succès");
+                alert.setContentText("La catégorie a été supprimée avec succès.");
+                alert.showAndWait();
+                ViderChampsCategory();
+//                availableCategory();
+                categoriesData();
+
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Échec");
+                alert.setContentText("La suppression de la catégorie a échoué.");
+                alert.showAndWait();
+                ViderChampsCategory();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setContentText("Une erreur est survenue lors de la suppression.");
+            alert.showAndWait();
+        }
+    }
 
 
 
@@ -914,7 +1053,7 @@ public void availableCategory() {
 //        addcategorieList();
         materialShowData();
         homeDisplayBarChart();
-
+        categoriesData();
         CategorySelectData();
 
         CategoriesListData();

@@ -112,6 +112,8 @@ public class Category {
             preparedStatement.setString(1, category.getCategoryDescription());
             preparedStatement.setString(2,category.getCategoryName());
             preparedStatement.setString(3,getCategoryState());
+            preparedStatement.setString(4, category.getCategoryName());
+
 
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
