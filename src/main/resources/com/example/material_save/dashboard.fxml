@@ -288,7 +288,7 @@
                   <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleDeleteMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #FFA500;">
+            <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #FFA500;" visible="false">
                <children>
                   <TableView fx:id="categorie_tableView" layoutX="14.0" layoutY="15.0" onMouseClicked="#CategorySelectData" prefHeight="481.0" prefWidth="435.0">
                     <columns>
@@ -324,18 +324,19 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #FFA500;">
                <children>
-                  <TableView fx:id="Maintenance_tableView" layoutX="14.0" layoutY="26.0" prefHeight="481.0" prefWidth="487.0">
+                  <TableView fx:id="Maintenance_tableView" layoutX="6.0" layoutY="14.0" onMouseClicked="#maintenanceSelectData" prefHeight="481.0" prefWidth="553.0">
                     <columns>
-                      <TableColumn prefWidth="106.0" text="numero Materiel" />
-                      <TableColumn prefWidth="92.0" text="Charge" />
-                        <TableColumn prefWidth="111.3333740234375" text="probleme(s)" />
-                        <TableColumn prefWidth="90.666748046875" text="date" />
-                        <TableColumn prefWidth="90.666748046875" text="statut" />
+                      <TableColumn fx:id="MaintenaceNumber" prefWidth="106.0" text="numero Materiel" />
+                      <TableColumn fx:id="col_charge" prefWidth="85.99996948242188" text="Charge" />
+                        <TableColumn fx:id="col_probleme" prefWidth="105.3333740234375" text="probleme(s)" />
+                        <TableColumn fx:id="col_dateMaintenance" prefWidth="83.33331298828125" text="date" />
+                        <TableColumn fx:id="col_statutMaintenance" prefWidth="88.0" text="statut" />
+                        <TableColumn fx:id="col_MaintenanceCombo" prefWidth="88.0" text="categorie " />
                     </columns>
                   </TableView>
-                  <Label layoutX="555.0" layoutY="16.0" prefHeight="17.0" prefWidth="256.0" text="Remplir le formulaire de maintenance ">
+                  <Label layoutX="594.0" layoutY="21.0" prefHeight="17.0" prefWidth="256.0" text="Remplir le formulaire de maintenance ">
                      <font>
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
@@ -349,7 +350,7 @@
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="numero_materiel" />
+                              <ComboBox fx:id="ComboNumMateriel" prefWidth="150.0" />
                            </children>
                            <opaqueInsets>
                               <Insets />
@@ -392,7 +393,17 @@
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DatePicker />
+                              <DatePicker fx:id="DateMaintenance" />
+                           </children>
+                        </HBox>
+                        <HBox layoutX="15.0" layoutY="82.0" spacing="8.0">
+                           <children>
+                              <Label text="Statut">
+                                 <font>
+                                    <Font name="Tahoma Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <ComboBox fx:id="Combo_maintenance" prefWidth="150.0" />
                            </children>
                         </HBox>
                      </children>
@@ -400,7 +411,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <Button fx:id="Maintenance_add_Btn" layoutX="581.0" layoutY="391.0" mnemonicParsing="false" text="Ajouter" />
+                  <Button fx:id="Maintenance_add_Btn" layoutX="581.0" layoutY="391.0" mnemonicParsing="false" onAction="#addMaintenance" text="Ajouter" />
                   <Button fx:id="Maintenance_Update_Btn" layoutX="661.0" layoutY="391.0" mnemonicParsing="false" text="Modifier" />
                   <Button layoutX="752.0" layoutY="391.0" mnemonicParsing="false" text="Supprimer" />
                </children>

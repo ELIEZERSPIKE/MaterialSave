@@ -137,43 +137,6 @@ public class Material implements MaterielInterface {
         this.charge = charge;
     }
 
-
-
-//  public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem,
-//                    String charge) {
-//        this.materialNumber = materialNumber;
-//       this.name = name;
-//      this.etat = etat;
-//       this.marque = marque;
-//        this.locale = locale;
-//       this.category = category;
-//       this.date = date;
-//       this.utilisateur = utilisateur;
-//       this.statut = statut;
-//      this.charge = (charge != null) ? charge : "";
-// }
-
-
-//    public Material(int materialNumber, int id, String name,
-//                    String etat, String marque,
-//                    String locale, String category, Date date, String utilisateur,
-//                    String statut, String problem, String charge)
-//    {
-//       this.materialNumber = materialNumber;
-//       this.id = id;
-//        this.name = name;
-//       this.etat = etat;
-//        this.marque = marque;
-//        this.locale = locale;
-//        this.category = category;
-//        this.date = date;
-//        this.utilisateur = utilisateur;
-//        this.statut = statut;
-//        this.problem = problem;
-//        this.charge = charge;
-//    }
-
-
     public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem, String charge) {
         this.materialNumber = materialNumber;
         this.name = name;
@@ -228,11 +191,6 @@ public class Material implements MaterielInterface {
             }
         }
     }
-
-
-
-
-
     public boolean updateMaterial(Material material) throws SQLException {
 
         connection = null;

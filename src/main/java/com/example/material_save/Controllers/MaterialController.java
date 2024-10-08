@@ -2,6 +2,7 @@ package com.example.material_save.Controllers;
 
 import com.example.material_save.IDB.DBConfig;
 import com.example.material_save.Models.Category;
+import com.example.material_save.Models.Maintenance;
 import com.example.material_save.Models.Material;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,7 +66,7 @@ public class MaterialController implements Initializable {
     private AnchorPane Main_Form;
 
     @FXML
-    private TableView<?> Maintenance_tableView;
+    private TableView<Maintenance> Maintenance_tableView;
 
 
     @FXML
@@ -168,6 +169,23 @@ public class MaterialController implements Initializable {
     private TableColumn<Material, String> colstatut;
 
     @FXML
+    private  TableColumn<Maintenance, String> MaintenaceNumber;
+    @FXML
+    private  TableColumn<Maintenance, String> col_charge;
+    @FXML
+    private  TableColumn<Maintenance, String> col_probleme;
+    @FXML
+    private  TableColumn<Maintenance, String> col_dateMaintenance;
+    @FXML
+    private  TableColumn <Maintenance, String> col_statutMaintenance;
+    @FXML
+    private TableColumn<Maintenance, String>col_MaintenanceCombo;
+    @FXML
+    private ComboBox<Integer> ComboNumMateriel;
+
+
+
+    @FXML
     private ComboBox<String> BoxCategorie;
 
     @FXML
@@ -225,9 +243,17 @@ public class MaterialController implements Initializable {
 
     @FXML
     private Button updateCategorie_Btn;
+    @FXML
+    private ComboBox <String> comboCategorie;
+//    @FXML
+////    private ComboBox ComboNumMateriel;
 
     @FXML
+    private ComboBox Combo_maintenance;
+    @FXML
     private TextField dateMaintenace;
+    @FXML
+    private DatePicker DateMaintenance;
 
     @FXML
     private TextField textFieldMaterialId;
@@ -255,6 +281,7 @@ public class MaterialController implements Initializable {
 
     private ObservableList<Material> materialData;
     private ObservableList<Category> categoriesData;
+    private ObservableList<Maintenance> maintenancesData;
 
 
     public void close() {
@@ -329,17 +356,6 @@ public class MaterialController implements Initializable {
     }
 
 //    private final String[] categoriesList = {"Electronique", "Mobilier", "Agricole"};
-private final String[] categoriesList = {"", "", ""};
-//    public void addcategorieList() {
-//        List<String> categoriesL = new ArrayList<>();
-//        for (String data : categoriesList) {
-//            categoriesL.add(data);
-//        }
-//
-//        ObservableList Oblist = FXCollections.observableList(categoriesL);
-//        BoxCategorie.setItems(Oblist);
-//    }
-
 
     public ObservableList<Material> materialListData() {
         ObservableList<Material> listData = FXCollections.observableArrayList();
@@ -376,9 +392,7 @@ private final String[] categoriesList = {"", "", ""};
 
         return listData;
     }
-
     public void AjouterMateriel() throws IOException {
-
         // Récupération des valeurs des champs
         String materialNumber = textfieldMaterialNumber.getText().trim();
         String name = textfieldMateriamName.getText().trim();
@@ -433,7 +447,8 @@ private final String[] categoriesList = {"", "", ""};
                         alert.setHeaderText(null);
                         alert.setContentText("Matériel ajouté avec succès !");
                         alert.showAndWait();
-                    } catch (SQLException e) {
+                    }
+                    catch (SQLException e) {
                         // Gestion des exceptions SQL
                         e.printStackTrace();
                         alert = new Alert(Alert.AlertType.ERROR);
@@ -730,6 +745,7 @@ private final String[] categoriesList = {"", "", ""};
 }
 
 
+//Logiques De Gestion des Categories
 public ObservableList<Category> CategoriesListData(){
         ObservableList<Category> listData = FXCollections.observableArrayList();
         String selectData = "SELECT * FROM category";
@@ -744,7 +760,7 @@ public ObservableList<Category> CategoriesListData(){
                 courseC = new Category(resultSet.getString("NomCategory"),
                         resultSet.getString("Description"),
                 resultSet.getString("Etat") );
-                 listData.add(courseC);
+                listData.add(courseC);
             }
 
         } catch (Exception e){
@@ -756,14 +772,16 @@ public ObservableList<Category> CategoriesListData(){
 public void addCategoryList() {
         String listCategory = "SELECT * FROM category";
         connection = DBConfig.getConnection();
-        ObservableList<String> courseC = FXCollections.observableArrayList();
+        ObservableList<String> courseG = FXCollections.observableArrayList();
         try {
             preparedStatement = connection.prepareStatement(listCategory);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                courseC.add(resultSet.getString("NomCategory"));
+                courseG.add(resultSet.getString("NomCategory"));
             }
-            BoxCategorie.setItems(courseC);
+//            La rececption des categories crees par le comboBox
+            BoxCategorie.setItems(courseG);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -771,14 +789,12 @@ public void addCategoryList() {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
                 if (connection != null) connection.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
-
-
-public boolean checkCategoryExists(String NomCategory) throws SQLException {
+    public boolean checkCategoryExists(String NomCategory) throws SQLException {
         boolean exists = false;
 
 
@@ -886,54 +902,6 @@ public void availableCategory() {
         description_categorie.setText(courseC.getCategoryDescription());
         etat_categorie.setText(courseC.getCategoryState());
     }
-
-//    public void MettraAjourCategorie() throws IOException{
-//        String CategoryName = textfield_categorie_name.getText().trim();
-//        String CategoryDescription = description_categorie.getText().trim();
-//        String  CategoryState = etat_categorie.getText().trim();
-//
-//        if(CategoryName.isEmpty() || CategoryDescription.isEmpty() || CategoryState.isEmpty()){
-//            alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setHeaderText(null);
-//            alert.setContentText("Veuillez remplir tout les champs");
-//            alert.showAndWait();
-//            return;
-//        }
-//        alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setHeaderText(null);
-//        alert.setContentText("êtes vous sûr de vouloir modifier" + CategoryName + "?");
-//        Optional<ButtonType> option = alert.showAndWait();
-//        if(option.get().equals(ButtonType.OK)){
-//            try{
-//                connection = DBConfig.getConnection();
-//                String CategorieName = CategoryName;
-//                Category category = new Category(CategorieName, CategoryDescription, CategoryState);
-//                boolean success = category.updateCategory(category);
-//
-//                if (success){
-//                    alert = new Alert(Alert.AlertType.CONFIRMATION);
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("Mise a jour effectue");
-//                    alert.showAndWait();
-//                    ViderChampsCategory();
-//                    categoriesData();
-//
-//
-//                } else{
-//
-//                    alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("Echec");
-//                    alert.showAndWait();
-//                    ViderChampsCategory();
-//                    categoriesData();
-//                }
-//            } catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     public void MettreAjourCategorie() throws IOException {
         String categoryName = textfield_categorie_name.getText().trim();
         String categoryDescription = description_categorie.getText().trim();
@@ -981,9 +949,6 @@ public void availableCategory() {
             }
         }
     }
-
-
-
     public void SupprimerCategory() throws IOException {
         String CategoryName = textfield_categorie_name.getText().trim();
         String CategoryDescription = description_categorie.getText().trim();
@@ -1028,7 +993,252 @@ public void availableCategory() {
     }
 
 
+//    Methodes De Gestion Des maintenaces
 
+//    Verifier si le numero existe dans la base de donnee
+
+
+//    public boolean checkMaterialExistense(int numeroMateriel) throws SQLException {
+//        String query = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ?";
+//        try (PreparedStatement statement = connection.prepareStatement(query)) {
+//            statement.setInt(1, numeroMateriel);
+//            ResultSet resultSet = statement.executeQuery();
+//            return resultSet.next();  // Retourne true si un résultat est trouvé
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+
+    public void statutList() {
+
+        List<String> statutL = new ArrayList<>();
+
+        for (String data : statutList ) {
+            statutL.add(data);
+        }
+
+        ObservableList ObList = FXCollections.observableArrayList(statutL);
+        Combo_maintenance.setItems(ObList);
+
+    }
+
+//    public void addMaintenance() throws IOException {
+//        try {
+//            // Récupérer les données du ComboBox et des champs texte
+//            Integer numeroMateriel = Integer.valueOf(ComboNumMateriel.getSelectionModel().getSelectedItem());  // Sélection via ComboBox
+//            String categorie = BoxCategorie.getSelectionModel().getSelectedItem();
+//            String charge = chargeMaintenace_textfield.getText().trim();
+//            String probleme = probleme_materiel.getText().trim();
+//            String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+//            Date date = Date.valueOf(DateMaintenance.getValue());
+//
+//            // Vérification des champs obligatoires
+//            if (numeroMateriel != null && categorie != null && !charge.isEmpty() && !probleme.isEmpty() && date != null && statut != null) {
+//                // Créer une instance de maintenance et l'enregistrer
+//                Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
+//                maintenance.register(maintenance);
+//
+//                showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
+//            } else {
+//                showAlert("Avertissement", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.WARNING);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showAlert("Erreur", "Une erreur inattendue est survenue.", Alert.AlertType.ERROR);
+//}
+//    }
+
+//    public void addMaintenance() throws IOException {
+//        try {
+//            // Récupérer les données du ComboBox et des champs texte
+//            String selectedMateriel = String.valueOf(ComboNumMateriel.getSelectionModel().getSelectedItem());
+//            String selectedCategorie = BoxCategorie.getSelectionModel().getSelectedItem();
+//            String charge = chargeMaintenace_textfield.getText().trim();
+//            String probleme = probleme_materiel.getText().trim();
+//            String selectedStatut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+//            LocalDate localDate = DateMaintenance.getValue(); // Assurez-vous que DateMaintenance est un LocalDate
+//
+//            // Vérification des champs obligatoires
+//            if (selectedMateriel != null && selectedCategorie != null && !charge.isEmpty() && !probleme.isEmpty() && localDate != null && selectedStatut != null) {
+//                Integer numeroMateriel = Integer.valueOf(selectedMateriel);  // Conversion après validation
+//
+//                // Créer une instance de maintenance et l'enregistrer
+//                Maintenance maintenance = new Maintenance(numeroMateriel, selectedCategorie, charge, probleme, Date.valueOf(localDate), selectedStatut);
+//                maintenance.register(maintenance);
+//
+//                showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
+//            } else {
+//                showAlert("Avertissement", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.WARNING);
+//            }
+//        } catch (NumberFormatException e) {
+//            showAlert("Erreur", "Le numéro de matériel doit être un nombre valide.", Alert.AlertType.ERROR);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showAlert("Erreur", "Une erreur inattendue est survenue.", Alert.AlertType.ERROR);
+//        }
+//    }
+
+    public void addMaintenance() throws IOException {
+        try {
+            // Récupérer les données du ComboBox et des champs texte
+            String selectedMateriel = String.valueOf(ComboNumMateriel.getSelectionModel().getSelectedItem());
+            String selectedCategorie = comboCategorie.getSelectionModel().getSelectedItem();
+            String charge = chargeMaintenace_textfield.getText().trim();
+            String probleme = probleme_materiel.getText().trim();
+            String selectedStatut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+            Date date = Date.valueOf(DateMaintenance.getValue()); // Assurez-vous que DateMaintenance est un LocalDate
+
+            // Log pour déboguer les valeurs récupérées
+            System.out.println("selectedMateriel: " + selectedMateriel);
+            System.out.println("selectedCategorie: " + selectedCategorie);
+            System.out.println("charge: " + charge);
+            System.out.println("probleme: " + probleme);
+            System.out.println("localDate: " + date);
+            System.out.println("selectedStatut: " + selectedStatut);
+
+            // Vérification des champs obligatoires
+            if (selectedMateriel == null || selectedMateriel.trim().isEmpty() ||
+                    selectedCategorie == null || selectedCategorie.trim().isEmpty() ||
+                    charge.isEmpty() || probleme.isEmpty() ||
+                    date == null || selectedStatut == null || selectedStatut.trim().isEmpty()) {
+
+                showAlert("Avertissement", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.WARNING);
+                return;
+            }
+
+            // Conversion du numéro de matériel
+            Integer numeroMateriel;
+            try {
+                numeroMateriel = Integer.valueOf(selectedMateriel);
+            } catch (NumberFormatException e) {
+                showAlert("Erreur", "Le numéro de matériel doit être un nombre valide.", Alert.AlertType.ERROR);
+                return;  // Stopper l'exécution si la conversion échoue
+            }
+
+            // Créer une instance de maintenance et l'enregistrer
+            Maintenance maintenance = new Maintenance(numeroMateriel, selectedCategorie, charge, probleme, date, selectedStatut);
+            maintenance.register(maintenance);
+             maintenanceShowData();
+
+            // Afficher un message de succès
+            showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur inattendue est survenue : " + e.getMessage(), Alert.AlertType.ERROR);
+}
+    }
+
+
+    private void showAlert(String title, String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+
+
+    public void maintenanceShowData() {
+        maintenancesData = maintenanceData();
+
+        MaintenaceNumber.setCellValueFactory(new PropertyValueFactory<>("numeroMateriel"));
+        col_charge.setCellValueFactory(new PropertyValueFactory<>("charge"));
+        col_probleme.setCellValueFactory(new PropertyValueFactory<>("probleme"));
+        col_dateMaintenance.setCellValueFactory(new PropertyValueFactory<>("date"));
+        col_statutMaintenance.setCellValueFactory(new PropertyValueFactory<>("statut"));
+        col_MaintenanceCombo.setCellValueFactory(new PropertyValueFactory<>("categorie"));
+
+        Maintenance_tableView.setItems(maintenancesData);
+    }
+    public ObservableList<Maintenance> maintenanceData() {
+        ObservableList<Maintenance> listData = FXCollections.observableArrayList();
+        String selectData = "SELECT * FROM maintenances";
+        connection = DBConfig.getConnection();
+
+        try {
+            preparedStatement = connection.prepareStatement(selectData);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Maintenance sData = new Maintenance(
+//                        resultSet.getInt("id"),
+                        resultSet.getInt("numeroMateriel"),
+                       resultSet.getString("categorie"),
+                        resultSet.getString("probleme"),
+                        resultSet.getString("charge"),
+                        resultSet.getDate("date"),
+                        resultSet.getString("statut")
+
+
+                        );
+//                listData.add(sData);
+                listData.add(sData);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listData;
+    }
+
+    public void maintenanceSelectData() {
+        Maintenance sData = Maintenance_tableView.getSelectionModel().getSelectedItem();
+        if (sData != null) {
+            numero_materiel.setText(String.valueOf(sData.getNumeroMateriel()));
+            // Vérifie si la catégorie existe dans le ComboBox avant de la définir
+            if (BoxCategorie.getItems().contains(sData.getCategorie())) {
+                BoxCategorie.setValue(sData.getCategorie());
+            }
+            chargeMaintenace_textfield.setText(sData.getCharge());
+            probleme_materiel.setText(sData.getProbleme());
+
+            if (sData.getDate() != null) {
+                DateMaintenance.setValue(sData.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+ }
+}
+    }
+
+    public ObservableList<Integer> getMaterials() {
+        ObservableList<Integer> materialsList = FXCollections.observableArrayList();
+        String query = "SELECT numeroMateriel FROM material";  // Remplace 'material' par le nom correct de ta table.
+
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                materialsList.add(resultSet.getInt("numeroMateriel"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return materialsList;
+    }
+
+    public ObservableList<String> getCategories() {
+        ObservableList<String> categoriesList = FXCollections.observableArrayList();
+        String query = "SELECT nomCategory FROM category";  // Remplace 'categorie' par le nom correct de ta table.
+
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                categoriesList.add(resultSet.getString("nomCategory"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categoriesList;
+    }
+
+    private String[] statutList = {"Preventive", "Corrective", "Conditionnelle", "Améliorative"};
 
 
 
@@ -1062,6 +1272,16 @@ public void availableCategory() {
 
 //        La Methode qui recupere les elements du combobox
         addCategoryList();
+         statutList();
+
+
+        maintenanceShowData();
+       ComboNumMateriel.setItems(getMaterials());
+        comboCategorie.setItems(getCategories());
+
+
+
+
 
 //        comboStatut.getItems().addAll(statutList);
         if (comboStatut.getItems().addAll("Disponible", "Non-disponible", "En reserve", "En maintenance"));

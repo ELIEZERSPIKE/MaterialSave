@@ -1,64 +1,45 @@
 package com.example.material_save.Models;
 
+import com.example.material_save.IDB.DBConfig;
 import javafx.fxml.Initializable;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+
 import java.util.ResourceBundle;
 
 public class Maintenance implements Initializable {
 
-    private int id;
+    private int numeroMateriel;
+    private String categorie;
+    private String charge;
 
-    private String category;
 
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    private String probleme;
     private Date date ;
+    private String statut;
+    private Connection connection;
 
-    private String problem;
 
-    private  String charge ;
 
-    private  String locate;
-
-    public Maintenance(int id, String category, Date date, String problem, String charge, String locate) {
-        this.id = id;
-        this.category = category;
-        this.date = date;
-        this.problem = problem;
-        this.charge = charge;
-        this.locate = locate;
+    public String getCategorie() {
+        return categorie;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getProblem() {
-        return problem;
-    }
-
-    public void setProblem(String problem) {
-        this.problem = problem;
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
     }
 
     public String getCharge() {
@@ -69,14 +50,85 @@ public class Maintenance implements Initializable {
         this.charge = charge;
     }
 
-    public String getLocate() {
-        return locate;
+    public String getProbleme() {
+        return probleme;
     }
 
-    public void setLocate(String locate) {
-        this.locate = locate;
+    public void setProbleme(String probleme) {
+        this.probleme = probleme;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getNumeroMateriel() {
+        return numeroMateriel;
+    }
+
+    public void setNumeroMateriel(int numeroMateriel) {
+        this.numeroMateriel = numeroMateriel;
+    }
+
+    public Maintenance(int numeroMateriel, String categorie, String charge, String probleme, Date date, String statut) {
+        this.numeroMateriel = numeroMateriel;
+        this.categorie = categorie;
+        this.charge = charge;
+        this.probleme = probleme;
+        this.date = date;
+        this.statut = statut;
+    }
+
+//    public void register(Maintenance maintenance) throws IOException{
+//
+//        PreparedStatement preparedStatement = null;
+//
+//        try{
+//            connection = DBConfig.getConnection();
+//            String req = " INSERT INTO maintenances " +
+//                     "(numeroMateriel, categorie, charge, date,probleme, statut)"
+//                       + "VALUES (?,?,?,?,?,?) ";
+//            preparedStatement = connection.prepareStatement(req);
+//           preparedStatement.setInt(1, this.numeroMateriel);
+//            preparedStatement.setString(2, this.categorie);
+//            preparedStatement.setString(3,this.probleme);
+//            preparedStatement.setString(4, this.charge);
+//            preparedStatement.setDate(5, this.date);
+//            preparedStatement.setString(6, this.statut);
+//
+//            preparedStatement.executeUpdate();
+//
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+public void register(Maintenance maintenance) throws IOException {
+    PreparedStatement preparedStatement = null;
+
+    try {
+        connection = DBConfig.getConnection();
+        String req = "INSERT INTO maintenances " +
+                "(numeroMateriel, categorie, charge, date, probleme, statut) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+        preparedStatement = connection.prepareStatement(req);
+
+        preparedStatement.setInt(1, this.numeroMateriel); // numeroMateriel
+        preparedStatement.setString(2, this.categorie); // categorie
+        preparedStatement.setString(3, this.charge); // charge
+        preparedStatement.setDate(4, this.date); // date
+        preparedStatement.setString(5, this.probleme); // probleme
+        preparedStatement.setString(6, this.statut); // statut
+
+        preparedStatement.executeUpdate();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
 
 
