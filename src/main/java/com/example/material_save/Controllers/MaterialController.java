@@ -191,8 +191,8 @@ public class MaterialController implements Initializable {
     @FXML
     private ComboBox<String> comboStatut;
 
-    @FXML
-    private DatePicker date_materiel;
+//    @FXML
+//    private DatePicker date_materiel;
 
     @FXML
     private Button deleteCategorie_Btn;
@@ -212,8 +212,8 @@ public class MaterialController implements Initializable {
     @FXML
     private TextField local_materiel;
 
-    @FXML
-    private TextField numero_materiel;
+//    @FXML
+//    private TextField numero_materiel;
 
     @FXML
     private TextField probleme_materiel;
@@ -250,8 +250,8 @@ public class MaterialController implements Initializable {
 
     @FXML
     private ComboBox Combo_maintenance;
-    @FXML
-    private TextField dateMaintenace;
+//    @FXML
+//    private TextField dateMaintenace;
     @FXML
     private DatePicker DateMaintenance;
 
@@ -348,6 +348,10 @@ public class MaterialController implements Initializable {
 
             Maintenance_Form.setVisible(true);
             Maintenance_Form.setManaged(true);
+
+            comboCategorie.setItems(getCategories());
+            ComboNumMateriel.setItems(getMaterials());
+
 
             System.out.println(" Maintenance  trouve");
         }
@@ -642,11 +646,6 @@ public class MaterialController implements Initializable {
             BoxCategorie.setValue(sData.getCategory());
             textefieldLocate.setText(sData.getLocale());
 
-//            Conversion de Date en localeDate
-
-//            if (sData.getDate() != null ){
-//                addDate.setValue(sData.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-//            }
             textfield_Material_User.setText(sData.getUtilisateur());
             comboStatut.setValue(sData.getStatut());
 
@@ -1079,6 +1078,14 @@ public void availableCategory() {
 //        }
 //    }
 
+    public  void clearMaintenace(){
+        ComboNumMateriel.getSelectionModel().clearSelection();
+        comboCategorie.getSelectionModel().clearSelection();
+        chargeMaintenace_textfield.setText("");
+        probleme_materiel.setText("");
+        DateMaintenance.setValue(null);
+        Combo_maintenance.getSelectionModel().clearSelection();
+    }
     public void addMaintenance() throws IOException {
         try {
             // Récupérer les données du ComboBox et des champs texte
@@ -1089,7 +1096,7 @@ public void availableCategory() {
             String selectedStatut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
             Date date = Date.valueOf(DateMaintenance.getValue()); // Assurez-vous que DateMaintenance est un LocalDate
 
-            // Log pour déboguer les valeurs récupérées
+            // ici je veux voir la valeur selctionne
             System.out.println("selectedMateriel: " + selectedMateriel);
             System.out.println("selectedCategorie: " + selectedCategorie);
             System.out.println("charge: " + charge);
@@ -1119,7 +1126,9 @@ public void availableCategory() {
             // Créer une instance de maintenance et l'enregistrer
             Maintenance maintenance = new Maintenance(numeroMateriel, selectedCategorie, charge, probleme, date, selectedStatut);
             maintenance.register(maintenance);
-             maintenanceShowData();
+            maintenanceData();
+            clearMaintenace();
+
 
             // Afficher un message de succès
             showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
@@ -1129,8 +1138,6 @@ public void availableCategory() {
             showAlert("Erreur", "Une erreur inattendue est survenue : " + e.getMessage(), Alert.AlertType.ERROR);
 }
     }
-
-
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -1138,9 +1145,6 @@ public void availableCategory() {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
-
-
     public void maintenanceShowData() {
         maintenancesData = maintenanceData();
 
@@ -1177,28 +1181,27 @@ public void availableCategory() {
 //                listData.add(sData);
                 listData.add(sData);
             }
+            Maintenance_tableView.setItems(listData);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return listData;
-    }
 
+    }
     public void maintenanceSelectData() {
         Maintenance sData = Maintenance_tableView.getSelectionModel().getSelectedItem();
         if (sData != null) {
-            numero_materiel.setText(String.valueOf(sData.getNumeroMateriel()));
+            ComboNumMateriel.setValue(sData.getNumeroMateriel());
             // Vérifie si la catégorie existe dans le ComboBox avant de la définir
             if (BoxCategorie.getItems().contains(sData.getCategorie())) {
                 BoxCategorie.setValue(sData.getCategorie());
             }
             chargeMaintenace_textfield.setText(sData.getCharge());
             probleme_materiel.setText(sData.getProbleme());
+            col_statutMaintenance.setText(sData.getStatut());
 
-            if (sData.getDate() != null) {
-                DateMaintenance.setValue(sData.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
- }
 }
     }
 
@@ -1237,7 +1240,6 @@ public void availableCategory() {
 
         return categoriesList;
     }
-
     private String[] statutList = {"Preventive", "Corrective", "Conditionnelle", "Améliorative"};
 
 
@@ -1276,9 +1278,10 @@ public void availableCategory() {
 
 
         maintenanceShowData();
-       ComboNumMateriel.setItems(getMaterials());
-        comboCategorie.setItems(getCategories());
 
+//        comboCategorie.setItems(getCategories());
+        maintenanceData();
+        clearMaintenace();
 
 
 
