@@ -412,7 +412,7 @@
                      </padding>
                   </VBox>
                   <Button fx:id="Maintenance_add_Btn" layoutX="581.0" layoutY="391.0" mnemonicParsing="false" onAction="#addMaintenance" text="Ajouter" />
-                  <Button fx:id="Maintenance_Update_Btn" layoutX="661.0" layoutY="391.0" mnemonicParsing="false" text="Modifier" />
+                  <Button fx:id="Maintenance_Update_Btn" layoutX="661.0" layoutY="391.0" mnemonicParsing="false" onAction="#MaintenanceUpdate" text="Modifier" />
                   <Button layoutX="752.0" layoutY="391.0" mnemonicParsing="false" text="Supprimer" />
                </children>
             </AnchorPane>

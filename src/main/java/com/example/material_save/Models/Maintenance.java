@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class Maintenance implements Initializable {
@@ -129,6 +130,42 @@ public void register(Maintenance maintenance) throws IOException {
         e.printStackTrace();
     }
 }
+
+    public boolean updateMaintenace(Maintenance maintenance) throws SQLException {
+        connection = null;
+        PreparedStatement preparedStatement = null;
+
+        // Ajoutez une clause WHERE pour identifier quel enregistrement mettre à jour
+        String query = "UPDATE maintenances SET numeroMateriel = ?, categorie = ?, charge = ?, date = ?, probleme = ?, statut = ? WHERE numeroMateriel = ?";
+        try {
+            connection = DBConfig.getConnection();
+            preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setInt(1, maintenance.getNumeroMateriel());
+            preparedStatement.setString(2, maintenance.getCategorie());
+            preparedStatement.setString(3, maintenance.getCharge());
+            preparedStatement.setDate(4, maintenance.getDate());
+            preparedStatement.setString(5, maintenance.getProbleme());
+            preparedStatement.setString(6, maintenance.getStatut());
+
+            // Utilisez le même numéro de matériel pour la condition WHERE
+            preparedStatement.setInt(7, maintenance.getNumeroMateriel());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            // Assurez-vous de fermer les ressources
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 
 
 

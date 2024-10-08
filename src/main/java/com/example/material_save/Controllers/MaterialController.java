@@ -1202,6 +1202,7 @@ public void availableCategory() {
             probleme_materiel.setText(sData.getProbleme());
             col_statutMaintenance.setText(sData.getStatut());
 
+
 }
     }
 
@@ -1241,6 +1242,127 @@ public void availableCategory() {
         return categoriesList;
     }
     private String[] statutList = {"Preventive", "Corrective", "Conditionnelle", "Améliorative"};
+
+//    public void MaintenaceUpdate() throws IOException{
+//
+//        int numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+//        String ComboBoxMaintenace = comboCategorie.getSelectionModel().getSelectedItem();
+//        String probleme = probleme_materiel.getText().trim();
+//        String charge =  chargeMaintenace_textfield.getText().trim();
+//        LocalDate date = DateMaintenance.getValue();
+//        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+//
+//        if( ComboBoxMaintenace.isEmpty() || probleme.isEmpty() || charge.isEmpty() || date == null || statut.isEmpty() ){
+//            alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText(null);
+//            alert.setContentText("Remplir tout les champs");
+//            alert.showAndWait();
+//            return;
+//        }
+//        alert = new Alert(Alert.AlertType.CONFIRMATION);
+//
+//        alert.setTitle("sur de modifier ? ");
+//        alert.setHeaderText(null);
+//        alert.setContentText("sur de modifier la maintenace effectuée sur  " + numeroMateriel + "?");
+//        Optional<ButtonType> option =  alert.showAndWait();
+//        if (option.get().equals(ButtonType.OK)){
+//            try{
+//                connection = DBConfig.getConnection();
+//
+//                int numeroMateriell = Integer.parseInt(String.valueOf(numeroMateriel));
+//
+//                Maintenance maintenance = new Maintenance( numeroMateriell , ComboBoxMaintenace, probleme, charge, Date.valueOf(date), statut);
+//                boolean success = maintenance.updateMaintenace(maintenance);
+//
+//                if (success){
+//                    alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("mise a jou");
+//                    alert.showAndWait();
+//
+//                    materialShowData();
+//                    ViderChamps();
+//
+//
+//                } else {
+//                    alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("echec");
+//                    alert.showAndWait();
+//                    materialShowData();
+//
+//                }
+//
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//
+//    }
+public void MaintenanceUpdate() throws IOException {
+    Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+    String comboBoxMaintenance = comboCategorie.getSelectionModel().getSelectedItem();
+    String probleme = probleme_materiel.getText().trim();
+    String charge = chargeMaintenace_textfield.getText().trim();
+    LocalDate date = DateMaintenance.getValue();
+    String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+
+    // Validate input fields
+    if (numeroMateriel == null || comboBoxMaintenance.isEmpty() || probleme.isEmpty() || charge.isEmpty() || date == null || statut == null || statut.isEmpty()) {
+        showAlert(Alert.AlertType.ERROR, "Remplir tous les champs");
+        return;
+    }
+
+    // Confirmation dialog
+    Optional<ButtonType> option = showConfirmation("Sur de modifier ?", "Sur de modifier la maintenance effectuée sur " + numeroMateriel + "?");
+    if (option.isPresent() && option.get().equals(ButtonType.OK)) {
+        try {
+            connection = DBConfig.getConnection();
+
+            Maintenance maintenance = new Maintenance(numeroMateriel, comboBoxMaintenance, probleme, charge, Date.valueOf(date), statut);
+            boolean success = maintenance.updateMaintenace(maintenance);
+            maintenanceData();
+            clearMaintenace();
+
+
+            if (success) {
+                showAlert(Alert.AlertType.INFORMATION, "Mise à jour réussie");
+                materialShowData();
+                clearFields();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Échec de la mise à jour");
+                materialShowData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Une erreur s'est produite : " + e.getMessage());
+        }
+    }
+}
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private Optional<ButtonType> showConfirmation(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
+
+    private void clearFields() {
+        probleme_materiel.clear();
+        chargeMaintenace_textfield.clear();
+        // Clear other fields as necessary
+    }
+
 
 
 
