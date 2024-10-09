@@ -107,7 +107,7 @@ public class Maintenance implements Initializable {
 //            e.printStackTrace();
 //        }
 //    }
-public void register(Maintenance maintenance) throws IOException {
+   public void register(Maintenance maintenance) throws IOException {
     PreparedStatement preparedStatement = null;
 
     try {
@@ -167,6 +167,47 @@ public void register(Maintenance maintenance) throws IOException {
         }
     }
 
+    public boolean DeleteMaintenance(Maintenance maintenance) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        String query = "DELETE FROM `maintenances` WHERE `numeroMateriel` = ?";
+
+        try {
+
+            connection = DBConfig.getConnection();
+
+            // Préparez la requête
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, maintenance.getNumeroMateriel());
+
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            // Retournez true si des lignes ont été supprimées, sinon false
+            return rowsDeleted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // Laissez passer l'exception pour une gestion ultérieure
+        } finally {
+
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 

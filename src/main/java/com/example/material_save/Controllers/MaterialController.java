@@ -1309,7 +1309,7 @@ public void MaintenanceUpdate() throws IOException {
     LocalDate date = DateMaintenance.getValue();
     String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
 
-    // Validate input fields
+    // Valider les inputs du logiciel
     if (numeroMateriel == null || comboBoxMaintenance.isEmpty() || probleme.isEmpty() || charge.isEmpty() || date == null || statut == null || statut.isEmpty()) {
         showAlert(Alert.AlertType.ERROR, "Remplir tous les champs");
         return;
@@ -1341,14 +1341,12 @@ public void MaintenanceUpdate() throws IOException {
         }
     }
 }
-
-    private void showAlert(Alert.AlertType alertType, String message) {
+private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-
     private Optional<ButtonType> showConfirmation(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
@@ -1363,6 +1361,117 @@ public void MaintenanceUpdate() throws IOException {
         // Clear other fields as necessary
     }
 
+
+//    public void DeleteMaintenance(ActionEvent event) {
+//        // Récupération des données des champs
+//        Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+//        String categorie = comboCategorie.getSelectionModel().getSelectedItem();
+//        String charge = chargeMaintenace_textfield.getText().trim();
+//        String probleme = probleme_materiel.getText().trim();
+//        LocalDate localDate = DateMaintenance.getValue(); // Utilise LocalDate directement
+//        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+//
+//        // Vérification si le numéro de matériel est sélectionné
+//        if (numeroMateriel == null) {
+//            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le numéro de matériel est requis.");
+//            return;
+//        }
+//
+//        // Vérification si la date est sélectionnée
+//        if (localDate == null) {
+//            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de maintenance est requise.");
+//            return;
+//        }
+//
+//        try {
+//            Date date = Date.valueOf(localDate); // Conversion de LocalDate à Date si nécessaire
+//
+//            // Création de l'objet Maintenance (si besoin)
+//            Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
+//
+//            // Suppression
+//            boolean success = maintenance.DeleteMaintenance(maintenance);
+//            materialShowData();
+//
+//            if (success) {
+//                showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
+//                        "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
+//                ViderChamps();
+//            } else {
+//                showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
+//                        "Le matériel avec le numéro " + numeroMateriel + " n'a pas été trouvé.");
+//                ViderChamps();
+//            }
+//        } catch (SQLException e) {
+//            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+//                    "Une erreur s'est produite lors de la suppression.");
+//            e.printStackTrace();
+//        } catch (IllegalArgumentException e) {
+//            showAlert(Alert.AlertType.ERROR, "Erreur de date",
+//                    "La date fournie est invalide.");
+//            e.printStackTrace();
+//        }
+//    }
+public void DeleteMaintenance(ActionEvent event) {
+    // Récupération des données des champs
+    Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+    String categorie = comboCategorie.getSelectionModel().getSelectedItem();
+    String charge = chargeMaintenace_textfield.getText().trim();
+    String probleme = probleme_materiel.getText().trim();
+    LocalDate localDate = DateMaintenance.getValue(); // Utilise LocalDate directement
+    String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+
+    // Vérification si le numéro de matériel est sélectionné
+    if (numeroMateriel == null) {
+        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le numéro de matériel est requis.");
+        return;
+    }
+
+    // Vérification si la date est sélectionnée
+    if (localDate == null) {
+        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de maintenance est requise.");
+        return;
+    }
+
+    try {
+        Date date = Date.valueOf(localDate); // Conversion de LocalDate à Date si nécessaire
+
+        // Création de l'objet Maintenance (si besoin)
+        Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
+
+        // Suppression
+        boolean success = maintenance.DeleteMaintenance(maintenance);
+        materialShowData();
+
+        if (success) {
+            showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
+                    "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
+            ViderChamps();
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
+                    "Le matériel avec le numéro " + numeroMateriel + " n'a pas été trouvé.");
+            ViderChamps();
+        }
+    } catch (SQLException e) {
+        showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                "Une erreur s'est produite lors de la suppression.");
+        e.printStackTrace();
+    } catch (IllegalArgumentException e) {
+        showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                "La date fournie est invalide.");
+        e.printStackTrace();
+    }
+}
+
+
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 
 
