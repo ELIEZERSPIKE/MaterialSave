@@ -296,7 +296,7 @@ public class MaterialController implements Initializable {
     public void switchForm(ActionEvent event) {
         if (event.getSource() == Home_Btn) {
             home_Form.setVisible(true);
-
+            totalMaterial();
             Material_Add_Form.setVisible(false);
 
             Form_categories.setVisible(false);
@@ -361,6 +361,23 @@ public class MaterialController implements Initializable {
 
 //    private final String[] categoriesList = {"Electronique", "Mobilier", "Agricole"};
 
+
+    public void  totalMaterial(){
+        String sql = " SELECT COUNT(id) FROM material ";
+        connection = DBConfig.getConnection();
+        int TotalEnrolle = 0;
+        try{
+
+            preparedStatement =  connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                TotalEnrolle = resultSet.getInt("COUNT(id)");
+            }
+            TotalEnrolled.setText(String.valueOf(TotalEnrolle));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public ObservableList<Material> materialListData() {
         ObservableList<Material> listData = FXCollections.observableArrayList();
         String selectData = "SELECT * FROM material";
@@ -1330,7 +1347,8 @@ public void MaintenanceUpdate() throws IOException {
             if (success) {
                 showAlert(Alert.AlertType.INFORMATION, "Mise à jour réussie");
                 materialShowData();
-                clearFields();
+                clearMaintenace();
+
             } else {
                 showAlert(Alert.AlertType.ERROR, "Échec de la mise à jour");
                 materialShowData();
@@ -1355,11 +1373,6 @@ private void showAlert(Alert.AlertType alertType, String message) {
         return alert.showAndWait();
     }
 
-    private void clearFields() {
-        probleme_materiel.clear();
-        chargeMaintenace_textfield.clear();
-        // Clear other fields as necessary
-    }
 
 
 //    public void DeleteMaintenance(ActionEvent event) {
@@ -1446,11 +1459,13 @@ public void DeleteMaintenance(ActionEvent event) {
         if (success) {
             showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
                     "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
-            ViderChamps();
+            clearMaintenace();
+
         } else {
             showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
                     "Le matériel avec le numéro " + numeroMateriel + " n'a pas été trouvé.");
-            ViderChamps();
+            clearMaintenace();
+
         }
     } catch (SQLException e) {
         showAlert(Alert.AlertType.ERROR, "Erreur SQL",
@@ -1488,6 +1503,7 @@ public void DeleteMaintenance(ActionEvent event) {
         Form_categories.setVisible(false);
         Form_categories.setManaged(false);
 
+
         Material_Add_Form.setVisible(false);
         Material_Add_Form.setManaged(false);
         ViderChampsCategory();
@@ -1513,6 +1529,9 @@ public void DeleteMaintenance(ActionEvent event) {
 //        comboCategorie.setItems(getCategories());
         maintenanceData();
         clearMaintenace();
+
+
+        totalMaterial();
 
 
 
