@@ -59,41 +59,56 @@
                   <Font size="11.0" />
                </font>
             </Text>
-            <AnchorPane prefHeight="268.0" prefWidth="406.0" style="-fx-background-color: White;">
+            <AnchorPane prefHeight="268.0" prefWidth="406.0" style="-fx-background-color: transparent;">
                <children>
-                  <Pane layoutX="65.0" layoutY="27.0" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                  <HBox alignment="CENTER" layoutX="64.0" layoutY="25.0" spacing="27.0">
                      <children>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="-1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../assets/mdi--account.png" />
-                           </image>
-                        </ImageView>
+                        <Pane prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                           <children>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="-1.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../assets/mdi--account.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <TextField fx:id="username" alignment="TOP_LEFT" promptText="Saisir Nom d'utilisateur" style="-fx-border-color: #44D952; -fx-border-radius: 25; -fx-background-radius: 25;" />
                      </children>
-                  </Pane>
-                  <TextField fx:id="username" alignment="TOP_LEFT" layoutX="108.0" layoutY="27.0" promptText="Saisir Nom d'utilisateur" style="-fx-border-color: #44D952; -fx-border-radius: 25; -fx-background-radius: 25;" />
-                  <TextField fx:id="email" alignment="TOP_LEFT" layoutX="111.0" layoutY="83.0" promptText="Saisir E-mail " style="-fx-border-color: #44D952; -fx-border-radius: 25; -fx-background-radius: 25;" />
-                  <Pane layoutX="65.0" layoutY="83.0" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="60.0" layoutY="74.0" spacing="27.0">
                      <children>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../assets/midi.png" />
-                           </image>
-                        </ImageView>
+                        <Pane prefHeight="28.0" prefWidth="33.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                           <children>
+                              <ImageView fitHeight="19.0" fitWidth="25.0" layoutX="7.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../assets/mdi--email-outline%20(1).png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <TextField fx:id="email" alignment="TOP_LEFT" promptText="Saisir E-mail " style="-fx-border-color: #44D952; -fx-border-radius: 25; -fx-background-radius: 25;" />
                      </children>
-                  </Pane>
-                  <Pane layoutX="65.0" layoutY="121.0" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="57.0" layoutY="121.0" spacing="27.0">
                      <children>
-                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../assets/ic--twotone-password.png" />
-                           </image>
-                        </ImageView>
+                        <Pane prefHeight="25.0" prefWidth="33.0" style="-fx-background-color: #44D952; -fx-background-radius: 30;">
+                           <children>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="4.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../assets/ic--twotone-password.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                        <PasswordField fx:id="password" promptText="mot de passe" style="-fx-border-color: #44D952; -fx-border-radius: 25; -fx-background-radius: 25;" />
                      </children>
-                  </Pane>
-                  <PasswordField fx:id="password" layoutX="111.0" layoutY="122.0" promptText="mot de passe" />
+                  </HBox>
                   <Button fx:id="onRegister" layoutX="108.0" layoutY="168.0" mnemonicParsing="false" onMouseClicked="#onSubmitRegister" prefHeight="31.0" prefWidth="85.0" style="-fx-background-color: #44D952;" text="S'inscrire" textFill="#fbf4f4" />
                   <Button layoutX="237.0" layoutY="171.0" mnemonicParsing="false" onAction="#onSignIn" style="-fx-background-color: transparent;" text="Se connecter" textFill="#09e91c" />
                </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </AnchorPane>
          </children>
       </VBox>
