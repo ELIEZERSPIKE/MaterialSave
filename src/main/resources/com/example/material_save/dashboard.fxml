@@ -16,7 +16,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -109,70 +112,75 @@
                </children>
             </AnchorPane>
             <Separator layoutX="4.0" layoutY="44.0" prefHeight="1.0" prefWidth="1094.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" prefWidth="849.0" style="-fx-background-color: #FFA500;">
+            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" prefWidth="849.0" style="-fx-background-color: #e3fce7;">
                <children>
-                  <AnchorPane layoutX="-1.0" layoutY="-8.0" prefHeight="103.0" prefWidth="855.0" style="-fx-background-color: #87CEEB;">
+                  <PieChart fx:id="PieChartMateriel" layoutX="492.0" layoutY="173.0" prefHeight="267.0" prefWidth="315.0" style="-fx-background-color: transparent;" title="Chart statut" />
+                  <AnchorPane layoutX="-1.0" layoutY="-8.0" prefHeight="103.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
                      <children>
-                        <AnchorPane layoutX="15.0" layoutY="8.0" prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284;">
+                        <HBox alignment="CENTER" layoutX="37.0" layoutY="5.0" spacing="60.0">
                            <children>
-                              <ImageView fitHeight="54.0" fitWidth="60.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../assets/stack_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="65.0" layoutY="54.0" prefHeight="25.0" prefWidth="113.0" text="Total Enregistrés " textFill="WHITE">
-                                 <font>
-                                    <Font name="Tahoma Bold" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="TotalEnrolled" layoutX="86.0" layoutY="19.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
-                                 <font>
-                                    <Font name="Berlin Sans FB Bold" size="14.0" />
-                                 </font>
-                              </Label>
+                              <AnchorPane prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
+                                 <children>
+                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../assets/stack_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label layoutX="65.0" layoutY="54.0" prefHeight="25.0" prefWidth="113.0" text="Total Enregistrés " textFill="WHITE">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="TotalEnrolled" layoutX="86.0" layoutY="19.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="#efecec">
+                                       <font>
+                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="88.0" prefWidth="201.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
+                                 <children>
+                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="1.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../assets/eos-icons--network-file-system-outlined.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label layoutX="55.0" layoutY="47.0" prefHeight="25.0" prefWidth="136.0" text="Les categories " textFill="WHITE">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="TotalDisponibleCategory" layoutX="87.0" layoutY="12.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
+                                       <font>
+                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
+                                 <children>
+                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="2.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../assets/eos-icons--content-deleted.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="181.0" text="Materiels en Maintenance" textFill="WHITE">
+                                       <font>
+                                          <Font name="Tahoma Bold" size="11.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="MaintenancesTotal" layoutX="107.0" layoutY="14.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
+                                       <font>
+                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
                            </children>
-                        </AnchorPane>
-                        <AnchorPane layoutX="295.0" layoutY="8.0" prefHeight="88.0" prefWidth="201.0" style="-fx-background-color: #468284;">
-                           <children>
-                              <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="1.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../assets/eos-icons--network-file-system-outlined.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="55.0" layoutY="47.0" prefHeight="25.0" prefWidth="136.0" text="Materiels Disponible" textFill="WHITE">
-                                 <font>
-                                    <Font name="Tahoma Bold" size="12.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="TotalDisponible" layoutX="87.0" layoutY="12.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
-                                 <font>
-                                    <Font name="Berlin Sans FB Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane layoutX="580.0" layoutY="8.0" prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284;">
-                           <children>
-                              <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="2.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../assets/eos-icons--content-deleted.png" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="181.0" text="Materiels Non-disponible" textFill="WHITE">
-                                 <font>
-                                    <Font name="Tahoma Bold" size="11.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="MaterielIndisponible" layoutX="107.0" layoutY="14.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
-                                 <font>
-                                    <Font name="Berlin Sans FB Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </AnchorPane>
+                        </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="14.0" layoutY="138.0" prefHeight="359.0" prefWidth="385.0" style="-fx-background-color: #0288D1;">
+                  <AnchorPane layoutX="14.0" layoutY="138.0" prefHeight="359.0" prefWidth="385.0" style="-fx-background-color: transparent;">
                      <children>
                         <BarChart fx:id="GraphiqueMateriel" layoutX="4.0" layoutY="42.0" prefHeight="295.0" prefWidth="347.0">
                           <xAxis>
@@ -182,23 +190,22 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </BarChart>
-                        <Label layoutX="113.0" layoutY="14.0" text="Graphique des Matériels" textFill="#f4f4f4" />
+                        <Label layoutX="94.0" layoutY="14.0" text="Graphique d'enregistrement par date" textFill="#241414" />
                      </children>
                   </AnchorPane>
-                  <PieChart fx:id="PieChartMateriel" layoutX="517.0" layoutY="215.0" prefHeight="195.0" prefWidth="256.0" style="-fx-background-color: #F5F5F5;" title="Chart statut" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Material_Add_Form" layoutX="236.0" layoutY="53.0" prefHeight="542.0" prefWidth="855.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="Material_Add_Form" layoutX="236.0" layoutY="53.0" prefHeight="550.0" prefWidth="866.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
-                  <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="855.0" style="-fx-background-color: #87CEEB;">
+                  <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
                      <children>
                         <TextField fx:id="searchMaterial" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="201.0" promptText="Rechercher" />
                         <TableView fx:id="Material_tableView" layoutY="42.0" onMouseClicked="#materialSelectData" prefHeight="245.0" prefWidth="855.0">
                           <columns>
                             <TableColumn fx:id="col_material" prefWidth="112.0" text="Numero Materiel" />
                             <TableColumn fx:id="col_name" prefWidth="82.0" text="Nom" />
-                              <TableColumn fx:id="col_marque" prefWidth="88.00003051757812" text="Marque" />
-                              <TableColumn fx:id="col_etat" prefWidth="72.6666259765625" text="Etat" />
+                              <TableColumn fx:id="col_etat" prefWidth="88.00003051757812" text="Marque" />
+                              <TableColumn fx:id="col_marque" prefWidth="72.6666259765625" text="Etat" />
                               <TableColumn fx:id="col_local" prefWidth="64.0" text="Local" />
                               <TableColumn fx:id="col_category" prefWidth="101.33331298828125" text="Categorie" />
                               <TableColumn fx:id="col_date" prefWidth="86.0" text="Date" />
@@ -208,87 +215,109 @@
                         </TableView>
                      </children>
                   </AnchorPane>
-                  <HBox alignment="CENTER" layoutX="7.0" layoutY="287.0" spacing="15.0">
+                  <HBox layoutX="14.0" layoutY="501.0" spacing="28.0">
                      <children>
+                        <Button fx:id="addMaterial" mnemonicParsing="false" onAction="#AjouterMateriel" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952;" text="Ajouter" />
+                        <Button fx:id="updateMaterial" mnemonicParsing="false" onAction="#MettreAjour" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
+                        <Button fx:id="deleteMaterial" mnemonicParsing="false" onAction="#handleDeleteMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
+                     </children>
+                  </HBox>
+                  <GridPane layoutX="307.0" layoutY="314.0" prefHeight="164.0" prefWidth="231.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="textfieldMaterialNumber" GridPane.columnIndex="1" />
                         <Label prefHeight="17.0" prefWidth="103.0" text=" Numero Materiel">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textfieldMaterialNumber" />
-                        <Label prefHeight="17.0" prefWidth="103.0" text="Nom Materiel">
+                        <TextField fx:id="textfieldMateriamName" prefHeight="25.0" prefWidth="155.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Nom Materiel" GridPane.rowIndex="1">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textfieldMateriamName" prefHeight="25.0" prefWidth="155.0" />
-                        <Label prefHeight="17.0" prefWidth="87.0" text="Marque">
+                        <Label prefHeight="17.0" prefWidth="87.0" text="Etat" GridPane.rowIndex="2">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="TextfieldMaterialMarque" prefHeight="25.0" prefWidth="142.0" />
+                        <TextField fx:id="textfieldMaterial_state" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER" layoutX="22.0" layoutY="324.0" prefHeight="25.0" prefWidth="798.0" spacing="15.0">
+                  </GridPane>
+                  <GridPane layoutX="587.0" layoutY="315.0" prefHeight="153.0" prefWidth="256.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.66666666666667" minWidth="10.0" prefWidth="118.66666666666667" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.3333740234375" minWidth="10.0" prefWidth="82.00000000000001" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <Label prefHeight="17.0" prefWidth="54.0" text="Etat ">
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Marque">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textfieldMaterial_state" />
-                        <Label prefHeight="17.0" prefWidth="79.0" text="Categories">
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Categories" GridPane.rowIndex="1">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="BoxCategorie" prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" />
-                        <Label prefHeight="17.0" prefWidth="60.0" text="Local">
+                        <Label prefHeight="17.0" prefWidth="87.0" text="Local" GridPane.rowIndex="2">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textefieldLocate" alignment="CENTER" prefHeight="25.0" prefWidth="176.0" />
+                        <ComboBox fx:id="BoxCategorie" prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textefieldLocate" alignment="CENTER" prefHeight="25.0" prefWidth="176.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="TextfieldMaterialMarque" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" />
                      </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
-                  <HBox alignment="CENTER" layoutX="3.0" layoutY="374.0" prefHeight="36.0" prefWidth="835.0" spacing="15.0">
+                  </GridPane>
+                  <GridPane layoutX="18.0" layoutY="321.0" prefHeight="139.0" prefWidth="250.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <Label prefHeight="17.0" prefWidth="38.0" text="Date">
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Date">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <DatePicker fx:id="addDate" promptText="Date" />
-                        <Label prefHeight="17.0" prefWidth="60.0" text="Utilisateur">
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Utilisateur" GridPane.rowIndex="1">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="textfield_Material_User" prefHeight="25.0" prefWidth="168.0" />
-                        <Label prefHeight="17.0" prefWidth="60.0" text="Statut">
+                        <Label prefHeight="17.0" prefWidth="87.0" text="Statut" GridPane.rowIndex="2">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="comboStatut" prefWidth="150.0" />
+                        <DatePicker fx:id="addDate" promptText="Date" GridPane.columnIndex="1" />
+                        <TextField fx:id="textfield_Material_User" prefHeight="25.0" prefWidth="168.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="comboStatut" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </HBox>
-                  <Button fx:id="addMaterial" layoutX="22.0" layoutY="444.0" mnemonicParsing="false" onAction="#AjouterMateriel" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #44D952; -fx-effect: hand;" text="Ajouter" />
-                  <Button fx:id="updateMaterial" layoutX="105.0" layoutY="444.0" mnemonicParsing="false" onAction="#MettreAjour" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FFEB3B;" text="Modifier" />
-                  <Button fx:id="deleteMaterial" layoutX="191.0" layoutY="444.0" mnemonicParsing="false" onAction="#handleDeleteMaterial" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: #FF3D00;" text="Suprimer" />
+                  </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #44D952;" visible="false">
                <children>
                   <TableView fx:id="categorie_tableView" layoutX="14.0" layoutY="15.0" onMouseClicked="#CategorySelectData" prefHeight="481.0" prefWidth="435.0">
                     <columns>
@@ -297,7 +326,7 @@
                         <TableColumn fx:id="col_etat_categorie" prefWidth="148.66668701171875" text="etat" />
                     </columns>
                   </TableView>
-                  <AnchorPane layoutX="473.0" layoutY="20.0" prefHeight="481.0" prefWidth="315.0" style="-fx-background-color: #87CEEB;">
+                  <AnchorPane layoutX="473.0" layoutY="20.0" prefHeight="481.0" prefWidth="315.0" style="-fx-background-color: #e3fce7;">
                      <children>
                         <Label layoutX="6.0" layoutY="42.0" prefHeight="17.0" prefWidth="136.0" text="Nom de la categorie">
                            <font>
@@ -319,12 +348,12 @@
                         </Label>
                         <TextField fx:id="etat_categorie" layoutX="151.0" layoutY="137.0" />
                         <Button fx:id="updateCategorie_Btn" layoutX="116.0" layoutY="240.0" mnemonicParsing="false" onAction="#MettreAjourCategorie" prefHeight="25.0" prefWidth="69.0" style="-fx-background-color: yellow;" text="Modifier" />
-                        <Button fx:id="deleteCategorie_Btn" layoutX="195.0" layoutY="240.0" mnemonicParsing="false" onAction="#SupprimerCategory" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: red;" text="Supprimer" />
+                        <Button fx:id="deleteCategorie_Btn" layoutX="195.0" layoutY="240.0" mnemonicParsing="false" onAction="#SupprimerCategory" prefHeight="25.0" prefWidth="79.0" style="-fx-background-color: red;" text="Supprimer" textFill="WHITE" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
                   <TableView fx:id="Maintenance_tableView" layoutX="6.0" layoutY="14.0" onMouseClicked="#maintenanceSelectData" prefHeight="481.0" prefWidth="553.0">
                     <columns>
@@ -341,29 +370,25 @@
                         <Font name="Tahoma Bold" size="12.0" />
                      </font>
                   </Label>
-                  <VBox alignment="CENTER" layoutX="581.0" layoutY="73.0" prefHeight="275.0" prefWidth="250.0" spacing="28.0">
+                  <VBox alignment="CENTER" layoutX="582.0" layoutY="72.0" prefHeight="348.0" prefWidth="272.0" spacing="28.0">
                      <children>
                         <HBox alignment="CENTER" spacing="8.0">
-                           <children>
-                              <Label prefHeight="15.0" prefWidth="119.0" text="numero materiel">
-                                 <font>
-                                    <Font name="Tahoma Bold" size="12.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox fx:id="ComboNumMateriel" prefWidth="150.0" />
-                           </children>
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
+                           <children>
+                              <Label text="N° matériel" />
+                              <ComboBox fx:id="ComboNumMateriel" prefHeight="25.0" prefWidth="182.0" promptText="choisir un numero de materiel" />
+                           </children>
                         </HBox>
-                        <HBox spacing="8.0">
+                        <HBox alignment="CENTER" spacing="8.0">
                            <children>
                               <Label text="categorie">
                                  <font>
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="comboCategorie" prefWidth="150.0" />
+                              <ComboBox fx:id="comboCategorie" prefHeight="25.0" prefWidth="183.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" spacing="8.0">
@@ -373,7 +398,7 @@
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="probleme_materiel" />
+                              <TextField fx:id="probleme_materiel" prefHeight="25.0" prefWidth="177.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" spacing="8.0">
@@ -383,27 +408,27 @@
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="chargeMaintenace_textfield" />
+                              <TextField fx:id="chargeMaintenace_textfield" prefHeight="25.0" prefWidth="200.0" />
                            </children>
                         </HBox>
-                        <HBox spacing="8.0">
+                        <HBox alignment="CENTER" spacing="8.0">
                            <children>
                               <Label text="Dates">
                                  <font>
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DatePicker fx:id="DateMaintenance" />
+                              <DatePicker fx:id="DateMaintenance" prefHeight="25.0" prefWidth="207.0" />
                            </children>
                         </HBox>
-                        <HBox layoutX="15.0" layoutY="82.0" spacing="8.0">
+                        <HBox alignment="CENTER" layoutX="15.0" layoutY="82.0" spacing="8.0">
                            <children>
                               <Label text="Statut">
                                  <font>
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="Combo_maintenance" prefWidth="150.0" />
+                              <ComboBox fx:id="Combo_maintenance" prefHeight="25.0" prefWidth="203.0" />
                            </children>
                         </HBox>
                      </children>
@@ -411,9 +436,13 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <Button fx:id="Maintenance_add_Btn" layoutX="581.0" layoutY="391.0" mnemonicParsing="false" onAction="#addMaintenance" text="Ajouter" />
-                  <Button fx:id="Maintenance_Update_Btn" layoutX="661.0" layoutY="391.0" mnemonicParsing="false" onAction="#MaintenanceUpdate" text="Modifier" />
-                  <Button layoutX="752.0" layoutY="391.0" mnemonicParsing="false" onAction="#DeleteMaintenance" text="Supprimer" />
+                  <HBox alignment="CENTER" layoutX="599.0" layoutY="436.0" spacing="24.0">
+                     <children>
+                        <Button fx:id="Maintenance_add_Btn" mnemonicParsing="false" onAction="#addMaintenance" style="-fx-background-color: #44D952;" text="Ajouter" />
+                        <Button fx:id="Maintenance_Update_Btn" mnemonicParsing="false" onAction="#MaintenanceUpdate" style="-fx-background-color: yellow;" text="Modifier" />
+                        <Button mnemonicParsing="false" onAction="#DeleteMaintenance" style="-fx-background-color: red;" text="Supprimer" textFill="WHITE" />
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
          </children>

@@ -86,13 +86,13 @@ public class MaterialController implements Initializable {
     private TableView<Material> Material_tableView;
 
     @FXML
-    private Label MaterielIndisponible;
+    private Label MaintenancesTotal;
 
     @FXML
     private TextField TextfieldMaterialMarque;
 
     @FXML
-    private Label TotalDisponible;
+    private Label TotalDisponibleCategory;
 
     @FXML
     private Label TotalEnrolled;
@@ -379,6 +379,43 @@ public class MaterialController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void  totalCategories(){
+        String sql = " SELECT COUNT(id) FROM category ";
+        connection = DBConfig.getConnection();
+        int TotalEnrolle = 0;
+        try{
+
+            preparedStatement =  connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                TotalEnrolle = resultSet.getInt("COUNT(id)");
+            }
+            TotalDisponibleCategory.setText(String.valueOf(TotalEnrolle));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void  totalMaintenaces(){
+        String sql = " SELECT COUNT(id) FROM maintenances ";
+        connection = DBConfig.getConnection();
+        int TotalEnrolle = 0;
+        try{
+
+            preparedStatement =  connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                TotalEnrolle = resultSet.getInt("COUNT(id)");
+            }
+            MaintenancesTotal.setText(String.valueOf(TotalEnrolle));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
     public ObservableList<Material> materialListData() {
         ObservableList<Material> listData = FXCollections.observableArrayList();
         String selectData = "SELECT * FROM material";
@@ -1388,6 +1425,8 @@ public void DeleteMaintenance(ActionEvent event) {
         totalMaterial();
         updatePieChart();
         statutListHome();
+        totalCategories();
+        totalMaintenaces();
 
 
 
