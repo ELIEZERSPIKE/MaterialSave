@@ -96,7 +96,7 @@ public class AuthController {
             if (manager.SignIn(manager) ) {
                 Stage stage = (Stage) username.getScene().getWindow();
                 Stage newStage =  new Stage();
-               Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("home.fxml")));
+               Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("dashboard.fxml")));
                 newStage.setTitle("Material_Save");
                 newStage.setScene(new Scene(root));
                 newStage.show();

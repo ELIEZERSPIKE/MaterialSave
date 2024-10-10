@@ -109,7 +109,7 @@
                </children>
             </AnchorPane>
             <Separator layoutX="4.0" layoutY="44.0" prefHeight="1.0" prefWidth="1094.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" prefWidth="849.0" style="-fx-background-color: #FFA500;" visible="false">
+            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" prefWidth="849.0" style="-fx-background-color: #FFA500;">
                <children>
                   <AnchorPane layoutX="-1.0" layoutY="-8.0" prefHeight="103.0" prefWidth="855.0" style="-fx-background-color: #87CEEB;">
                      <children>
@@ -324,7 +324,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #FFA500;">
+            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #FFA500;" visible="false">
                <children>
                   <TableView fx:id="Maintenance_tableView" layoutX="6.0" layoutY="14.0" onMouseClicked="#maintenanceSelectData" prefHeight="481.0" prefWidth="553.0">
                     <columns>

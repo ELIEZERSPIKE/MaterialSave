@@ -270,6 +270,7 @@ public class MaterialController implements Initializable {
     @FXML
     private AnchorPane HomeForm;
 
+
     private Connection connection;
     private PreparedStatement preparedStatement;
 
@@ -691,63 +692,98 @@ public class MaterialController implements Initializable {
 
         }
     }
+
+//    private void updatePieChart() {
+//        String selectedStatut = comboStatut.getValue();
+//        System.out.println("Statut sélectionné : " + selectedStatut);
+//
+//        PieChartMateriel.getData().clear();
+//
+//        if (selectedStatut != null) {
+//            Connection connection = null;
+//            PreparedStatement preparedStatement = null;
+//            ResultSet resultSet = null;
+//
+//            try {
+//                connection = DBConfig.getConnection();
+//                String sql = "SELECT statut, COUNT(id) AS count FROM material WHERE statut = ? GROUP BY statut";
+//                preparedStatement = connection.prepareStatement(sql);
+//                preparedStatement.setString(1, selectedStatut);
+//                resultSet = preparedStatement.executeQuery();
+//
+//                int count = 0;
+//                if (resultSet.next()) {
+//                    count = resultSet.getInt("count");
+//                    System.out.println("Matériels : " + count);
+//                } else {
+//                    System.out.println("Aucune donnée trouvée pour : " + selectedStatut);
+//                }
+//
+//                int total = getTotaCount(connection);
+//                PieChartMateriel.getData().addAll(
+//                        new PieChart.Data(selectedStatut, count),
+//                        new PieChart.Data("Autres", total - count)
+//                );
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                // Assurer la fermeture des ressources
+//                try { if (resultSet != null) resultSet.close(); } catch (Exception e) { e.printStackTrace(); }
+//                try { if (preparedStatement != null) preparedStatement.close(); } catch (Exception e) { e.printStackTrace(); }
+//                try { if (connection != null) connection.close(); } catch (Exception e) { e.printStackTrace(); }
+//            }
+//        }
+//    }
+//    private int getTotaCount(Connection connection){
+//
+//        String total = "SELECT COUNT(id) AS total FROM material ";
+//        try{
+//            connection = DBConfig.getConnection();
+//            preparedStatement = connection.prepareStatement(total);
+//            resultSet = preparedStatement.executeQuery();
+//            if (resultSet.next()){
+//                return resultSet.getInt("total");
+//            }
+//        }catch (Exception e){
+//           e.printStackTrace();
+//        }
+//        return 0;
+//    }
+
+    private String[] statutListHome = {"Disponible", "Retire", "Maintenance", "Non-disponible"};
+    public  void statutListHome(){
+        List<String> statutL =  new ArrayList<>();
+        for(String data : statutListHome){
+            statutL.add(data);
+        }
+        ObservableList<String> Oblist = FXCollections.observableArrayList(statutL);
+        comboStatut.setItems(Oblist);
+        updatePieChart();
+    }
+
     private void updatePieChart() {
-        String selectedStatut = comboStatut.getValue();
-        System.out.println("Statut sélectionné : " + selectedStatut);
-
-        PieChartMateriel.getData().clear();
-
-        if (selectedStatut != null) {
-            Connection connection = null;
-            PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
-
-            try {
-                connection = DBConfig.getConnection();
-                String sql = "SELECT statut, COUNT(id) AS count FROM material WHERE statut = ? GROUP BY statut";
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setString(1, selectedStatut);
-                resultSet = preparedStatement.executeQuery();
-
-                int count = 0;
-                if (resultSet.next()) {
-                    count = resultSet.getInt("count");
-                    System.out.println("Matériels : " + count);
-                } else {
-                    System.out.println("Aucune donnée trouvée pour : " + selectedStatut);
-                }
-
-                int total = getTotaCount(connection);
-                PieChartMateriel.getData().addAll(
-                        new PieChart.Data(selectedStatut, count),
-                        new PieChart.Data("Autres", total - count)
-                );
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                // Assurer la fermeture des ressources
-                try { if (resultSet != null) resultSet.close(); } catch (Exception e) { e.printStackTrace(); }
-                try { if (preparedStatement != null) preparedStatement.close(); } catch (Exception e) { e.printStackTrace(); }
-                try { if (connection != null) connection.close(); } catch (Exception e) { e.printStackTrace(); }
-            }
-        }
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Disponible", getStatutCount("Disponible")),
+                new PieChart.Data("Non-disponible", getStatutCount("Non-Disponible")),
+                new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
+                new PieChart.Data("Retire", getStatutCount("Retire"))
+        );
+        PieChartMateriel.setData(pieChartData);
     }
-    private int getTotaCount(Connection connection){
 
-        String total = "SELECT COUNT(id) AS total FROM material ";
-        try{
-            connection = DBConfig.getConnection();
-            preparedStatement = connection.prepareStatement(total);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                return resultSet.getInt("total");
-            }
-        }catch (Exception e){
-           e.printStackTrace();
-        }
-        return 0;
+
+    private int getStatutCount(String statut){
+       int count = 0;
+       for(String s : statutListHome){
+           if (s.equals(statut)){
+               count ++;
+           }
+       }
+       return count;
     }
+
+
     public  void ViderChamps(){
     textfieldMaterialNumber.setText("");
     textfieldMateriamName.setText("");
@@ -1011,20 +1047,6 @@ public void availableCategory() {
 
 //    Methodes De Gestion Des maintenaces
 
-//    Verifier si le numero existe dans la base de donnee
-
-
-//    public boolean checkMaterialExistense(int numeroMateriel) throws SQLException {
-//        String query = "SELECT numeroMateriel FROM material WHERE numeroMateriel = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setInt(1, numeroMateriel);
-//            ResultSet resultSet = statement.executeQuery();
-//            return resultSet.next();  // Retourne true si un résultat est trouvé
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 
     public void statutList() {
 
@@ -1038,62 +1060,7 @@ public void availableCategory() {
         Combo_maintenance.setItems(ObList);
 
     }
-
-//    public void addMaintenance() throws IOException {
-//        try {
-//            // Récupérer les données du ComboBox et des champs texte
-//            Integer numeroMateriel = Integer.valueOf(ComboNumMateriel.getSelectionModel().getSelectedItem());  // Sélection via ComboBox
-//            String categorie = BoxCategorie.getSelectionModel().getSelectedItem();
-//            String charge = chargeMaintenace_textfield.getText().trim();
-//            String probleme = probleme_materiel.getText().trim();
-//            String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
-//            Date date = Date.valueOf(DateMaintenance.getValue());
-//
-//            // Vérification des champs obligatoires
-//            if (numeroMateriel != null && categorie != null && !charge.isEmpty() && !probleme.isEmpty() && date != null && statut != null) {
-//                // Créer une instance de maintenance et l'enregistrer
-//                Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
-//                maintenance.register(maintenance);
-//
-//                showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
-//            } else {
-//                showAlert("Avertissement", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.WARNING);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showAlert("Erreur", "Une erreur inattendue est survenue.", Alert.AlertType.ERROR);
-//}
-//    }
-
-//    public void addMaintenance() throws IOException {
-//        try {
-//            // Récupérer les données du ComboBox et des champs texte
-//            String selectedMateriel = String.valueOf(ComboNumMateriel.getSelectionModel().getSelectedItem());
-//            String selectedCategorie = BoxCategorie.getSelectionModel().getSelectedItem();
-//            String charge = chargeMaintenace_textfield.getText().trim();
-//            String probleme = probleme_materiel.getText().trim();
-//            String selectedStatut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
-//            LocalDate localDate = DateMaintenance.getValue(); // Assurez-vous que DateMaintenance est un LocalDate
-//
-//            // Vérification des champs obligatoires
-//            if (selectedMateriel != null && selectedCategorie != null && !charge.isEmpty() && !probleme.isEmpty() && localDate != null && selectedStatut != null) {
-//                Integer numeroMateriel = Integer.valueOf(selectedMateriel);  // Conversion après validation
-//
-//                // Créer une instance de maintenance et l'enregistrer
-//                Maintenance maintenance = new Maintenance(numeroMateriel, selectedCategorie, charge, probleme, Date.valueOf(localDate), selectedStatut);
-//                maintenance.register(maintenance);
-//
-//                showAlert("Succès", "Maintenance ajoutée avec succès !", Alert.AlertType.INFORMATION);
-//            } else {
-//                showAlert("Avertissement", "Veuillez remplir tous les champs obligatoires.", Alert.AlertType.WARNING);
-//            }
-//        } catch (NumberFormatException e) {
-//            showAlert("Erreur", "Le numéro de matériel doit être un nombre valide.", Alert.AlertType.ERROR);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showAlert("Erreur", "Une erreur inattendue est survenue.", Alert.AlertType.ERROR);
-//        }
-//    }
+    private String[] statutList = {"Preventive", "Corrective", "Conditionnelle", "Améliorative"};
 
     public  void clearMaintenace(){
         ComboNumMateriel.getSelectionModel().clearSelection();
@@ -1258,66 +1225,7 @@ public void availableCategory() {
 
         return categoriesList;
     }
-    private String[] statutList = {"Preventive", "Corrective", "Conditionnelle", "Améliorative"};
 
-//    public void MaintenaceUpdate() throws IOException{
-//
-//        int numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
-//        String ComboBoxMaintenace = comboCategorie.getSelectionModel().getSelectedItem();
-//        String probleme = probleme_materiel.getText().trim();
-//        String charge =  chargeMaintenace_textfield.getText().trim();
-//        LocalDate date = DateMaintenance.getValue();
-//        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
-//
-//        if( ComboBoxMaintenace.isEmpty() || probleme.isEmpty() || charge.isEmpty() || date == null || statut.isEmpty() ){
-//            alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setHeaderText(null);
-//            alert.setContentText("Remplir tout les champs");
-//            alert.showAndWait();
-//            return;
-//        }
-//        alert = new Alert(Alert.AlertType.CONFIRMATION);
-//
-//        alert.setTitle("sur de modifier ? ");
-//        alert.setHeaderText(null);
-//        alert.setContentText("sur de modifier la maintenace effectuée sur  " + numeroMateriel + "?");
-//        Optional<ButtonType> option =  alert.showAndWait();
-//        if (option.get().equals(ButtonType.OK)){
-//            try{
-//                connection = DBConfig.getConnection();
-//
-//                int numeroMateriell = Integer.parseInt(String.valueOf(numeroMateriel));
-//
-//                Maintenance maintenance = new Maintenance( numeroMateriell , ComboBoxMaintenace, probleme, charge, Date.valueOf(date), statut);
-//                boolean success = maintenance.updateMaintenace(maintenance);
-//
-//                if (success){
-//                    alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("mise a jou");
-//                    alert.showAndWait();
-//
-//                    materialShowData();
-//                    ViderChamps();
-//
-//
-//                } else {
-//                    alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("echec");
-//                    alert.showAndWait();
-//                    materialShowData();
-//
-//                }
-//
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-//
-//    }
 public void MaintenanceUpdate() throws IOException {
     Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
     String comboBoxMaintenance = comboCategorie.getSelectionModel().getSelectedItem();
@@ -1373,58 +1281,6 @@ private void showAlert(Alert.AlertType alertType, String message) {
         return alert.showAndWait();
     }
 
-
-
-//    public void DeleteMaintenance(ActionEvent event) {
-//        // Récupération des données des champs
-//        Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
-//        String categorie = comboCategorie.getSelectionModel().getSelectedItem();
-//        String charge = chargeMaintenace_textfield.getText().trim();
-//        String probleme = probleme_materiel.getText().trim();
-//        LocalDate localDate = DateMaintenance.getValue(); // Utilise LocalDate directement
-//        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
-//
-//        // Vérification si le numéro de matériel est sélectionné
-//        if (numeroMateriel == null) {
-//            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le numéro de matériel est requis.");
-//            return;
-//        }
-//
-//        // Vérification si la date est sélectionnée
-//        if (localDate == null) {
-//            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de maintenance est requise.");
-//            return;
-//        }
-//
-//        try {
-//            Date date = Date.valueOf(localDate); // Conversion de LocalDate à Date si nécessaire
-//
-//            // Création de l'objet Maintenance (si besoin)
-//            Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
-//
-//            // Suppression
-//            boolean success = maintenance.DeleteMaintenance(maintenance);
-//            materialShowData();
-//
-//            if (success) {
-//                showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
-//                        "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
-//                ViderChamps();
-//            } else {
-//                showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
-//                        "Le matériel avec le numéro " + numeroMateriel + " n'a pas été trouvé.");
-//                ViderChamps();
-//            }
-//        } catch (SQLException e) {
-//            showAlert(Alert.AlertType.ERROR, "Erreur SQL",
-//                    "Une erreur s'est produite lors de la suppression.");
-//            e.printStackTrace();
-//        } catch (IllegalArgumentException e) {
-//            showAlert(Alert.AlertType.ERROR, "Erreur de date",
-//                    "La date fournie est invalide.");
-//            e.printStackTrace();
-//        }
-//    }
 public void DeleteMaintenance(ActionEvent event) {
     // Récupération des données des champs
     Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
@@ -1478,9 +1334,7 @@ public void DeleteMaintenance(ActionEvent event) {
     }
 }
 
-
-
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
+   private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -1532,14 +1386,17 @@ public void DeleteMaintenance(ActionEvent event) {
 
 
         totalMaterial();
+        updatePieChart();
+        statutListHome();
 
 
 
 
 //        comboStatut.getItems().addAll(statutList);
-        if (comboStatut.getItems().addAll("Disponible", "Non-disponible", "En reserve", "En maintenance"));
-
-        comboStatut.setOnAction(event -> updatePieChart());
+//
+//        if (comboStatut.getItems().addAll("Disponible", "Non-disponible", "En reserve", "En maintenance"));
+//
+//        comboStatut.setOnAction(event -> updatePieChart());
 
         BoxCategorie.setOnAction(event -> {
             String selectedCategory = BoxCategorie.getSelectionModel().getSelectedItem();
