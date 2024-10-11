@@ -112,7 +112,7 @@
                </children>
             </AnchorPane>
             <Separator layoutX="4.0" layoutY="44.0" prefHeight="1.0" prefWidth="1094.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" style="-fx-background-color: #e3fce7;">
+            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
                   <AnchorPane layoutX="-1.0" layoutY="-8.0" prefHeight="103.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
                      <children>
@@ -195,7 +195,7 @@
                   <PieChart fx:id="PieChartMateriel" layoutX="492.0" layoutY="173.0" prefHeight="267.0" style="-fx-background-color: transparent;" title="Chart statut" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Material_Add_Form" layoutX="236.0" layoutY="53.0" prefHeight="550.0" prefWidth="866.0" style="-fx-background-color: #e3fce7;" visible="false">
+            <AnchorPane fx:id="Material_Add_Form" layoutX="236.0" layoutY="53.0" prefHeight="550.0" prefWidth="866.0" style="-fx-background-color: #e3fce7;">
                <children>
                   <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
                      <children>
@@ -240,7 +240,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="textfieldMateriamName" prefHeight="25.0" prefWidth="155.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label prefHeight="17.0" prefWidth="103.0" text="Nom Materiel" GridPane.rowIndex="1">
+                        <Label prefHeight="17.0" prefWidth="103.0" text="Numero de Série" GridPane.rowIndex="1">
                            <font>
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
