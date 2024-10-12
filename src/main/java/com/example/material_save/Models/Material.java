@@ -36,8 +36,7 @@ public class Material  {
     private Date date ;
     private String utilisateur;
     private String statut;
-    private String problem;
-    private String charge;
+
 
     private Connection connection;
 
@@ -121,23 +120,9 @@ public class Material  {
         this.statut = statut;
     }
 
-    public String getProblem() {
-        return problem;
-    }
 
-    public void setProblem(String problem) {
-        this.problem = problem;
-    }
 
-    public String getCharge() {
-        return charge;
-    }
-
-    public void setCharge(String charge) {
-        this.charge = charge;
-    }
-
-    public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut, String problem, String charge) {
+    public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut) {
         this.materialNumber = materialNumber;
         this.name = name;
         this.etat = etat;
@@ -147,8 +132,7 @@ public class Material  {
         this.date = date;
         this.utilisateur = utilisateur;
         this.statut = statut;
-        this.problem = (problem != null) ? problem : "";
-        this.charge = (charge != null) ? charge : "";
+
     }
 
     public void register(Material material) throws SQLException {

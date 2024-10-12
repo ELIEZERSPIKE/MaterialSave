@@ -436,11 +436,7 @@ public class MaterialController implements Initializable {
                         resultSet.getString("categorie"),
                         resultSet.getDate("date"),
                         resultSet.getString("utilisateur"),
-                        resultSet.getString("statut"),
-                        resultSet.getString("problem"),
-                        resultSet.getString("charge")
-
-
+                        resultSet.getString("statut")
                 );
                 listData.add(sData);
             }
@@ -451,6 +447,7 @@ public class MaterialController implements Initializable {
 
         return listData;
     }
+
     public void AjouterMateriel() throws IOException {
         // Récupération des valeurs des champs
         String materialNumber = textfieldMaterialNumber.getText().trim();
@@ -468,15 +465,29 @@ public class MaterialController implements Initializable {
                 && category != null && !utilisateur.isEmpty() && statut != null && date != null) {
 
             try {
+                // Vérification si le numéro de matériel est bien un entier
+                int materialNum;
+                try {
+                    materialNum = Integer.parseInt(materialNumber);
+                } catch (NumberFormatException e) {
+                    // Si ce n'est pas un entier, afficher une alerte
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Le numéro de matériel doit être un entier.");
+                    alert.showAndWait();
+                    return; // Arrêter l'exécution de la méthode
+                }
+
                 // Vérification si le numéro de matériel existe déjà
-                boolean checkMaterialNumber = checkMaterialNumber(Integer.parseInt(materialNumber));
+                boolean checkMaterialNumber = checkMaterialNumber(materialNum);
 
                 if (checkMaterialNumber) {
                     // Si le matériel existe déjà, afficher une alerte d'erreur
                     alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erreur");
                     alert.setHeaderText(null);
-                    alert.setContentText("Le matériel existe déjà");
+                    alert.setContentText("Le matériel existe déjà.");
                     alert.showAndWait();
                     ViderChamps();
                 } else {
@@ -484,7 +495,7 @@ public class MaterialController implements Initializable {
 
                     // Création de l'objet Material et assignation des valeurs
                     Material material = new Material();
-                    material.setMaterialNumber(Integer.parseInt(materialNumber));
+                    material.setMaterialNumber(materialNum);
                     material.setName(name);
                     material.setMarque(marque);
                     material.setEtat(etat);
@@ -506,8 +517,7 @@ public class MaterialController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Matériel ajouté avec succès !");
                         alert.showAndWait();
-                    }
-                    catch (SQLException e) {
+                    } catch (SQLException e) {
                         // Gestion des exceptions SQL
                         e.printStackTrace();
                         alert = new Alert(Alert.AlertType.ERROR);
@@ -515,11 +525,6 @@ public class MaterialController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Une erreur est survenue lors de l'ajout du matériel.");
                         alert.showAndWait();
-
-
-
-
-
                     }
                 }
             } catch (Exception e) {
@@ -533,7 +538,6 @@ public class MaterialController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText("Veuillez remplir tous les champs !");
             alert.showAndWait();
-
         }
     }
     public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
@@ -587,13 +591,13 @@ public class MaterialController implements Initializable {
 
             int materialNumberInt = Integer.parseInt(materialNumber);
 
-            Material material = new Material(  materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut, null, null);
+            Material material = new Material(materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut);
             boolean success = material.updateMaterial(material);
 
             if (success){
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
-                alert.setContentText("mise a jou");
+                alert.setContentText("mise a jour");
                 alert.showAndWait();
 
                 materialShowData();
@@ -730,63 +734,6 @@ public class MaterialController implements Initializable {
         }
     }
 
-//    private void updatePieChart() {
-//        String selectedStatut = comboStatut.getValue();
-//        System.out.println("Statut sélectionné : " + selectedStatut);
-//
-//        PieChartMateriel.getData().clear();
-//
-//        if (selectedStatut != null) {
-//            Connection connection = null;
-//            PreparedStatement preparedStatement = null;
-//            ResultSet resultSet = null;
-//
-//            try {
-//                connection = DBConfig.getConnection();
-//                String sql = "SELECT statut, COUNT(id) AS count FROM material WHERE statut = ? GROUP BY statut";
-//                preparedStatement = connection.prepareStatement(sql);
-//                preparedStatement.setString(1, selectedStatut);
-//                resultSet = preparedStatement.executeQuery();
-//
-//                int count = 0;
-//                if (resultSet.next()) {
-//                    count = resultSet.getInt("count");
-//                    System.out.println("Matériels : " + count);
-//                } else {
-//                    System.out.println("Aucune donnée trouvée pour : " + selectedStatut);
-//                }
-//
-//                int total = getTotaCount(connection);
-//                PieChartMateriel.getData().addAll(
-//                        new PieChart.Data(selectedStatut, count),
-//                        new PieChart.Data("Autres", total - count)
-//                );
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            } finally {
-//                // Assurer la fermeture des ressources
-//                try { if (resultSet != null) resultSet.close(); } catch (Exception e) { e.printStackTrace(); }
-//                try { if (preparedStatement != null) preparedStatement.close(); } catch (Exception e) { e.printStackTrace(); }
-//                try { if (connection != null) connection.close(); } catch (Exception e) { e.printStackTrace(); }
-//            }
-//        }
-//    }
-//    private int getTotaCount(Connection connection){
-//
-//        String total = "SELECT COUNT(id) AS total FROM material ";
-//        try{
-//            connection = DBConfig.getConnection();
-//            preparedStatement = connection.prepareStatement(total);
-//            resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next()){
-//                return resultSet.getInt("total");
-//            }
-//        }catch (Exception e){
-//           e.printStackTrace();
-//        }
-//        return 0;
-//    }
 
     private String[] statutListHome = {"Disponible", "Retire", "Maintenance", "Non-disponible"};
     public  void statutListHome(){
@@ -883,9 +830,9 @@ public void addCategoryList() {
             }
         }
     }
+
     public boolean checkCategoryExists(String NomCategory) throws SQLException {
         boolean exists = false;
-
 
         String query = "SELECT NomCategory FROM category WHERE NomCategory = ?";
 
@@ -893,16 +840,16 @@ public void addCategoryList() {
             statement.setString(1, NomCategory);
             ResultSet resultSet = statement.executeQuery();
 
+            // Si un résultat est retourné, cela signifie que la catégorie existe
             if (resultSet.next()) {
-                exists = resultSet.getInt(1) > 0;  // Vérifie si le matériel existe
+                exists = true;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return exists;
     }
-
 public void categoriesData(){
      categoriesData = CategoriesListData();
     col_categoryName.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
@@ -1086,13 +1033,10 @@ public void availableCategory() {
 
 
     public void statutList() {
-
         List<String> statutL = new ArrayList<>();
-
         for (String data : statutList ) {
             statutL.add(data);
         }
-
         ObservableList ObList = FXCollections.observableArrayList(statutL);
         Combo_maintenance.setItems(ObList);
 
@@ -1381,7 +1325,57 @@ public void DeleteMaintenance(ActionEvent event) {
 
 
 
+//    public void logout() {
+//        try {
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//            alert.setTitle("Confirmation");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Êtes-vous sûr de vous déconnecter ?"); // Correction de l'orthographe
+//
+//            Optional<ButtonType> option = alert.showAndWait();
+//            if (option.isPresent() && option.get() == ButtonType.OK) { // Vérification si une option est présente et utilisation de == pour comparer
+//                LogOut_Btn.getScene().getWindow().hide();
+//                Parent root;
+//                root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("src/main/resources/com/example/material_save/LogIn.fxml")));
+////                Parent root = FXMLLoader.load(getClass().getResource("/LogIn.fxml"));
+//                Stage stage = new Stage();
+//                Scene scene = new Scene(root);
+//                stage.setScene(scene);
+//                stage.show();
+//            } else {
+//                return;
+//            }
+//        }  catch (Exception e) {
+//            System.out.println("Erreur lors de la déconnexion : " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 
+    public void logout() {
+        try {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Êtes-vous sûr de vous déconnecter ?");
+
+            Optional<ButtonType> option = alert.showAndWait();
+            if (option.isPresent() && option.get() == ButtonType.OK) {
+                // Fermer la fenêtre actuelle
+                Stage stage = (Stage) LogOut_Btn.getScene().getWindow();
+                stage.close();
+
+                // Charger la vue de connexion
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/material_save/LogIn.fxml")));
+                Stage loginStage = new Stage();
+                Scene scene = new Scene(root);
+                loginStage.setScene(scene);
+                loginStage.show();
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la déconnexion : " + e.getMessage());
+            e.printStackTrace();
+}
+    }
 
 
 

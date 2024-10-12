@@ -29,7 +29,7 @@
    <children>
       <AnchorPane fx:id="Main_Form" prefHeight="600.0">
          <children>
-            <AnchorPane layoutX="-2.0" layoutY="57.0" prefHeight="542.0" style="-fx-background-color: #44D952;">
+            <AnchorPane layoutX="-2.0" layoutY="49.0" prefHeight="558.0" prefWidth="216.0" style="-fx-background-color: #44D952;">
                <children>
                   <ImageView fitHeight="111.0" fitWidth="103.0" layoutX="37.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -92,7 +92,7 @@
                               <Font name="Tahoma Bold" size="13.0" />
                            </font>
                         </Button>
-                        <Button fx:id="LogOut_Btn" mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" style="-fx-background-color: transparent;" text="Se deconnecter" textFill="WHITE">
+                        <Button fx:id="LogOut_Btn" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="143.0" style="-fx-background-color: transparent;" text="Se deconnecter" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -111,12 +111,12 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <Separator layoutX="4.0" layoutY="44.0" prefHeight="1.0" prefWidth="1094.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="242.0" layoutY="57.0" prefHeight="533.0" style="-fx-background-color: #e3fce7;" visible="false">
+            <Separator layoutX="4.0" layoutY="46.0" prefHeight="1.0" prefWidth="1227.0" style="-fx-background-color: #FFA726;" />
+            <AnchorPane fx:id="home_Form" layoutX="214.0" layoutY="48.0" prefHeight="549.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
-                  <AnchorPane layoutX="-1.0" layoutY="-8.0" prefHeight="103.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
+                  <AnchorPane layoutX="-2.0" prefHeight="96.0" prefWidth="1020.0" style="-fx-background-color: #44D952;">
                      <children>
-                        <HBox alignment="CENTER" layoutX="37.0" layoutY="5.0" spacing="60.0">
+                        <HBox alignment="CENTER" layoutX="121.0" layoutY="4.0" spacing="60.0">
                            <children>
                               <AnchorPane prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
                                  <children>
@@ -192,25 +192,24 @@
                         <Label layoutX="94.0" layoutY="14.0" text="Graphique d'enregistrement par date" textFill="#241414" />
                      </children>
                   </AnchorPane>
-                  <PieChart fx:id="PieChartMateriel" layoutX="492.0" layoutY="173.0" prefHeight="267.0" style="-fx-background-color: transparent;" title="Chart statut" />
+                  <PieChart fx:id="PieChartMateriel" layoutX="518.0" layoutY="173.0" prefHeight="289.0" prefWidth="481.0" style="-fx-background-color: transparent;" title="Chart statut" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Material_Add_Form" layoutX="236.0" layoutY="53.0" prefHeight="550.0" prefWidth="866.0" style="-fx-background-color: #e3fce7;">
+            <AnchorPane fx:id="Material_Add_Form" layoutX="210.0" layoutY="51.0" prefHeight="558.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;">
                <children>
-                  <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="855.0" style="-fx-background-color: #44D952;">
+                  <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="1020.0" style="-fx-background-color: #44D952;">
                      <children>
-                        <TextField fx:id="searchMaterial" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="201.0" promptText="Rechercher" />
-                        <TableView fx:id="Material_tableView" layoutY="42.0" onMouseClicked="#materialSelectData" prefHeight="245.0" prefWidth="855.0">
+                        <TableView fx:id="Material_tableView" onMouseClicked="#materialSelectData" prefHeight="289.0" prefWidth="1020.0">
                           <columns>
-                            <TableColumn fx:id="col_material" prefWidth="112.0" text="Numero Materiel" />
-                            <TableColumn fx:id="col_name" prefWidth="82.0" text="Nom" />
-                              <TableColumn fx:id="col_etat" prefWidth="88.00003051757812" text="Marque" />
-                              <TableColumn fx:id="col_marque" prefWidth="72.6666259765625" text="Etat" />
-                              <TableColumn fx:id="col_local" prefWidth="64.0" text="Local" />
-                              <TableColumn fx:id="col_category" prefWidth="101.33331298828125" text="Categorie" />
-                              <TableColumn fx:id="col_date" prefWidth="86.0" text="Date" />
-                              <TableColumn fx:id="col_utilisateur" prefWidth="116.66668701171875" text="Utilisateur" />
-                              <TableColumn fx:id="colstatut" prefWidth="122.66656494140625" text="Statut" />
+                            <TableColumn fx:id="col_material" prefWidth="129.99998474121094" text="Numero Materiel" />
+                            <TableColumn fx:id="col_name" prefWidth="122.66668701171875" text="Numero de serie" />
+                              <TableColumn fx:id="col_etat" prefWidth="84.00003051757812" text="Marque" />
+                              <TableColumn fx:id="col_marque" prefWidth="86.0" text="Etat" />
+                              <TableColumn fx:id="col_local" prefWidth="71.33331298828125" text="Local" />
+                              <TableColumn fx:id="col_category" prefWidth="136.0" text="Categorie" />
+                              <TableColumn fx:id="col_date" prefWidth="98.666748046875" text="Date" />
+                              <TableColumn fx:id="col_utilisateur" prefWidth="142.66656494140625" text="Utilisateur" />
+                              <TableColumn fx:id="colstatut" prefWidth="157.333251953125" text="Statut" />
                           </columns>
                         </TableView>
                      </children>
@@ -253,10 +252,10 @@
                         <TextField fx:id="textfieldMaterial_state" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-                  <GridPane layoutX="587.0" layoutY="315.0" prefHeight="153.0" prefWidth="256.0">
+                  <GridPane layoutX="587.0" layoutY="315.0" prefHeight="153.0" prefWidth="283.0">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.66666666666667" minWidth="10.0" prefWidth="118.66666666666667" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.3333740234375" minWidth="10.0" prefWidth="82.00000000000001" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.66666666666667" minWidth="10.0" prefWidth="47.99991861979167" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.666748046875" minWidth="10.0" prefWidth="170.666748046875" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
@@ -279,7 +278,7 @@
                               <Font name="Tahoma Bold" size="11.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="BoxCategorie" prefHeight="25.0" prefWidth="155.0" promptText="Liste des categories" visibleRowCount="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="BoxCategorie" prefHeight="25.0" prefWidth="176.0" promptText="Les categories" visibleRowCount="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="textefieldLocate" alignment="CENTER" prefHeight="25.0" prefWidth="176.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="TextfieldMaterialMarque" prefHeight="25.0" prefWidth="142.0" GridPane.columnIndex="1" />
                      </children>
@@ -317,16 +316,16 @@
                   </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Form_categories" layoutX="258.0" layoutY="68.0" prefHeight="511.0" prefWidth="798.0" style="-fx-background-color: #44D952;" visible="false">
+            <AnchorPane fx:id="Form_categories" layoutX="214.0" layoutY="49.0" prefHeight="558.0" prefWidth="1020.0" style="-fx-background-color: #44D952;" visible="false">
                <children>
-                  <TableView fx:id="categorie_tableView" layoutX="14.0" layoutY="15.0" onMouseClicked="#CategorySelectData" prefHeight="481.0" prefWidth="435.0">
+                  <TableView fx:id="categorie_tableView" layoutX="14.0" layoutY="14.0" onMouseClicked="#CategorySelectData" prefHeight="533.0" prefWidth="467.0">
                     <columns>
-                      <TableColumn fx:id="col_categoryName" prefWidth="119.33328247070312" text="Categorie" />
-                      <TableColumn fx:id="col_description_categorie" prefWidth="164.00006103515625" text="Description" />
-                        <TableColumn fx:id="col_etat_categorie" prefWidth="148.66668701171875" text="etat" />
+                      <TableColumn fx:id="col_categoryName" prefWidth="132.0000457763672" text="Nom" />
+                      <TableColumn fx:id="col_description_categorie" prefWidth="173.333251953125" text="Description" />
+                        <TableColumn fx:id="col_etat_categorie" prefWidth="160.0" text="etat" />
                     </columns>
                   </TableView>
-                  <AnchorPane layoutX="473.0" layoutY="20.0" prefHeight="481.0" prefWidth="315.0" style="-fx-background-color: #e3fce7;">
+                  <AnchorPane layoutX="592.0" layoutY="14.0" prefHeight="481.0" prefWidth="315.0" style="-fx-background-color: #e3fce7;">
                      <children>
                         <Label layoutX="6.0" layoutY="42.0" prefHeight="17.0" prefWidth="136.0" text="Nom de la categorie">
                            <font>
@@ -353,7 +352,7 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="865.0" style="-fx-background-color: #e3fce7;" visible="false">
+            <AnchorPane fx:id="Maintenance_Form" layoutX="231.0" layoutY="63.0" prefHeight="533.0" prefWidth="1000.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
                   <TableView fx:id="Maintenance_tableView" layoutX="6.0" layoutY="14.0" onMouseClicked="#maintenanceSelectData" prefHeight="481.0" prefWidth="553.0">
                     <columns>
@@ -428,7 +427,7 @@
                                     <Font name="Tahoma Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="Combo_maintenance" prefHeight="25.0" prefWidth="203.0" />
+                              <ComboBox fx:id="Combo_maintenance" prefHeight="25.0" prefWidth="203.0" promptText="Type de maintenance" />
                            </children>
                         </HBox>
                      </children>

@@ -71,9 +71,8 @@ public class Category {
                     + "VALUES (?,?,?) ";
             preparedStatement = connection.prepareStatement(req);
 
-
-            preparedStatement.setString(1, this.CategoryDescription);
-            preparedStatement.setString(2, this.CategoryName);
+            preparedStatement.setString(1, this.CategoryName);
+            preparedStatement.setString(2, this.CategoryDescription);
             preparedStatement.setString(3,this.CategoryState);
 
 
