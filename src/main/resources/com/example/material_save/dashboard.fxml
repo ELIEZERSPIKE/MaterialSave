@@ -112,38 +112,28 @@
                </children>
             </AnchorPane>
             <Separator layoutX="4.0" layoutY="46.0" prefHeight="1.0" prefWidth="1227.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="214.0" layoutY="48.0" prefHeight="549.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;" visible="false">
+            <AnchorPane fx:id="home_Form" layoutX="214.0" layoutY="48.0" prefHeight="549.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;">
                <children>
-                  <AnchorPane layoutX="-2.0" prefHeight="96.0" prefWidth="1020.0" style="-fx-background-color: #44D952;">
+                  <AnchorPane layoutX="-2.0" prefHeight="96.0" prefWidth="1020.0" style="-fx-background-color: fff;">
                      <children>
                         <HBox alignment="CENTER" layoutX="121.0" layoutY="4.0" spacing="60.0">
                            <children>
                               <AnchorPane prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
                                  <children>
-                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../assets/stack_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label layoutX="65.0" layoutY="54.0" prefHeight="25.0" prefWidth="113.0" text="Total Enregistrés " textFill="WHITE">
+                                    <Label layoutX="35.0" layoutY="54.0" prefHeight="25.0" prefWidth="143.0" text="Total Enregistrés " textFill="WHITE">
                                        <font>
                                           <Font name="Tahoma Bold" size="13.0" />
                                        </font>
                                     </Label>
                                     <Label fx:id="TotalEnrolled" layoutX="86.0" layoutY="19.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="#efecec">
                                        <font>
-                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                          <Font name="Tahoma Bold" size="24.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </AnchorPane>
                               <AnchorPane prefHeight="88.0" prefWidth="201.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
                                  <children>
-                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="1.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../assets/eos-icons--network-file-system-outlined.png" />
-                                       </image>
-                                    </ImageView>
                                     <Label layoutX="55.0" layoutY="47.0" prefHeight="25.0" prefWidth="136.0" text="Les categories " textFill="WHITE">
                                        <font>
                                           <Font name="Tahoma Bold" size="12.0" />
@@ -151,18 +141,13 @@
                                     </Label>
                                     <Label fx:id="TotalDisponibleCategory" layoutX="87.0" layoutY="12.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
                                        <font>
-                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                          <Font name="Tahoma Bold" size="24.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </AnchorPane>
                               <AnchorPane prefHeight="88.0" prefWidth="222.0" style="-fx-background-color: #468284; -fx-background-radius: 20;">
                                  <children>
-                                    <ImageView fitHeight="54.0" fitWidth="60.0" layoutX="2.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../assets/eos-icons--content-deleted.png" />
-                                       </image>
-                                    </ImageView>
                                     <Label layoutX="54.0" layoutY="48.0" prefHeight="25.0" prefWidth="181.0" text="Materiels en Maintenance" textFill="WHITE">
                                        <font>
                                           <Font name="Tahoma Bold" size="11.0" />
@@ -170,7 +155,7 @@
                                     </Label>
                                     <Label fx:id="MaintenancesTotal" layoutX="107.0" layoutY="14.0" prefHeight="25.0" prefWidth="113.0" text="0" textFill="WHITE">
                                        <font>
-                                          <Font name="Berlin Sans FB Bold" size="14.0" />
+                                          <Font name="Tahoma Bold" size="24.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -195,7 +180,7 @@
                   <PieChart fx:id="PieChartMateriel" layoutX="518.0" layoutY="173.0" prefHeight="289.0" prefWidth="481.0" style="-fx-background-color: transparent;" title="Chart statut" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="Material_Add_Form" layoutX="210.0" layoutY="51.0" prefHeight="558.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;">
+            <AnchorPane fx:id="Material_Add_Form" layoutX="210.0" layoutY="51.0" prefHeight="558.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;" visible="false">
                <children>
                   <AnchorPane layoutY="-2.0" prefHeight="289.0" prefWidth="1020.0" style="-fx-background-color: #44D952;">
                      <children>
