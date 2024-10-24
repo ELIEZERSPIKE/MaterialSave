@@ -185,6 +185,7 @@ public class MaterialController implements Initializable {
             Material_Add_Form.setVisible(false);
             Form_categories.setVisible(false);
             Maintenance_Form.setVisible(false);
+            updatePieChart();
             System.out.println("Home appuye");
 
         } else if (event.getSource() == AddMateriel_Btn) {
@@ -342,6 +343,7 @@ public class MaterialController implements Initializable {
                         material.register(material);
                         materialShowData();
                         ViderChamps();
+                        updatePieChart();
 
                         // Afficher un message de confirmation après l'ajout réussi
                         alert = new Alert(Alert.AlertType.INFORMATION);
@@ -437,6 +439,7 @@ public class MaterialController implements Initializable {
 
                 materialShowData();
                 ViderChamps();
+                updatePieChart();
 
 
             } else {
@@ -479,6 +482,7 @@ public class MaterialController implements Initializable {
             Material materialService = new Material();
             boolean success = material.DeleteMaterial(material);
             materialShowData();
+            updatePieChart();
 
             if (success) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -581,23 +585,50 @@ public class MaterialController implements Initializable {
         comboStatut.setItems(Oblist);
         updatePieChart();
     }
+
+//        private void updatePieChart() {
+//    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+//            new PieChart.Data("Disponible", getStatutCount("Disponible")),
+//            new PieChart.Data("Non-disponible", getStatutCount("Non-disponible")),
+//            new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
+//            new PieChart.Data("Retire", getStatutCount("Retire"))
+//    );
+//
+//    // Vérifie si tous les statuts ont des données
+//    if (pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum() == 0) {
+//        pieChartData.add(new PieChart.Data("Aucune donnée", 1)); // Ajoute une section "Aucune donnée" si tout est zéro
+//    }
+//
+//    PieChartMateriel.setData(pieChartData);
+//  }
+
     private void updatePieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Disponible", getStatutCount("Disponible")),
-                new PieChart.Data("Non-disponible", getStatutCount("Non-Disponible")),
+                new PieChart.Data("Non-disponible", getStatutCount("Non-disponible")),
                 new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
                 new PieChart.Data("Retire", getStatutCount("Retire"))
         );
+
+        // Vérifie si tous les statuts ont des données
+        if (pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum() == 0) {
+            pieChartData.add(new PieChart.Data("Aucune donnée", 1)); // Ajoute une section "Aucune donnée" si tout est zéro
+        }
+
+        // Met à jour le PieChart avec les nouvelles données
         PieChartMateriel.setData(pieChartData);
     }
-    private int getStatutCount(String statut){
-       int count = 0;
-       for(String s : statutListHome){
-           if (s.equals(statut)){
-               count ++;
-           }
-       }
-       return count;
+
+
+
+    private int getStatutCount(String statut) {
+        int count = 0;
+        for (String s : statutListHome) {
+            if (s.equals(statut)) {
+                count++;
+            }
+        }
+        return count;
     }
     public  void ViderChamps(){
     textfieldMaterialNumber.setText("");
@@ -1270,10 +1301,12 @@ public class MaterialController implements Initializable {
         clearMaintenace();
         totalMaterial();
         updatePieChart();
+
         statutListHome();
 
 
         totalCategories();
+
 
         totalMaintenaces();
         BoxCategorie.setOnAction(event -> {
