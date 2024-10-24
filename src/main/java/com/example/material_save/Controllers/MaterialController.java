@@ -208,6 +208,7 @@ public class MaterialController implements Initializable {
             System.out.println("categorie  trouve");
             Maintenance_Form.setVisible(false);
             Maintenance_Form.setManaged(false);
+            totalCategories();
 
             categoriesData();
 
@@ -613,7 +614,7 @@ public class MaterialController implements Initializable {
 
 //Logiques De Gestion des Categories
 // Méthode pour récupérer la liste des catégories depuis la base de données / Method to retrieve the list of categories from the database
-public ObservableList<Category> CategoriesListData() {
+  public ObservableList<Category> CategoriesListData() {
     ObservableList<Category> listData = FXCollections.observableArrayList();
     String selectData = "SELECT * FROM category";
     connection = DBConfig.getConnection(); // Établir la connexion à la base de données / Establish the connection to the database
@@ -726,6 +727,8 @@ public ObservableList<Category> CategoriesListData() {
             category.register(category); // Enregistrer la catégorie / Register the category
             categoriesData(); // Actualiser les données de la TableView / Refresh the TableView data
             addCategoryList(); // Actualiser le ComboBox / Refresh the ComboBox
+            totalCategories();
+
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Succès");
@@ -845,6 +848,7 @@ public ObservableList<Category> CategoriesListData() {
             connection = DBConfig.getConnection();
             Category category = new Category(CategoryName, CategoryDescription, CategoryState); // Créer un objet Category / Create a Category object
             boolean success = category.DeleteCategory(category); // Supprimer la catégorie / Delete the category
+            totalCategories();
 
             if (success) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -885,6 +889,8 @@ public ObservableList<Category> CategoriesListData() {
             e.printStackTrace(); // Afficher les erreurs / Print errors
         }
     }
+
+
 
 
 
@@ -1265,7 +1271,10 @@ public ObservableList<Category> CategoriesListData() {
         totalMaterial();
         updatePieChart();
         statutListHome();
+
+
         totalCategories();
+
         totalMaintenaces();
         BoxCategorie.setOnAction(event -> {
             String selectedCategory = BoxCategorie.getSelectionModel().getSelectedItem();
