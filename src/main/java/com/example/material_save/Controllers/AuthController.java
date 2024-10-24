@@ -42,74 +42,158 @@ public class AuthController {
         Stage stage = (Stage) username.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
-    @FXML
-    private void onSubmitRegister() {
-        try {
-            String Username = username.getText().trim();
-            String Email = email.getText().trim();
-            String Password = password.getText().trim();
 
-            if (!Username.isEmpty() && !Password.isEmpty() && !Email.isEmpty()) {
-                Manager manager = new Manager();
-                manager.setUsername(Username);
-                manager.setEmail(Email);
-                manager.setPassword(Password);
-
-                // Assurez-vous que register() ne lance pas une SQLException non gérée
-                manager.register(manager);
-
-                // Changement de la scène
-                Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("LogIn.fxml")));
-                Stage stage = (Stage) username.getScene().getWindow();
-                stage.setScene(new Scene(root));
-            } else {
-                // Afficher un message d'erreur si les champs sont vides
-//                System.out.println("Tous les champs doivent être remplis.");
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Ehec d'authentification");
-//                alert.setTitle("Nom d'utilisateur ou Mot de passe obligatoires");
-//                alert.setContentText("Tous les champs doivent être remplis.");
-//                alert.show();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Afficher un message d'erreur en cas d'échec de chargement de la vue
-            System.out.println("Erreur lors du chargement de la vue.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Afficher un message d'erreur en cas d'échec d'enregistrement dans la base de données
-            System.out.println("Erreur lors de l'enregistrement dans la base de données.");
-        }
-    }
-
-
-    @FXML
-    private void onSubmitSignIn() throws IOException, SQLException {
+//    @FXML
+//    private void onSubmitRegister() {
+//        try {
+//            String Username = username.getText().trim();
+//            String Email = email.getText().trim();
+//            String Password = password.getText().trim();
+//
+//            if (!Username.isEmpty() && !Password.isEmpty() && !Email.isEmpty()) {
+//                Manager manager = new Manager();
+//                manager.setUsername(Username);
+//                manager.setEmail(Email);
+//                manager.setPassword(Password);
+//
+//                // Assurez-vous que register() ne lance pas une SQLException non gérée
+//                manager.register(manager);
+//
+//                // Changement de la scène
+//                Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("LogIn.fxml")));
+//                Stage stage = (Stage) username.getScene().getWindow();
+//                stage.setScene(new Scene(root));
+//            } else {
+//                // Afficher un message d'erreur si les champs sont vides
+////                System.out.println("Tous les champs doivent être remplis.");
+////                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+////                alert.setTitle("Ehec d'authentification");
+////                alert.setTitle("Nom d'utilisateur ou Mot de passe obligatoires");
+////                alert.setContentText("Tous les champs doivent être remplis.");
+////                alert.show();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            // Afficher un message d'erreur en cas d'échec de chargement de la vue
+//            System.out.println("Erreur lors du chargement de la vue.");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            // Afficher un message d'erreur en cas d'échec d'enregistrement dans la base de données
+//            System.out.println("Erreur lors de l'enregistrement dans la base de données.");
+//        }
+//    }
+@FXML
+private void onSubmitRegister() {
+    try {
         String Username = username.getText().trim();
+        String Email = email.getText().trim();
         String Password = password.getText().trim();
 
-        if (!Username.isEmpty() && !Password.isEmpty()){
+        if (!Username.isEmpty() && !Password.isEmpty() && !Email.isEmpty()) {
             Manager manager = new Manager();
             manager.setUsername(Username);
+            manager.setEmail(Email);
             manager.setPassword(Password);
 
-            if (manager.SignIn(manager) ) {
-                Stage stage = (Stage) username.getScene().getWindow();
-                Stage newStage =  new Stage();
-               Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("dashboard.fxml")));
-                newStage.setTitle("Material_Save");
-                newStage.setScene(new Scene(root));
-                newStage.show();
-                stage.close();
-            }
-            else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Ehec d'authentification");
-                alert.setTitle("Nom d'utilisateur ou Mot de passe incorrecte");
-                alert.setContentText("Nous ne parvenons pas à vous connecter");
-                alert.show();
-            }
-        }
+            // Enregistrement de l'utilisateur
+            manager.register(manager);
 
+            // Alerte de confirmation d'inscription
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Inscription réussie");
+            alert.setHeaderText(null);
+            alert.setContentText("Inscription effectuée avec succès !");
+            alert.showAndWait(); // Attends que l'utilisateur ferme l'alerte
+
+            // Changement de la scène
+            Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("LogIn.fxml")));
+            Stage stage = (Stage) username.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } else {
+            // Afficher un message d'erreur si les champs sont vides
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Champs manquants");
+            alert.setHeaderText(null);
+            alert.setContentText("Tous les champs doivent être remplis.");
+            alert.show();
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        // Afficher un message d'erreur en cas d'échec de chargement de la vue
+        System.out.println("Erreur lors du chargement de la vue.");
+    } catch (SQLException e) {
+        e.printStackTrace();
+        // Afficher un message d'erreur en cas d'échec d'enregistrement dans la base de données
+        System.out.println("Erreur lors de l'enregistrement dans la base de données.");
     }
+}
+
+
+
+    //    @FXML
+//    private void onSubmitSignIn() throws IOException, SQLException {
+//        String Username = username.getText().trim();
+//        String Password = password.getText().trim();
+//
+//        if (!Username.isEmpty() && !Password.isEmpty()){
+//            Manager manager = new Manager();
+//            manager.setUsername(Username);
+//            manager.setPassword(Password);
+//
+//            if (manager.SignIn(manager) ) {
+//                Stage stage = (Stage) username.getScene().getWindow();
+//                Stage newStage =  new Stage();
+//               Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("dashboard.fxml")));
+//                newStage.setTitle("Material_Save");
+//                newStage.setScene(new Scene(root));
+//                newStage.show();
+//                stage.close();
+//            }
+//            else {
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Ehec d'authentification");
+//                alert.setTitle("Nom d'utilisateur ou Mot de passe incorrecte");
+//                alert.setContentText("Nous ne parvenons pas à vous connecter");
+//                alert.show();
+//            }
+//        }
+//
+//    }
+@FXML
+private void onSubmitSignIn() throws IOException, SQLException {
+    String Username = username.getText().trim();
+    String Password = password.getText().trim();
+
+    if (!Username.isEmpty() && !Password.isEmpty()){
+        Manager manager = new Manager();
+        manager.setUsername(Username);
+        manager.setPassword(Password);
+
+        // Supposons que tu appelles une méthode pour enregistrer l'utilisateur ici
+        if (manager.SignIn(manager)) {
+            // Alerte pour confirmer l'inscription
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Inscription réussie");
+            alert.setHeaderText(null);
+            alert.setContentText("Inscription effectuée avec succès !");
+            alert.showAndWait(); // Attend que l'utilisateur ferme l'alerte
+
+            // Transition vers la page de connexion
+            Stage stage = (Stage) username.getScene().getWindow();
+            Stage newStage = new Stage();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(HelloApplication.class.getResource("dashboard.fxml")));
+            newStage.setTitle("Material_Save");
+            newStage.setScene(new Scene(root));
+            newStage.show();
+            stage.close();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Échec d'authentification");
+            alert.setHeaderText(null);
+            alert.setContentText("Nom d'utilisateur ou mot de passe incorrect.");
+            alert.show();
+        }
+    }
+}
+
 }
