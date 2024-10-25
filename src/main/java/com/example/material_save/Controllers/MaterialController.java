@@ -4,6 +4,7 @@ import com.example.material_save.IDB.DBConfig;
 import com.example.material_save.Models.Category;
 import com.example.material_save.Models.Maintenance;
 import com.example.material_save.Models.Material;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -186,6 +188,7 @@ public class MaterialController implements Initializable {
             Form_categories.setVisible(false);
             Maintenance_Form.setVisible(false);
             updatePieChart();
+
             System.out.println("Home appuye");
 
         } else if (event.getSource() == AddMateriel_Btn) {
@@ -552,29 +555,66 @@ public class MaterialController implements Initializable {
 
         }
     }
+//    public void homeDisplayBarChart() {
+//        GraphiqueMateriel.getData().clear();
+//
+//        String sql = "SELECT date, COUNT(id) FROM material WHERE statut = 'disponible' GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 5";
+//        connection = DBConfig.getConnection();
+//
+//        try {
+//            XYChart.Series<String, Number> chart = new XYChart.Series<>();
+//            preparedStatement = connection.prepareStatement(sql);
+//            resultSet = preparedStatement.executeQuery();
+//
+//            while (resultSet.next()) {
+//                chart.getData().add(new XYChart.Data<>(resultSet.getString(1), resultSet.getInt(2)));
+//            }
+//
+//            // Ajoutez la série au graphique après avoir inséré toutes les données
+//            GraphiqueMateriel.getData().add(chart);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
+
+
     public void homeDisplayBarChart() {
-        GraphiqueMateriel.getData().clear();
+        GraphiqueMateriel.getData().clear(); // Nettoyer le graphique
+        String sql = "SELECT date, statut, COUNT(id) FROM material GROUP BY date, statut ORDER BY TIMESTAMP(date) ASC LIMIT 5";
 
-        String sql = "SELECT date, COUNT(id) FROM material WHERE statut = 'disponible' GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 5";
-        connection = DBConfig.getConnection();
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        try {
-            XYChart.Series<String, Number> chart = new XYChart.Series<>();
-            preparedStatement = connection.prepareStatement(sql);
-            resultSet = preparedStatement.executeQuery();
+            Map<String, XYChart.Series<String, Number>> seriesMap = new HashMap<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy"); // Format de date
 
             while (resultSet.next()) {
-                chart.getData().add(new XYChart.Data<>(resultSet.getString(1), resultSet.getInt(2)));
+                String dateRaw = resultSet.getString(1);
+                String statut = resultSet.getString(2);
+                int count = resultSet.getInt(3);
+
+                LocalDate date = LocalDate.parse(dateRaw); // Convertir en LocalDate
+                String formattedDate = date.format(formatter); // Reformater en une chaîne plus lisible
+
+                // Créer une série pour le statut si elle n'existe pas
+                seriesMap.putIfAbsent(statut, new XYChart.Series<>());
+                seriesMap.get(statut).setName(statut); // Définir le nom de la série
+
+                // Ajouter les données à la série
+                seriesMap.get(statut).getData().add(new XYChart.Data<>(formattedDate, count));
             }
 
-            // Ajoutez la série au graphique après avoir inséré toutes les données
-            GraphiqueMateriel.getData().add(chart);
+            // Ajouter toutes les séries au graphique
+            GraphiqueMateriel.getData().addAll(seriesMap.values());
 
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
+
     private String[] statutListHome = {"Disponible", "Retire", "Maintenance", "Non-disponible"};
     public  void statutListHome(){
         List<String> statutL =  new ArrayList<>();
@@ -1281,6 +1321,7 @@ public class MaterialController implements Initializable {
         Material_Add_Form.setVisible(false);
         Material_Add_Form.setManaged(false);
         ViderChampsCategory();
+
 
 //        addstatutList();
 //        addcategorieList();
