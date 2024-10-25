@@ -555,30 +555,6 @@ public class MaterialController implements Initializable {
 
         }
     }
-//    public void homeDisplayBarChart() {
-//        GraphiqueMateriel.getData().clear();
-//
-//        String sql = "SELECT date, COUNT(id) FROM material WHERE statut = 'disponible' GROUP BY date ORDER BY TIMESTAMP(date) ASC LIMIT 5";
-//        connection = DBConfig.getConnection();
-//
-//        try {
-//            XYChart.Series<String, Number> chart = new XYChart.Series<>();
-//            preparedStatement = connection.prepareStatement(sql);
-//            resultSet = preparedStatement.executeQuery();
-//
-//            while (resultSet.next()) {
-//                chart.getData().add(new XYChart.Data<>(resultSet.getString(1), resultSet.getInt(2)));
-//            }
-//
-//            // Ajoutez la série au graphique après avoir inséré toutes les données
-//            GraphiqueMateriel.getData().add(chart);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
-//    }
-
 
     public void homeDisplayBarChart() {
         GraphiqueMateriel.getData().clear(); // Nettoyer le graphique
@@ -660,16 +636,26 @@ public class MaterialController implements Initializable {
     }
 
 
-
     private int getStatutCount(String statut) {
         int count = 0;
-        for (String s : statutListHome) {
-            if (s.equals(statut)) {
-                count++;
+        String sql = "SELECT COUNT(id) FROM material WHERE statut = ?";
+
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, statut);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                count = resultSet.getInt(1); // Récupérer le nombre d'enregistrements
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return count;
     }
+
+
     public  void ViderChamps(){
     textfieldMaterialNumber.setText("");
     textfieldMateriamName.setText("");
