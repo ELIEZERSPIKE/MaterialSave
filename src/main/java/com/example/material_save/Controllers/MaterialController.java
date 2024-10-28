@@ -226,8 +226,11 @@ public class MaterialController implements Initializable {
             Form_categories.setManaged(false);
             Maintenance_Form.setVisible(true);
             Maintenance_Form.setManaged(true);
+
             comboCategorie.setItems(getCategories());
             ComboNumMateriel.setItems(getMaterials());
+
+
             System.out.println(" Maintenance  trouve");
         }
 
@@ -1018,6 +1021,8 @@ public class MaterialController implements Initializable {
             maintenance.register(maintenance);
             maintenanceData();
             clearMaintenace();
+            totalMaintenaces();
+
 
 
             // Afficher un message de succès
@@ -1220,12 +1225,14 @@ public class MaterialController implements Initializable {
 
         // Suppression
         boolean success = maintenance.DeleteMaintenance(maintenance);
-        materialShowData();
+
+        maintenanceShowData();
 
         if (success) {
             showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
                     "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
             clearMaintenace();
+            totalMaintenaces();
 
         } else {
             showAlert(Alert.AlertType.ERROR, "Erreur de suppression",

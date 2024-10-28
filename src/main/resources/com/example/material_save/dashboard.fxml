@@ -112,7 +112,7 @@
                </children>
             </AnchorPane>
             <Separator layoutX="4.0" layoutY="46.0" prefHeight="1.0" prefWidth="1227.0" style="-fx-background-color: #FFA726;" />
-            <AnchorPane fx:id="home_Form" layoutX="214.0" layoutY="48.0" prefHeight="549.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;">
+            <AnchorPane fx:id="home_Form" layoutX="214.0" layoutY="48.0" prefHeight="558.0" prefWidth="1020.0" style="-fx-background-color: #e3fce7;">
                <children>
                   <AnchorPane layoutX="-2.0" prefHeight="96.0" prefWidth="1020.0" style="-fx-background-color: fff;">
                      <children>
