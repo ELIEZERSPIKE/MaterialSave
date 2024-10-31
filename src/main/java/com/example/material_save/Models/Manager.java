@@ -50,40 +50,62 @@ public class Manager implements ManagerInterface {
     }
 
 
+//    @Override
+//    public void register(Manager manager) throws SQLException {
+//        connection = null;
+//        PreparedStatement preparedStatement = null;
+//
+//        try {
+//            connection = DBConfig.getConnection();
+//            String req = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
+//            preparedStatement = connection.prepareStatement(req);
+//
+//            preparedStatement.setString(1, this.username);
+//            preparedStatement.setString(2, this.email);
+//            preparedStatement.setString(3, this.password);
+//
+//            preparedStatement.executeUpdate();
+//
+//        } finally {
+//            if (preparedStatement != null) {
+//                try {
+//                    preparedStatement.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (connection != null) {
+//                try {
+//                    connection.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
     @Override
-    public void register(Manager manager) throws SQLException {
-        connection = null;
-        PreparedStatement preparedStatement = null;
+    public boolean isUsernameUnique(String username) throws SQLException {
+        String query = "SELECT COUNT(*) FROM users WHERE username = ?";
 
-        try {
-            connection = DBConfig.getConnection();
-            String req = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
-            preparedStatement = connection.prepareStatement(req);
+        try (Connection connection = DBConfig.getConnection()) {
+            if (connection == null) {
+                throw new SQLException("Failed to establish a database connection.");
+            }
 
-            preparedStatement.setString(1, this.username);
-            preparedStatement.setString(2, this.email);
-            preparedStatement.setString(3, this.password);
-
-            preparedStatement.executeUpdate();
-
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) == 0; // Returns false if the username exists
                 }
             }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (SQLException e) {
+            throw new SQLException("Error checking username uniqueness: " + e.getMessage(), e);
         }
-    }
 
+        return true; // Returns true if the username is unique
+    }
 
     @Override
     public boolean SignIn(Manager manager) throws SQLException {
@@ -94,7 +116,7 @@ public class Manager implements ManagerInterface {
         try {
             if (connection != null) {
                 String req = "SELECT * FROM users WHERE username = ? AND password = ? ";
-           PreparedStatement preparedStatement = connection.prepareStatement(req);
+                PreparedStatement preparedStatement = connection.prepareStatement(req);
 
                 preparedStatement.setString(1, manager.getUsername());
                 preparedStatement.setString(2, manager.getPassword());
@@ -115,4 +137,38 @@ public class Manager implements ManagerInterface {
         return false;
     }
 
+    @Override
+    public void register(Manager manager) throws SQLException {
+        if (isUsernameUnique(manager.getUsername())) {
+            // Hash the password before storing it
+            String hashedPassword = hashPassword(manager.getPassword());
+
+            String query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+            try (Connection connection = DBConfig.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                statement.setString(1, manager.getUsername());
+                statement.setString(2, hashedPassword);
+                statement.setString(3, manager.getEmail());
+
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                // Log the exception (optional)
+                throw new SQLException("Error during registration: " + e.getMessage(), e);
+            }
+        } else {
+            throw new SQLException("Le nom d'utilisateur est déjà pris.");
+        }
+    }
+
+    private String hashPassword(String password) {
+        // Implement your password hashing logic here
+        return password; // Placeholder: Replace with actual hashing
+    }
 }
+
+
+
+
+
+

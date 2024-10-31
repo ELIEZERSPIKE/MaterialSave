@@ -9,4 +9,6 @@ public interface ManagerInterface {
     void register(Manager manager) throws SQLException;
 
     boolean SignIn(Manager manager) throws SQLException;
+
+    boolean isUsernameUnique(String username) throws SQLException;
 }

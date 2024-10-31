@@ -4,6 +4,7 @@ import com.example.material_save.IDB.DBConfig;
 import com.example.material_save.Models.Category;
 import com.example.material_save.Models.Maintenance;
 import com.example.material_save.Models.Material;
+import com.example.material_save.Models.SessionManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1225,7 +1226,7 @@ public class MaterialController implements Initializable {
 
         // Suppression
         boolean success = maintenance.DeleteMaintenance(maintenance);
-
+//        materialShowData();
         maintenanceShowData();
 
         if (success) {
@@ -1276,6 +1277,32 @@ public class MaterialController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+//    public void logout() {
+//        try {
+//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//            alert.setTitle("Confirmation");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Êtes-vous sûr de vous déconnecter ?");
+//
+//            Optional<ButtonType> option = alert.showAndWait();
+//            if (option.isPresent() && option.get() == ButtonType.OK) {
+//                // Fermer la fenêtre actuelle
+//                Stage stage = (Stage) LogOut_Btn.getScene().getWindow();
+//                stage.close();
+//
+//                // Charger la vue de connexion
+//                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/material_save/LogIn.fxml")));
+//                Stage loginStage = new Stage();
+//                Scene scene = new Scene(root);
+//                loginStage.setScene(scene);
+//                loginStage.show();
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Erreur lors de la déconnexion : " + e.getMessage());
+//            e.printStackTrace();
+//}
+//    }
+
     public void logout() {
         try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1286,6 +1313,7 @@ public class MaterialController implements Initializable {
             Optional<ButtonType> option = alert.showAndWait();
             if (option.isPresent() && option.get() == ButtonType.OK) {
                 // Fermer la fenêtre actuelle
+                SessionManager.clearSession();
                 Stage stage = (Stage) LogOut_Btn.getScene().getWindow();
                 stage.close();
 
@@ -1299,9 +1327,8 @@ public class MaterialController implements Initializable {
         } catch (Exception e) {
             System.out.println("Erreur lors de la déconnexion : " + e.getMessage());
             e.printStackTrace();
+        }
 }
-    }
-
 
 
 
@@ -1315,56 +1342,52 @@ public class MaterialController implements Initializable {
         Material_Add_Form.setManaged(false);
         ViderChampsCategory();
 
-
-//        addstatutList();
-//        addcategorieList();
+        // Appels aux méthodes
         materialShowData();
         homeDisplayBarChart();
         categoriesData();
         CategorySelectData();
         CategoriesListData();
         availableCategory();
-
-//        La Methode qui recupere les elements du combobox
         addCategoryList();
-         statutList();
-         maintenanceShowData();
-
-//        comboCategorie.setItems(getCategories());
+        statutList();
+        maintenanceShowData();
         maintenanceData();
         clearMaintenace();
         totalMaterial();
         updatePieChart();
-
         statutListHome();
-
-
         totalCategories();
-
-
         totalMaintenaces();
+
+        // Action pour le ComboBox
         BoxCategorie.setOnAction(event -> {
             String selectedCategory = BoxCategorie.getSelectionModel().getSelectedItem();
             if (selectedCategory != null) {
-                String categoryName = selectedCategory;
-                System.out.println("Nom de la catégorie sélectionnée: " + categoryName);
+                System.out.println("Nom de la catégorie sélectionnée: " + selectedCategory);
             }
         });
 
-
+        // Vérification de l'utilisateur connecté
+        String currentUser = SessionManager.getCurrentUsername();
+        if (currentUser == null) {
+            // Redirige vers la page de connexion
+            try {
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("LogIn.fxml")));
+                Stage stage = (Stage) TotalEnrolled.getScene().getWindow(); // Correction ici
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace(); // Afficher la trace d'erreur
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Erreur lors du chargement de la vue de connexion.");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            System.out.println("Utilisateur connecté : " + currentUser);
+        }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
