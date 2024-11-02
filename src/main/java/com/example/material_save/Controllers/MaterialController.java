@@ -170,6 +170,7 @@ public class MaterialController implements Initializable {
     private Button updateMaterial;
     @FXML
     private PieChart PieChartMateriel;
+
     @FXML
     private AnchorPane HomeForm;
     private Connection connection;
@@ -256,133 +257,205 @@ public class MaterialController implements Initializable {
         }
     }
 
-    public ObservableList<Material> materialListData() {
-        ObservableList<Material> listData = FXCollections.observableArrayList();
-        String selectData = "SELECT * FROM material";
-        connection = DBConfig.getConnection();
+//    public ObservableList<Material> materialListData() {
+//        ObservableList<Material> listData = FXCollections.observableArrayList();
+//        String selectData = "SELECT * FROM material";
+//        connection = DBConfig.getConnection();
+//
+//        try {
+//            preparedStatement = connection.prepareStatement(selectData);
+//            resultSet = preparedStatement.executeQuery();
+//
+//            while (resultSet.next()) {
+//                Material sData = new Material(
+////                        resultSet.getInt("id"),
+//                        resultSet.getInt("numeroMateriel"),
+//                        resultSet.getString("nom"),
+//                        resultSet.getString("marque"),
+//                        resultSet.getString("etat"),
+//                        resultSet.getString("local"),
+//                        resultSet.getString("categorie"),
+//                        resultSet.getDate("date"),
+//                        resultSet.getString("utilisateur"),
+//                        resultSet.getString("statut")
+//                );
+//                listData.add(sData);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return listData;
+//    }
+//    La Methode pour ajouter le materiel
+private Material materialService = new Material();
+public void AjouterMateriel() throws IOException {
+    System.out.println("Début de l'ajout de matériel.");
+
+    // Récupération des valeurs des champs
+    String materialNumber = textfieldMaterialNumber.getText().trim();
+    String name = textfieldMateriamName.getText().trim();
+    String marque = TextfieldMaterialMarque.getText().trim();
+    String etat = textfieldMaterial_state.getText().trim();
+    String locale = textefieldLocate.getText().trim();
+    String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
+    LocalDate date = addDate.getValue();
+    String utilisateur = textfield_Material_User.getText().trim();
+    String statut = comboStatut.getSelectionModel().getSelectedItem();
+
+    System.out.println("Valeurs récupérées : " +
+            "MaterialNumber=" + materialNumber + ", Name=" + name + ", Marque=" + marque +
+            ", Etat=" + etat + ", Local=" + locale + ", Category=" + category +
+            ", Date=" + date + ", Utilisateur=" + utilisateur + ", Statut=" + statut);
+
+    // Vérification que tous les champs sont remplis
+    if (!materialNumber.isEmpty() && !name.isEmpty() && !marque.isEmpty() && !etat.isEmpty() && !locale.isEmpty()
+            && category != null && !utilisateur.isEmpty() && statut != null && date != null) {
 
         try {
-            preparedStatement = connection.prepareStatement(selectData);
-            resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Material sData = new Material(
-//                        resultSet.getInt("id"),
-                        resultSet.getInt("numeroMateriel"),
-                        resultSet.getString("nom"),
-                        resultSet.getString("marque"),
-                        resultSet.getString("etat"),
-                        resultSet.getString("local"),
-                        resultSet.getString("categorie"),
-                        resultSet.getDate("date"),
-                        resultSet.getString("utilisateur"),
-                        resultSet.getString("statut")
-                );
-                listData.add(sData);
+            // Vérification si le numéro de matériel est bien un entier
+            int materialNum;
+            try {
+                materialNum = Integer.parseInt(materialNumber);
+                System.out.println("Numéro de matériel converti en entier : " + materialNum);
+            } catch (NumberFormatException e) {
+                System.err.println("Erreur : Le numéro de matériel doit être un entier.");
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Le numéro de matériel doit être un entier.");
+                alert.showAndWait();
+                return;
             }
 
+            // Vérification si le numéro de matériel existe déjà
+            boolean checkMaterialNumber = checkMaterialNumber(materialNum);
+            System.out.println("Vérification si le matériel existe déjà : " + checkMaterialNumber);
+
+            if (checkMaterialNumber) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Le matériel existe déjà.");
+                alert.showAndWait();
+                ViderChamps();
+            } else {
+                Material material = new Material();
+                material.setMaterialNumber(materialNum);
+                material.setName(name);
+                material.setMarque(marque);
+                material.setEtat(etat);
+                material.setLocale(locale);
+                material.setCategory(category);
+                material.setDate(Date.valueOf(date));
+                material.setUtilisateur(utilisateur);
+                material.setStatut(statut);
+                material.setUserId(SessionManager.getCurrentUserId());
+
+                System.out.println("Création de l'objet Material : " + material);
+
+                try {
+//                    material.register(material);// On passe le matériel pour l'enregistrement
+                    materialService.register(material);
+
+                    System.out.println("Matériel enregistré avec succès.");
+                    materialShowData();
+                    ViderChamps();
+                    updatePieChart();
+
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Succès");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Matériel ajouté avec succès !");
+                    alert.showAndWait();
+                } catch (SQLException e) {
+                    System.err.println("Erreur lors de l'ajout du matériel : " + e.getMessage());
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Une erreur est survenue lors de l'ajout du matériel.");
+                    alert.showAndWait();
+                }
+            }
         } catch (Exception e) {
+            System.err.println("Erreur inattendue : " + e.getMessage());
             e.printStackTrace();
+        }
+    } else {
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText("Veuillez remplir tous les champs !");
+        alert.showAndWait();
+    }
+
+    System.out.println("Fin de l'ajout de matériel.");
+}
+
+    public ObservableList<Material> materialListData(int userId) {
+        ObservableList<Material> listData = FXCollections.observableArrayList();
+        String selectData;
+
+        // Vérifie si l'utilisateur est admin
+        if (isAdmin(userId)) {
+            selectData = "SELECT * FROM material"; // Tous les matériaux pour l'admin
+        } else {
+            selectData = "SELECT * FROM material WHERE userId = ?"; // Filtrer par userId
+        }
+
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(selectData)) {
+
+            // Définir l'ID de l'utilisateur si ce n'est pas un admin
+            if (!isAdmin(userId)) {
+                preparedStatement.setInt(1, userId);
+            }
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Material sData = new Material(
+                            resultSet.getInt("numeroMateriel"),
+                            resultSet.getString("nom"),
+                            resultSet.getString("marque"),
+                            resultSet.getString("etat"),
+                            resultSet.getString("local"),
+                            resultSet.getString("categorie"),
+                            resultSet.getDate("date"),
+                            resultSet.getString("utilisateur"),
+                            resultSet.getString("statut")
+                    );
+                    listData.add(sData);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Ou afficher une alerte
         }
 
         return listData;
     }
-//    La Methode pour ajouter le materiel
-    public void AjouterMateriel() throws IOException {
-        // Récupération des valeurs des champs
-        String materialNumber = textfieldMaterialNumber.getText().trim();
-        String name = textfieldMateriamName.getText().trim();
-        String marque = TextfieldMaterialMarque.getText().trim();
-        String etat = textfieldMaterial_state.getText().trim();
-        String locale = textefieldLocate.getText().trim();
-        String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
-        LocalDate date = addDate.getValue();
-        String utilisateur = textfield_Material_User.getText().trim();
-        String statut = comboStatut.getSelectionModel().getSelectedItem();
+    public boolean isAdmin(int userId) {
+        // Exemple d'accès à la base de données pour vérifier le rôle
+        String query = "SELECT role FROM users WHERE userId = ?";
+        try (Connection connection = DBConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-        // Vérification que tous les champs sont remplis
-        if (!materialNumber.isEmpty() && !name.isEmpty() && !marque.isEmpty() && !etat.isEmpty() && !locale.isEmpty()
-                && category != null && !utilisateur.isEmpty() && statut != null && date != null) {
-
-            try {
-                // Vérification si le numéro de matériel est bien un entier
-                int materialNum;
-                try {
-                    materialNum = Integer.parseInt(materialNumber);
-                } catch (NumberFormatException e) {
-                    // Si ce n'est pas un entier, afficher une alerte
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erreur");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Le numéro de matériel doit être un entier.");
-                    alert.showAndWait();
-                    return; // Arrêter l'exécution de la méthode
+            preparedStatement.setInt(1, userId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String role = resultSet.getString("role");
+                    return "admin".equalsIgnoreCase(role); // Vérifie si le rôle est admin
                 }
-
-                // Vérification si le numéro de matériel existe déjà
-                boolean checkMaterialNumber = checkMaterialNumber(materialNum);
-
-                if (checkMaterialNumber) {
-                    // Si le matériel existe déjà, afficher une alerte d'erreur
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erreur");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Le matériel existe déjà.");
-                    alert.showAndWait();
-                    ViderChamps();
-                } else {
-                    // Si le matériel n'existe pas, on peut le créer
-
-                    // Création de l'objet Material et assignation des valeurs
-                    Material material = new Material();
-                    material.setMaterialNumber(materialNum);
-                    material.setName(name);
-                    material.setMarque(marque);
-                    material.setEtat(etat);
-                    material.setLocale(locale);
-                    material.setCategory(category);
-                    material.setDate(Date.valueOf(date));
-                    material.setUtilisateur(utilisateur);
-                    material.setStatut(statut);
-
-                    try {
-                        // Enregistrement du matériel en base de données
-                        material.register(material);
-                        materialShowData();
-                        ViderChamps();
-                        updatePieChart();
-
-                        // Afficher un message de confirmation après l'ajout réussi
-                        alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Succès");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Matériel ajouté avec succès !");
-                        alert.showAndWait();
-                    } catch (SQLException e) {
-                        // Gestion des exceptions SQL
-                        e.printStackTrace();
-                        alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Erreur");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Une erreur est survenue lors de l'ajout du matériel.");
-                        alert.showAndWait();
-                    }
-                }
-            } catch (Exception e) {
-                // Gestion des exceptions générales
-                e.printStackTrace();
             }
-        } else {
-            // Afficher un message d'erreur si des champs sont vides
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez remplir tous les champs !");
-            alert.showAndWait();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return false; // Par défaut, l'utilisateur n'est pas admin
     }
 
-//    Check if the materialNumber exists before add the material
+
+    //    Check if the materialNumber exists before add the material
     public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
         boolean exists = false;
 
@@ -402,71 +475,128 @@ public class MaterialController implements Initializable {
 
         return exists;
     }
-//    MettreAjour == Update material
-    public void MettreAjour() throws IOException{
+//    public void MettreAjour() throws IOException {
+//        String materialNumber = textfieldMaterialNumber.getText().trim();
+//        String name = textfieldMateriamName.getText().trim();
+//        String marque = TextfieldMaterialMarque.getText().trim();
+//        String etat = textfieldMaterial_state.getText().trim();
+//        String locale = textefieldLocate.getText().trim();
+//        String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
+//        LocalDate date = addDate.getValue();
+//        String utilisateur = textfield_Material_User.getText().trim();
+//        String statut = comboStatut.getSelectionModel().getSelectedItem();
+//
+//        // Vérification que tous les champs sont remplis
+//        if (materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
+//                || category == null || utilisateur.isEmpty() || statut == null || date == null) {
+//            alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setHeaderText(null);
+//            alert.setContentText("Remplir tous les champs");
+//            alert.showAndWait();
+//            return;
+//        }
+//
+//        // Vérification du rôle de l'utilisateur
+//        String currentUserRole = SessionManager.getCurrentUserRole();
+//        if (!"admin".equals(currentUserRole)) {
+//            Alert alert = new Alert(Alert.AlertType.WARNING);
+//            alert.setTitle("Accès refusé");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Vous n'avez pas les droits nécessaires pour modifier un matériel.");
+//            alert.showAndWait();
+//            return; // Sortir de la méthode si l'utilisateur n'est pas admin
+//        }
+//
+//        alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Êtes-vous sûr de vouloir modifier ?");
+//        alert.setHeaderText(null);
+//        alert.setContentText("Êtes-vous sûr de vouloir modifier " + materialNumber + "?");
+//        Optional<ButtonType> option = alert.showAndWait();
+//        if (option.isPresent() && option.get().equals(ButtonType.OK)) {
+//            try {
+//                int materialNumberInt = Integer.parseInt(materialNumber);
+//                Material material = new Material(materialNumberInt, name, marque, etat, locale, category, Date.valueOf(date), utilisateur, statut);
+//                boolean success = material.updateMaterial(material);
+//
+//                if (success) {
+//                    alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("Mise à jour réussie");
+//                    alert.showAndWait();
+//                    materialShowData();
+//                    ViderChamps();
+//                    updatePieChart();
+//                } else {
+//                    alert = new Alert(Alert.AlertType.ERROR);
+//                    alert.setHeaderText(null);
+//                    alert.setContentText("Échec de la mise à jour");
+//                    alert.showAndWait();
+//                    materialShowData();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-    String materialNumber = textfieldMaterialNumber.getText().trim();
-    String name = textfieldMateriamName.getText().trim();
-    String marque = TextfieldMaterialMarque.getText().trim();
-    String etat = textfieldMaterial_state.getText().trim();
-    String locale = textefieldLocate.getText().trim();
-    String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
-    LocalDate date = addDate.getValue();
-    String utilisateur = textfield_Material_User.getText().trim();
-    String statut = comboStatut.getSelectionModel().getSelectedItem();
 
-    if(materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
-    || category == null || utilisateur.isEmpty() || statut == null || date == null ){
-        alert = new Alert(Alert.AlertType.ERROR);
+    public void MettreAjour() throws IOException {
+        String materialNumber = textfieldMaterialNumber.getText().trim();
+        String name = textfieldMateriamName.getText().trim();
+        String marque = TextfieldMaterialMarque.getText().trim();
+        String etat = textfieldMaterial_state.getText().trim();
+        String locale = textefieldLocate.getText().trim();
+        String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
+        LocalDate date = addDate.getValue();
+        String utilisateur = textfield_Material_User.getText().trim();
+        String statut = comboStatut.getSelectionModel().getSelectedItem();
+
+        // Vérification que tous les champs sont remplis
+        if (materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
+                || category == null || utilisateur.isEmpty() || statut == null || date == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Remplir tous les champs");
+            alert.showAndWait();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Êtes-vous sûr de vouloir modifier ?");
         alert.setHeaderText(null);
-        alert.setContentText("Remplir tout les champs");
-        alert.showAndWait();
-        return;
-    }
-    alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Êtes-vous sûr de vouloir modifier " + materialNumber + " ?");
+        Optional<ButtonType> option = alert.showAndWait();
+        if (option.isPresent() && option.get().equals(ButtonType.OK)) {
+            try {
+                int materialNumberInt = Integer.parseInt(materialNumber);
+                Material material = new Material(materialNumberInt, name, marque, etat, locale, category, Date.valueOf(date), utilisateur, statut);
+                boolean success = material.updateMaterial(material);
 
-    alert.setTitle("sur de modifier ? ");
-    alert.setHeaderText(null);
-    alert.setContentText("sur de modifier " + materialNumber + "?");
-    Optional<ButtonType> option =  alert.showAndWait();
-    if (option.get().equals(ButtonType.OK)){
-        try{
-            connection = DBConfig.getConnection();
-
-            int materialNumberInt = Integer.parseInt(materialNumber);
-
-            Material material = new Material(materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut);
-            boolean success = material.updateMaterial(material);
-
-            if (success){
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("mise a jour");
-                alert.showAndWait();
-
-                materialShowData();
-                ViderChamps();
-                updatePieChart();
-
-
-            } else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText(null);
-                alert.setContentText("echec");
-                alert.showAndWait();
-                materialShowData();
-
+                if (success) {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Mise à jour réussie");
+                    alert.showAndWait();
+                    materialShowData();
+                    ViderChamps();
+                    updatePieChart();
+                } else {
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Échec de la mise à jour");
+                    alert.showAndWait();
+                    materialShowData();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Une erreur s'est produite lors de la mise à jour.");
+                errorAlert.showAndWait();
             }
-
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
-
-
-}
-//        Delete material
     public void handleDeleteMaterial(ActionEvent event) {
         String materialNumberText = textfieldMaterialNumber.getText().trim();
 
@@ -478,15 +608,22 @@ public class MaterialController implements Initializable {
             return;
         }
 
+        // Vérification du rôle de l'utilisateur
+        String currentUserRole = SessionManager.getCurrentUserRole();
+        if (!"admin".equals(currentUserRole)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Vous n'avez pas les droits nécessaires pour supprimer un matériel.");
+            alert.showAndWait();
+            return; // Sortir de la méthode si l'utilisateur n'est pas admin
+        }
+
         try {
             int materialNumber = Integer.parseInt(materialNumberText);
-
-
             Material material = new Material();
             material.setMaterialNumber(materialNumber);
 
-
-            Material materialService = new Material();
             boolean success = material.DeleteMaterial(material);
             materialShowData();
             updatePieChart();
@@ -498,14 +635,12 @@ public class MaterialController implements Initializable {
                 alert.setContentText("Le matériel avec le numéro " + materialNumber + " a été supprimé avec succès.");
                 alert.showAndWait();
                 ViderChamps();
-
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erreur de suppression");
                 alert.setHeaderText(null);
                 alert.setContentText("Le matériel avec le numéro " + materialNumber + " n'a pas été trouvé.");
                 alert.showAndWait();
-
                 ViderChamps();
             }
         } catch (NumberFormatException e) {
@@ -524,11 +659,9 @@ public class MaterialController implements Initializable {
             e.printStackTrace();
         }
     }
-
-//    Configuration des informations pour lier chaque objet de Material à une colonne du tableView
-    //    Configuring information to bind each Material object to a tableView column
     public void materialShowData() {
-        materialData = materialListData();
+        int currentUserId = SessionManager.getCurrentUserId(); // Récupère l'ID de l'utilisateur connecté
+        materialData = materialListData(currentUserId); // Passe l'ID à la méthode
 
         col_material.setCellValueFactory(new PropertyValueFactory<>("materialNumber"));
         col_name.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -542,8 +675,7 @@ public class MaterialController implements Initializable {
 
         Material_tableView.setItems(materialData);
     }
-
-    public void materialSelectData() {
+   public void materialSelectData() {
         Material sData = Material_tableView.getSelectionModel().getSelectedItem();
         if (sData != null) {
             textfieldMaterialNumber.setText(String.valueOf(sData.getMaterialNumber()));
@@ -559,7 +691,87 @@ public class MaterialController implements Initializable {
 
         }
     }
-
+    public void displayAllMaterials() {
+        if (SessionManager.getCurrentUserRole() != null && SessionManager.getCurrentUserRole().equals("admin")) {
+            try {
+                List<Material> materials = materialService.getAllMaterials();
+                // Remplir le TableView avec les matériaux
+                Material_tableView.getItems().setAll(materials);
+                System.out.println("Rôle de l'utilisateur actuel : " + SessionManager.getCurrentUserRole());
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue lors de la récupération des matériaux.");
+            }
+        } else {
+            // Alerte pour l'accès refusé
+            showAlert(Alert.AlertType.WARNING, "Accès refusé", "Vous n'avez pas les droits nécessaires pour voir tous les matériaux.");
+            return; // Assurez-vous de retourner ici pour éviter de poursuivre l'exécution
+        }
+    }
+    //    MettreAjour == Update material
+//    public void MettreAjour() throws IOException{
+//
+//    String materialNumber = textfieldMaterialNumber.getText().trim();
+//    String name = textfieldMateriamName.getText().trim();
+//    String marque = TextfieldMaterialMarque.getText().trim();
+//    String etat = textfieldMaterial_state.getText().trim();
+//    String locale = textefieldLocate.getText().trim();
+//    String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
+//    LocalDate date = addDate.getValue();
+//    String utilisateur = textfield_Material_User.getText().trim();
+//    String statut = comboStatut.getSelectionModel().getSelectedItem();
+//
+//    if(materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
+//    || category == null || utilisateur.isEmpty() || statut == null || date == null ){
+//        alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setHeaderText(null);
+//        alert.setContentText("Remplir tout les champs");
+//        alert.showAndWait();
+//        return;
+//    }
+//    alert = new Alert(Alert.AlertType.CONFIRMATION);
+//
+//    alert.setTitle("sur de modifier ? ");
+//    alert.setHeaderText(null);
+//    alert.setContentText("sur de modifier " + materialNumber + "?");
+//    Optional<ButtonType> option =  alert.showAndWait();
+//    if (option.get().equals(ButtonType.OK)){
+//        try{
+//            connection = DBConfig.getConnection();
+//
+//            int materialNumberInt = Integer.parseInt(materialNumber);
+//
+//            Material material = new Material(materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut);
+//            boolean success = material.updateMaterial(material);
+//
+//            if (success){
+//                alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setHeaderText(null);
+//                alert.setContentText("mise a jour");
+//                alert.showAndWait();
+//
+//                materialShowData();
+//                ViderChamps();
+//                updatePieChart();
+//
+//
+//            } else {
+//                alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setHeaderText(null);
+//                alert.setContentText("echec");
+//                alert.showAndWait();
+//                materialShowData();
+//
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//
+//
+//}
+//        Delete material
     public void homeDisplayBarChart() {
         GraphiqueMateriel.getData().clear(); // Nettoyer le graphique
         String sql = "SELECT date, statut, COUNT(id) FROM material GROUP BY date, statut ORDER BY TIMESTAMP(date) ASC LIMIT 5";
@@ -605,23 +817,6 @@ public class MaterialController implements Initializable {
         comboStatut.setItems(Oblist);
         updatePieChart();
     }
-
-//        private void updatePieChart() {
-//    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-//            new PieChart.Data("Disponible", getStatutCount("Disponible")),
-//            new PieChart.Data("Non-disponible", getStatutCount("Non-disponible")),
-//            new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
-//            new PieChart.Data("Retire", getStatutCount("Retire"))
-//    );
-//
-//    // Vérifie si tous les statuts ont des données
-//    if (pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum() == 0) {
-//        pieChartData.add(new PieChart.Data("Aucune donnée", 1)); // Ajoute une section "Aucune donnée" si tout est zéro
-//    }
-//
-//    PieChartMateriel.setData(pieChartData);
-//  }
-
     private void updatePieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Disponible", getStatutCount("Disponible")),
@@ -638,8 +833,6 @@ public class MaterialController implements Initializable {
         // Met à jour le PieChart avec les nouvelles données
         PieChartMateriel.setData(pieChartData);
     }
-
-
     private int getStatutCount(String statut) {
         int count = 0;
         String sql = "SELECT COUNT(id) FROM material WHERE statut = ?";
@@ -658,8 +851,6 @@ public class MaterialController implements Initializable {
 
         return count;
     }
-
-
     public  void ViderChamps(){
     textfieldMaterialNumber.setText("");
     textfieldMateriamName.setText("");
@@ -675,7 +866,7 @@ public class MaterialController implements Initializable {
 
 //Logiques De Gestion des Categories
 // Méthode pour récupérer la liste des catégories depuis la base de données / Method to retrieve the list of categories from the database
-  public ObservableList<Category> CategoriesListData() {
+   public ObservableList<Category> CategoriesListData() {
     ObservableList<Category> listData = FXCollections.observableArrayList();
     String selectData = "SELECT * FROM category";
     connection = DBConfig.getConnection(); // Établir la connexion à la base de données / Establish the connection to the database
@@ -757,57 +948,7 @@ public class MaterialController implements Initializable {
     }
 
     // Méthode pour ajouter une nouvelle catégorie / Method to add a new category
-    public void ajouterCategory() throws IOException {
-        String categoryName = textfield_categorie_name.getText().trim(); // Récupérer le nom de la catégorie / Retrieve the category name
-        String categoryDescription = description_categorie.getText().trim(); // Récupérer la description / Retrieve the description
-        String categoryState = etat_categorie.getText().trim(); // Récupérer l'état / Retrieve the state
 
-        // Vérifier si les champs sont vides / Check if the fields are empty
-        if (categoryName.isEmpty() || categoryDescription.isEmpty() || categoryState.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Avertissement");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez remplir tous les champs requis."); // Please fill in all required fields.
-            alert.showAndWait();
-            return; // Sortir de la méthode si les champs sont vides / Exit the method if fields are empty
-        }
-
-        try {
-            // Vérifier si la catégorie existe déjà / Check if the category already exists
-            if (checkCategoryExists(categoryName)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("La catégorie existe déjà"); // The category already exists
-                alert.showAndWait();
-                ViderChampsCategory(); // Vider les champs / Clear the fields
-                return; // Sortir de la méthode / Exit the method
-            }
-
-            Category category = new Category(categoryName, categoryDescription, categoryState); // Créer un nouvel objet Category / Create a new Category object
-            category.register(category); // Enregistrer la catégorie / Register the category
-            categoriesData(); // Actualiser les données de la TableView / Refresh the TableView data
-            addCategoryList(); // Actualiser le ComboBox / Refresh the ComboBox
-            totalCategories();
-
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Succès");
-            alert.setHeaderText(null);
-            alert.setContentText("Catégorie créée"); // Category created
-            alert.showAndWait();
-
-            ViderChampsCategory(); // Vider les champs après l'ajout / Clear the fields after adding
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Afficher les erreurs / Print errors
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Catégorie non créée"); // Category not created
-            alert.showAndWait();
-        }
-    }
 
     // Méthode pour sélectionner une catégorie dans la TableView / Method to select a category in the TableView
     public void CategorySelectData() {
@@ -840,99 +981,185 @@ public class MaterialController implements Initializable {
         description_categorie.setText(courseC.getCategoryDescription());
         etat_categorie.setText(courseC.getCategoryState());
     }
+    public void ajouterCategory() throws IOException {
+        // Vérification du rôle de l'utilisateur
+        String currentUserRole = SessionManager.getCurrentUserRole();
+        if (!"admin".equals(currentUserRole)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Vous n'avez pas les droits nécessaires pour créer une catégorie.");
+            alert.showAndWait();
+            return; // Sortir de la méthode si l'utilisateur n'est pas admin
+        }
 
-    // Méthode pour mettre à jour une catégorie / Method to update a category
-    public void MettreAjourCategorie() throws IOException {
         String categoryName = textfield_categorie_name.getText().trim();
         String categoryDescription = description_categorie.getText().trim();
         String categoryState = etat_categorie.getText().trim();
 
-        // Vérifier si les champs sont vides / Check if the fields are empty
+        // Vérifier si les champs sont vides
+        if (categoryName.isEmpty() || categoryDescription.isEmpty() || categoryState.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Avertissement");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez remplir tous les champs requis.");
+            alert.showAndWait();
+            return; // Sortir de la méthode si les champs sont vides
+        }
+
+        try {
+            // Vérifier si la catégorie existe déjà
+            if (checkCategoryExists(categoryName)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("La catégorie existe déjà.");
+                alert.showAndWait();
+                ViderChampsCategory(); // Vider les champs
+                return; // Sortir de la méthode
+            }
+
+            Category category = new Category(categoryName, categoryDescription, categoryState);
+            category.register(category); // Enregistrer la catégorie
+            categoriesData(); // Actualiser les données de la TableView
+            addCategoryList(); // Actualiser le ComboBox
+            totalCategories();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText(null);
+            alert.setContentText("Catégorie créée.");
+            alert.showAndWait();
+
+            ViderChampsCategory(); // Vider les champs après l'ajout
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Catégorie non créée.");
+            alert.showAndWait();
+        }
+    }
+
+
+    // Méthode pour mettre à jour une catégorie / Method to update a category
+    public void MettreAjourCategorie() throws IOException {
+        // Vérification du rôle de l'utilisateur
+        String currentUserRole = SessionManager.getCurrentUserRole();
+        if (!"admin".equals(currentUserRole)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Vous n'avez pas les droits nécessaires pour modifier une catégorie.");
+            alert.showAndWait();
+            return; // Sortir de la méthode si l'utilisateur n'est pas admin
+        }
+
+        String categoryName = textfield_categorie_name.getText().trim();
+        String categoryDescription = description_categorie.getText().trim();
+        String categoryState = etat_categorie.getText().trim();
+
+        // Vérifier si les champs sont vides
         if (categoryName.isEmpty() || categoryDescription.isEmpty() || categoryState.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setContentText("Veuillez remplir tous les champs"); // Please fill in all fields
+            alert.setContentText("Veuillez remplir tous les champs.");
             alert.showAndWait();
-            return; // Sortir de la méthode / Exit the method
+            return;
         }
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
-        alert.setContentText("Êtes-vous sûr de vouloir modifier " + categoryName + "?"); // Are you sure you want to modify...
+        alert.setContentText("Êtes-vous sûr de vouloir modifier " + categoryName + "?");
         Optional<ButtonType> option = alert.showAndWait();
         if (option.isPresent() && option.get().equals(ButtonType.OK)) {
             try {
                 connection = DBConfig.getConnection();
                 Category category = new Category(categoryName, categoryDescription, categoryState);
-                boolean success = category.updateCategory(category); // Mettre à jour la catégorie / Update the category
+                boolean success = category.updateCategory(category); // Mettre à jour la catégorie
 
                 if (success) {
-                    alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText(null);
-                    alert.setContentText("Mise à jour effectuée"); // Update successful
+                    alert.setContentText("Mise à jour effectuée.");
                     alert.showAndWait();
-                    ViderChampsCategory(); // Vider les champs / Clear the fields
-                    categoriesData(); // Actualiser les données de la TableView / Refresh the TableView data
+                    ViderChampsCategory(); // Vider les champs
+                    categoriesData(); // Actualiser les données de la TableView
                 } else {
                     alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
-                    alert.setContentText("Échec de la mise à jour"); // Update failed
+                    alert.setContentText("Échec de la mise à jour.");
                     alert.showAndWait();
-                    ViderChampsCategory(); // Vider les champs / Clear the fields
-                    categoriesData(); // Actualiser les données de la TableView / Refresh the TableView data
+                    ViderChampsCategory();
+                    categoriesData();
                 }
             } catch (Exception e) {
-                e.printStackTrace(); // Afficher les erreurs / Print errors
+                e.printStackTrace();
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText(null);
-                errorAlert.setContentText("Une erreur est survenue lors de la mise à jour."); // An error occurred during the update
+                errorAlert.setContentText("Une erreur est survenue lors de la mise à jour.");
                 errorAlert.showAndWait();
             }
         }
     }
 
+
     // Méthode pour supprimer une catégorie / Method to delete a category
     public void SupprimerCategory() throws IOException {
-        String CategoryName = textfield_categorie_name.getText().trim(); // Récupérer le nom de la catégorie / Retrieve the category name
-        String CategoryDescription = description_categorie.getText().trim(); // Récupérer la description / Retrieve the description
-        String CategoryState = etat_categorie.getText().trim(); // Récupérer l'état / Retrieve the state
-        // Vérifier si les champs sont vides / Check if the fields are empty
-        if (CategoryName.isEmpty() && CategoryDescription.isEmpty() && CategoryState.isEmpty()) {
+        // Vérification du rôle de l'utilisateur
+        String currentUserRole = SessionManager.getCurrentUserRole();
+        if (!"admin".equals(currentUserRole)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Accès refusé");
+            alert.setHeaderText(null);
+            alert.setContentText("Vous n'avez pas les droits nécessaires pour supprimer une catégorie.");
+            alert.showAndWait();
+            return; // Sortir de la méthode si l'utilisateur n'est pas admin
+        }
+
+        String CategoryName = textfield_categorie_name.getText().trim();
+        String CategoryDescription = description_categorie.getText().trim();
+        String CategoryState = etat_categorie.getText().trim();
+
+        // Vérifier si le nom de la catégorie est vide
+        if (CategoryName.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de validation");
-            alert.setContentText("Le nom de la catégorie est obligatoire"); // The category name is required
+            alert.setContentText("Le nom de la catégorie est obligatoire.");
             alert.showAndWait();
-            return; // Sortir de la méthode / Exit the method
+            return;
         }
 
         try {
             connection = DBConfig.getConnection();
-            Category category = new Category(CategoryName, CategoryDescription, CategoryState); // Créer un objet Category / Create a Category object
-            boolean success = category.DeleteCategory(category); // Supprimer la catégorie / Delete the category
-            totalCategories();
+            Category category = new Category(CategoryName, CategoryDescription, CategoryState);
+            boolean success = category.DeleteCategory(category); // Supprimer la catégorie
 
             if (success) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Succès");
-                alert.setContentText("La catégorie a été supprimée avec succès."); // The category has been successfully deleted
+                alert.setContentText("La catégorie a été supprimée avec succès.");
                 alert.showAndWait();
-                ViderChampsCategory(); // Vider les champs / Clear the fields
-                categoriesData(); // Actualiser les données de la TableView / Refresh the TableView data
+                ViderChampsCategory(); // Vider les champs
+                categoriesData(); // Actualiser les données de la TableView
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Échec");
-                alert.setContentText("La suppression de la catégorie a échoué."); // Deletion of the category failed
+                alert.setContentText("La suppression de la catégorie a échoué.");
                 alert.showAndWait();
-                ViderChampsCategory(); // Vider les champs / Clear the fields
+                ViderChampsCategory();
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Afficher les erreurs / Print errors
+            e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
-            alert.setContentText("Une erreur est survenue lors de la suppression."); // An error occurred during deletion
+            alert.setContentText("Une erreur est survenue lors de la suppression.");
             alert.showAndWait();
         }
     }
+
 
     // Méthode pour compter le nombre total de catégories / Method to count the total number of categories
     public void totalCategories() {
@@ -1141,49 +1368,47 @@ public class MaterialController implements Initializable {
 
         return categoriesList;
     }
+    public void MaintenanceUpdate() throws IOException {
+        Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+        String comboBoxMaintenance = comboCategorie.getSelectionModel().getSelectedItem();
+        String probleme = probleme_materiel.getText().trim();
+        String charge = chargeMaintenace_textfield.getText().trim();
+        LocalDate date = DateMaintenance.getValue();
+        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
 
-   public void MaintenanceUpdate() throws IOException {
-    Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
-    String comboBoxMaintenance = comboCategorie.getSelectionModel().getSelectedItem();
-    String probleme = probleme_materiel.getText().trim();
-    String charge = chargeMaintenace_textfield.getText().trim();
-    LocalDate date = DateMaintenance.getValue();
-    String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+        // Valider les inputs
+        if (numeroMateriel == null || comboBoxMaintenance == null || probleme.isEmpty() || charge.isEmpty() || date == null || statut == null || statut.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez remplir tous les champs obligatoires.");
+            return;
+        }
 
-    // Valider les inputs du logiciel
-    if (numeroMateriel == null || comboBoxMaintenance.isEmpty() || probleme.isEmpty() || charge.isEmpty() || date == null || statut == null || statut.isEmpty()) {
-        showAlert(Alert.AlertType.ERROR, "Remplir tous les champs");
-        return;
-    }
+        // Confirmation avant modification
+        Optional<ButtonType> option = showConfirmation("Confirmation", "Êtes-vous sûr de vouloir modifier la maintenance pour " + numeroMateriel + "?");
+        if (option.isPresent() && option.get() == ButtonType.OK) {
+            try {
+                // Créer une instance de Maintenance
+                Maintenance maintenance = new Maintenance(numeroMateriel, comboBoxMaintenance, probleme, charge, Date.valueOf(date), statut);
+                boolean success = maintenance.updateMaintenace(maintenance);
 
-    // Confirmation dialog
-    Optional<ButtonType> option = showConfirmation("Sur de modifier ?", "Sur de modifier la maintenance effectuée sur " + numeroMateriel + "?");
-    if (option.isPresent() && option.get().equals(ButtonType.OK)) {
-        try {
-            connection = DBConfig.getConnection();
-
-            Maintenance maintenance = new Maintenance(numeroMateriel, comboBoxMaintenance, probleme, charge, Date.valueOf(date), statut);
-            boolean success = maintenance.updateMaintenace(maintenance);
-            maintenanceData();
-            clearMaintenace();
-
-
-            if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Mise à jour réussie");
-                materialShowData();
-                clearMaintenace();
-
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Échec de la mise à jour");
-                materialShowData();
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Mise à jour réussie.");
+                    maintenanceData();
+                    clearMaintenace();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la mise à jour de la maintenance.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Une erreur s'est produite lors de la mise à jour de la maintenance : " + e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur inattendue s'est produite : " + e.getMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Une erreur s'est produite : " + e.getMessage());
         }
     }
-}
-   private void showAlert(Alert.AlertType alertType, String message) {
+
+
+    private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -1197,60 +1422,68 @@ public class MaterialController implements Initializable {
         return alert.showAndWait();
     }
 
-    public void DeleteMaintenance(ActionEvent event) {
-    // Récupération des données des champs
-    Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
-    String categorie = comboCategorie.getSelectionModel().getSelectedItem();
-    String charge = chargeMaintenace_textfield.getText().trim();
-    String probleme = probleme_materiel.getText().trim();
-    LocalDate localDate = DateMaintenance.getValue(); // Utilise LocalDate directement
-    String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
-
-    // Vérification si le numéro de matériel est sélectionné
-    if (numeroMateriel == null) {
-        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le numéro de matériel est requis.");
-        return;
-    }
-
-    // Vérification si la date est sélectionnée
-    if (localDate == null) {
-        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de maintenance est requise.");
-        return;
-    }
-
-    try {
-        Date date = Date.valueOf(localDate); // Conversion de LocalDate à Date si nécessaire
-
-        // Création de l'objet Maintenance (si besoin)
-        Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
-
-        // Suppression
-        boolean success = maintenance.DeleteMaintenance(maintenance);
-//        materialShowData();
-        maintenanceShowData();
-
-        if (success) {
-            showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
-                    "Le matériel avec le numéro " + numeroMateriel + " a été supprimé avec succès.");
-            clearMaintenace();
-            totalMaintenaces();
-
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
-                    "Le matériel avec le numéro " + numeroMateriel + " n'a pas été trouvé.");
-            clearMaintenace();
-
+    public void deleteMaintenance(ActionEvent event) {
+        // Vérification des droits d'accès
+        if (!isAdmin(SessionManager.getCurrentUserId())) {
+            showAlert(Alert.AlertType.ERROR, "Accès refusé", "Vous n'avez pas les droits nécessaires pour supprimer une maintenance.");
+            return;
         }
-    } catch (SQLException e) {
-        showAlert(Alert.AlertType.ERROR, "Erreur SQL",
-                "Une erreur s'est produite lors de la suppression.");
-        e.printStackTrace();
-    } catch (IllegalArgumentException e) {
-        showAlert(Alert.AlertType.ERROR, "Erreur de date",
-                "La date fournie est invalide.");
-        e.printStackTrace();
+
+        // Récupération des données des champs
+        Integer numeroMateriel = ComboNumMateriel.getSelectionModel().getSelectedItem();
+        String categorie = comboCategorie.getSelectionModel().getSelectedItem();
+        String charge = chargeMaintenace_textfield.getText().trim();
+        String probleme = probleme_materiel.getText().trim();
+        LocalDate localDate = DateMaintenance.getValue(); // Utilise LocalDate directement
+        String statut = (String) Combo_maintenance.getSelectionModel().getSelectedItem();
+
+        // Vérification si le numéro de matériel est sélectionné
+        if (numeroMateriel == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Le numéro de matériel est requis.");
+            return;
+        }
+
+        // Vérification si la date est sélectionnée
+        if (localDate == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de validation", "La date de maintenance est requise.");
+            return;
+        }
+
+        // Confirmation de la suppression
+        Optional<ButtonType> option = showConfirmation("Confirmation", "Êtes-vous sûr de vouloir supprimer la maintenance du matériel " + numeroMateriel + " ?");
+        if (option.isPresent() && option.get() == ButtonType.OK) {
+            try {
+                Date date = Date.valueOf(localDate); // Conversion de LocalDate à Date si nécessaire
+
+                // Création de l'objet Maintenance avec les données nécessaires
+                Maintenance maintenance = new Maintenance(numeroMateriel, categorie, charge, probleme, date, statut);
+
+                // Suppression
+                boolean success = maintenance.DeleteMaintenance(maintenance); // Assurez-vous que cette méthode existe
+
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "Succès de la suppression",
+                            "La maintenance du matériel " + numeroMateriel + " a été supprimée avec succès.");
+                    maintenanceShowData(); // Actualiser l'affichage
+                    clearMaintenace(); // Effacer les champs
+                    totalMaintenaces(); // Actualiser le total
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
+                            "La maintenance pour le matériel " + numeroMateriel + " n'a pas été trouvée.");
+                    clearMaintenace();
+                }
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur SQL",
+                        "Une erreur s'est produite lors de la suppression.");
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de date",
+                        "La date fournie est invalide.");
+                e.printStackTrace();
+            }
+        }
     }
-}
+
 
     public void  totalMaintenaces(){
         String sql = " SELECT COUNT(id) FROM maintenances ";
@@ -1331,6 +1564,21 @@ public class MaterialController implements Initializable {
 }
 
 
+//        private void updatePieChart() {
+//    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+//            new PieChart.Data("Disponible", getStatutCount("Disponible")),
+//            new PieChart.Data("Non-disponible", getStatutCount("Non-disponible")),
+//            new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
+//            new PieChart.Data("Retire", getStatutCount("Retire"))
+//    );
+//
+//    // Vérifie si tous les statuts ont des données
+//    if (pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum() == 0) {
+//        pieChartData.add(new PieChart.Data("Aucune donnée", 1)); // Ajoute une section "Aucune donnée" si tout est zéro
+//    }
+//
+//    PieChartMateriel.setData(pieChartData);
+//  }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -1359,6 +1607,7 @@ public class MaterialController implements Initializable {
         statutListHome();
         totalCategories();
         totalMaintenaces();
+        displayAllMaterials();
 
         // Action pour le ComboBox
         BoxCategorie.setOnAction(event -> {

@@ -6,6 +6,8 @@ import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Material  {
 
@@ -15,6 +17,15 @@ public class Material  {
 
     public Material() {
 
+    }
+    private int userId; // Ajoute cette ligne
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getId() {
@@ -120,8 +131,6 @@ public class Material  {
         this.statut = statut;
     }
 
-
-
     public Material(int materialNumber, String name, String etat, String marque, String locale, String category, Date date, String utilisateur, String statut) {
         this.materialNumber = materialNumber;
         this.name = name;
@@ -134,29 +143,27 @@ public class Material  {
         this.statut = statut;
 
     }
-
     public void register(Material material) throws SQLException {
         connection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             connection = DBConfig.getConnection();
-            String req = "INSERT INTO  material "
-                    + "(numeroMateriel, nom, marque, etat,local,categorie,date,utilisateur,statut)"
-                    + "VALUES (?,?,?,?,?,?,?,?,?) ";
+            String req = "INSERT INTO material (numeroMateriel, nom, marque, etat, local, categorie, date, utilisateur, statut, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             preparedStatement = connection.prepareStatement(req);
 
+            preparedStatement.setInt(1, material.getMaterialNumber());
+            preparedStatement.setString(2, material.getName());
+            preparedStatement.setString(3, material.getMarque());
+            preparedStatement.setString(4, material.getEtat());
+            preparedStatement.setString(5, material.getLocale());
+            preparedStatement.setString(6, material.getCategory());
+            preparedStatement.setDate(7, material.getDate());
+            preparedStatement.setString(8, material.getUtilisateur());
+            preparedStatement.setString(9, material.getStatut());
+            preparedStatement.setInt(10, SessionManager.getCurrentUserId());
 
-            preparedStatement.setInt(1, this.materialNumber);
-            preparedStatement.setString(2, this.name);
-            preparedStatement.setString(3,this.marque);
-            preparedStatement.setString(4,this.etat);
-            preparedStatement.setString(5, this.locale);
-            preparedStatement.setString(6, this.category);
-
-            preparedStatement.setDate(7, this.date);
-            preparedStatement.setString(8, this.utilisateur);
-            preparedStatement.setString(9,  this.statut);
             preparedStatement.executeUpdate();
         } finally {
             if (preparedStatement != null) {
@@ -207,7 +214,6 @@ public class Material  {
             throw  e;
         }
     }
-
     public boolean DeleteMaterial(Material material) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -249,6 +255,38 @@ public class Material  {
             }
         }
     }
+    public List<Material> getAllMaterials() throws SQLException {
+        List<Material> materials = new ArrayList<>();
+        String query = "SELECT * FROM material";
+
+        // Essaye d'établir la connexion à la base de données
+        try (Connection connection = DBConfig.getConnection(); // Vérifie que DBConfig.getConnection() est bien défini
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            // Parcours des résultats
+            while (resultSet.next()) {
+                Material material = new Material();
+                material.setMaterialNumber(resultSet.getInt("numeroMateriel")); // Assure-toi que le nom de la colonne est correct
+                material.setName(resultSet.getString("nom"));
+                material.setMarque(resultSet.getString("marque"));
+                material.setEtat(resultSet.getString("etat"));
+                material.setLocale(resultSet.getString("local"));
+                material.setCategory(resultSet.getString("categorie"));
+                material.setDate(Date.valueOf(resultSet.getDate("date").toLocalDate())); // Convertir à LocalDate si nécessaire
+                material.setUtilisateur(resultSet.getString("utilisateur"));
+                material.setStatut(resultSet.getString("statut"));
+                material.setUserId(resultSet.getInt("userId"));
+                materials.add(material); // Ajoute le matériel à la liste
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des matériaux : " + e.getMessage());
+            throw e; // Relève l'exception pour être gérée ailleurs
+        }
+
+        return materials;
+    }
+
 
 
 }
