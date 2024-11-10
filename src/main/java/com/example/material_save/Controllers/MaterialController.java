@@ -153,7 +153,6 @@ public class MaterialController implements Initializable {
     private TextField textfield_Material_User;
     @FXML
     private TextField textfield_categorie_name;
-
     @FXML
     private Button updateCategorie_Btn;
     @FXML
@@ -170,7 +169,6 @@ public class MaterialController implements Initializable {
     private Button updateMaterial;
     @FXML
     private PieChart PieChartMateriel;
-
     @FXML
     private AnchorPane HomeForm;
     private Connection connection;
@@ -181,7 +179,6 @@ public class MaterialController implements Initializable {
     private ObservableList<Material> materialData;
     private ObservableList<Category> categoriesData;
     private ObservableList<Maintenance> maintenancesData;
-
     public void switchForm(ActionEvent event) {
         if (event.getSource() == Home_Btn) {
             home_Form.setVisible(true);
@@ -257,40 +254,8 @@ public class MaterialController implements Initializable {
         }
     }
 
-//    public ObservableList<Material> materialListData() {
-//        ObservableList<Material> listData = FXCollections.observableArrayList();
-//        String selectData = "SELECT * FROM material";
-//        connection = DBConfig.getConnection();
-//
-//        try {
-//            preparedStatement = connection.prepareStatement(selectData);
-//            resultSet = preparedStatement.executeQuery();
-//
-//            while (resultSet.next()) {
-//                Material sData = new Material(
-////                        resultSet.getInt("id"),
-//                        resultSet.getInt("numeroMateriel"),
-//                        resultSet.getString("nom"),
-//                        resultSet.getString("marque"),
-//                        resultSet.getString("etat"),
-//                        resultSet.getString("local"),
-//                        resultSet.getString("categorie"),
-//                        resultSet.getDate("date"),
-//                        resultSet.getString("utilisateur"),
-//                        resultSet.getString("statut")
-//                );
-//                listData.add(sData);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return listData;
-//    }
-//    La Methode pour ajouter le materiel
-private Material materialService = new Material();
-public void AjouterMateriel() throws IOException {
+    private Material materialService = new Material();
+    public void AjouterMateriel() throws IOException {
     System.out.println("Début de l'ajout de matériel.");
 
     // Récupération des valeurs des champs
@@ -392,8 +357,7 @@ public void AjouterMateriel() throws IOException {
 
     System.out.println("Fin de l'ajout de matériel.");
 }
-
-    public ObservableList<Material> materialListData(int userId) {
+     public ObservableList<Material> materialListData(int userId) {
         ObservableList<Material> listData = FXCollections.observableArrayList();
         String selectData;
 
@@ -453,7 +417,6 @@ public void AjouterMateriel() throws IOException {
         }
         return false; // Par défaut, l'utilisateur n'est pas admin
     }
-
 
     //    Check if the materialNumber exists before add the material
     public boolean checkMaterialNumber(int numeroMateriel) throws SQLException {
@@ -694,7 +657,8 @@ public void AjouterMateriel() throws IOException {
     public void displayAllMaterials() {
         if (SessionManager.getCurrentUserRole() != null && SessionManager.getCurrentUserRole().equals("admin")) {
             try {
-                List<Material> materials = materialService.getAllMaterials();
+                List<Material> materials =
+                        materialService.getAllMaterials();
                 // Remplir le TableView avec les matériaux
                 Material_tableView.getItems().setAll(materials);
                 System.out.println("Rôle de l'utilisateur actuel : " + SessionManager.getCurrentUserRole());
@@ -707,71 +671,7 @@ public void AjouterMateriel() throws IOException {
             return; // Assurez-vous de retourner ici pour éviter de poursuivre l'exécution
         }
     }
-    //    MettreAjour == Update material
-//    public void MettreAjour() throws IOException{
-//
-//    String materialNumber = textfieldMaterialNumber.getText().trim();
-//    String name = textfieldMateriamName.getText().trim();
-//    String marque = TextfieldMaterialMarque.getText().trim();
-//    String etat = textfieldMaterial_state.getText().trim();
-//    String locale = textefieldLocate.getText().trim();
-//    String category = (String) BoxCategorie.getSelectionModel().getSelectedItem();
-//    LocalDate date = addDate.getValue();
-//    String utilisateur = textfield_Material_User.getText().trim();
-//    String statut = comboStatut.getSelectionModel().getSelectedItem();
-//
-//    if(materialNumber.isEmpty() || name.isEmpty() || marque.isEmpty() || etat.isEmpty() || locale.isEmpty()
-//    || category == null || utilisateur.isEmpty() || statut == null || date == null ){
-//        alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setHeaderText(null);
-//        alert.setContentText("Remplir tout les champs");
-//        alert.showAndWait();
-//        return;
-//    }
-//    alert = new Alert(Alert.AlertType.CONFIRMATION);
-//
-//    alert.setTitle("sur de modifier ? ");
-//    alert.setHeaderText(null);
-//    alert.setContentText("sur de modifier " + materialNumber + "?");
-//    Optional<ButtonType> option =  alert.showAndWait();
-//    if (option.get().equals(ButtonType.OK)){
-//        try{
-//            connection = DBConfig.getConnection();
-//
-//            int materialNumberInt = Integer.parseInt(materialNumber);
-//
-//            Material material = new Material(materialNumberInt, name, marque, etat,locale, category, Date.valueOf(date),  utilisateur, statut);
-//            boolean success = material.updateMaterial(material);
-//
-//            if (success){
-//                alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setHeaderText(null);
-//                alert.setContentText("mise a jour");
-//                alert.showAndWait();
-//
-//                materialShowData();
-//                ViderChamps();
-//                updatePieChart();
-//
-//
-//            } else {
-//                alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setHeaderText(null);
-//                alert.setContentText("echec");
-//                alert.showAndWait();
-//                materialShowData();
-//
-//            }
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//
-//}
-//        Delete material
+    //      Delete material
     public void homeDisplayBarChart() {
         GraphiqueMateriel.getData().clear(); // Nettoyer le graphique
         String sql = "SELECT date, statut, COUNT(id) FROM material GROUP BY date, statut ORDER BY TIMESTAMP(date) ASC LIMIT 5";
@@ -864,8 +764,8 @@ public void AjouterMateriel() throws IOException {
 }
 
 
-//Logiques De Gestion des Categories
-// Méthode pour récupérer la liste des catégories depuis la base de données / Method to retrieve the list of categories from the database
+  //Logiques De Gestion des Categories
+ // Méthode pour récupérer la liste des catégories depuis la base de données / Method to retrieve the list of categories from the database
    public ObservableList<Category> CategoriesListData() {
     ObservableList<Category> listData = FXCollections.observableArrayList();
     String selectData = "SELECT * FROM category";
@@ -936,7 +836,6 @@ public void AjouterMateriel() throws IOException {
 
         return exists; // Retourner le résultat de la vérification / Return the result of the check
     }
-
     // Méthode pour afficher les données des catégories dans une TableView / Method to display category data in a TableView
     public void categoriesData() {
         categoriesData = CategoriesListData(); // Récupérer les données des catégories / Retrieve category data
@@ -946,10 +845,7 @@ public void AjouterMateriel() throws IOException {
 
         categorie_tableView.setItems(categoriesData); // Définir les items de la TableView / Set the items of the TableView
     }
-
     // Méthode pour ajouter une nouvelle catégorie / Method to add a new category
-
-
     // Méthode pour sélectionner une catégorie dans la TableView / Method to select a category in the TableView
     public void CategorySelectData() {
         Category courseC = categorie_tableView.getSelectionModel().getSelectedItem(); // Obtenir l'élément sélectionné / Get the selected item
@@ -960,14 +856,12 @@ public void AjouterMateriel() throws IOException {
             etat_categorie.setText(courseC.getCategoryState());
         }
     }
-
     // Méthode pour vider les champs de saisie / Method to clear the input fields
     public void ViderChampsCategory() {
         textfield_categorie_name.setText(""); // Vider le champ du nom / Clear the name field
         etat_categorie.setText(""); // Vider le champ de l'état / Clear the state field
         description_categorie.setText(""); // Vider le champ de la description / Clear the description field
     }
-
     // Méthode pour obtenir les données disponibles d'une catégorie / Method to get available category data
     public void availableCategory() {
         Category courseC = categorie_tableView.getSelectionModel().getSelectedItem(); // Obtenir l'élément sélectionné / Get the selected item
@@ -1042,8 +936,6 @@ public void AjouterMateriel() throws IOException {
             alert.showAndWait();
         }
     }
-
-
     // Méthode pour mettre à jour une catégorie / Method to update a category
     public void MettreAjourCategorie() throws IOException {
         // Vérification du rôle de l'utilisateur
@@ -1104,8 +996,6 @@ public void AjouterMateriel() throws IOException {
             }
         }
     }
-
-
     // Méthode pour supprimer une catégorie / Method to delete a category
     public void SupprimerCategory() throws IOException {
         // Vérification du rôle de l'utilisateur
@@ -1144,6 +1034,8 @@ public void AjouterMateriel() throws IOException {
                 alert.showAndWait();
                 ViderChampsCategory(); // Vider les champs
                 categoriesData(); // Actualiser les données de la TableView
+                totalCategories();
+                addCategoryList();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Échec");
@@ -1159,8 +1051,6 @@ public void AjouterMateriel() throws IOException {
             alert.showAndWait();
         }
     }
-
-
     // Méthode pour compter le nombre total de catégories / Method to count the total number of categories
     public void totalCategories() {
         String sql = " SELECT COUNT(id) FROM category ";
@@ -1177,15 +1067,7 @@ public void AjouterMateriel() throws IOException {
             e.printStackTrace(); // Afficher les erreurs / Print errors
         }
     }
-
-
-
-
-
-
-//    Methodes De Gestion Des maintenaces
-
-
+    //    Methodes De Gestion Des maintenaces
     // Méthode pour créer la liste des statuts / Method to create the status list
     public void statutList() {
         List<String> statutL = new ArrayList<>();
@@ -1407,7 +1289,6 @@ public void AjouterMateriel() throws IOException {
         }
     }
 
-
     private void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(null);
@@ -1467,6 +1348,7 @@ public void AjouterMateriel() throws IOException {
                     maintenanceShowData(); // Actualiser l'affichage
                     clearMaintenace(); // Effacer les champs
                     totalMaintenaces(); // Actualiser le total
+
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Erreur de suppression",
                             "La maintenance pour le matériel " + numeroMateriel + " n'a pas été trouvée.");
@@ -1484,7 +1366,6 @@ public void AjouterMateriel() throws IOException {
         }
     }
 
-
     public void  totalMaintenaces(){
         String sql = " SELECT COUNT(id) FROM maintenances ";
         connection = DBConfig.getConnection();
@@ -1501,8 +1382,6 @@ public void AjouterMateriel() throws IOException {
             e.printStackTrace();
         }
     }
-
-
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -1510,31 +1389,6 @@ public void AjouterMateriel() throws IOException {
         alert.setContentText(message);
         alert.showAndWait();
     }
-//    public void logout() {
-//        try {
-//            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//            alert.setTitle("Confirmation");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Êtes-vous sûr de vous déconnecter ?");
-//
-//            Optional<ButtonType> option = alert.showAndWait();
-//            if (option.isPresent() && option.get() == ButtonType.OK) {
-//                // Fermer la fenêtre actuelle
-//                Stage stage = (Stage) LogOut_Btn.getScene().getWindow();
-//                stage.close();
-//
-//                // Charger la vue de connexion
-//                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/material_save/LogIn.fxml")));
-//                Stage loginStage = new Stage();
-//                Scene scene = new Scene(root);
-//                loginStage.setScene(scene);
-//                loginStage.show();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Erreur lors de la déconnexion : " + e.getMessage());
-//            e.printStackTrace();
-//}
-//    }
 
     public void logout() {
         try {
@@ -1563,22 +1417,6 @@ public void AjouterMateriel() throws IOException {
         }
 }
 
-
-//        private void updatePieChart() {
-//    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-//            new PieChart.Data("Disponible", getStatutCount("Disponible")),
-//            new PieChart.Data("Non-disponible", getStatutCount("Non-disponible")),
-//            new PieChart.Data("Maintenance", getStatutCount("Maintenance")),
-//            new PieChart.Data("Retire", getStatutCount("Retire"))
-//    );
-//
-//    // Vérifie si tous les statuts ont des données
-//    if (pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum() == 0) {
-//        pieChartData.add(new PieChart.Data("Aucune donnée", 1)); // Ajoute une section "Aucune donnée" si tout est zéro
-//    }
-//
-//    PieChartMateriel.setData(pieChartData);
-//  }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

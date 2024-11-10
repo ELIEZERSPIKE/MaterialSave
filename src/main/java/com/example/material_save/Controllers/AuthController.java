@@ -203,7 +203,7 @@ public class AuthController {
 
                 // Essayez d'enregistrer l'utilisateur
                 try {
-                    manager.register(manager); // Inscription de l'utilisateur
+                    manager.register(manager); // Inscription de l'utilisateur manager
                     showAlert(Alert.AlertType.INFORMATION, "Inscription réussie",
                             "Inscription effectuée avec succès !");
 
